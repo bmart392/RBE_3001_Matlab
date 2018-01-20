@@ -22,9 +22,11 @@ import java.lang.*;
 
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
-SERV_ID = 37;            % we will be talking to server ID 37 on
+SERV_ID = 42;            % we will be talking to server ID 37 on
                          % the Nucleo
 
+                         var1 = 0;
+                         
 DEBUG   = true;          % enables/disables debug prints
 
 % Instantiate a packet - the following instruction allocates 64
@@ -35,31 +37,43 @@ packet = zeros(15, 1, 'single');
 % The following code generates a sinusoidal trajectory to be
 % executed on joint 1 of the arm and iteratively sends the list of
 % setpoints to the Nucleo firmware. 
-viaPts = [0, -400, 400, -400, 400, 0];
+
+% viaPts = [0, -400, 400, -400, 400, 0];
+viaPts1 = [1, 2, 3, 4, 5];
+
+% this is a giant matrix that stores the result of polling the status
+% server.
+giant = zeros(9,5);
 
 tic
-
+    
 % Iterate through a sine wave for joint values
-for k = viaPts
+for k = viaPts1
     %incremtal = (single(k) / sinWaveInc);
-    
+
     packet(1) = k;
-    
-    
+
     % Send packet to the server and get the response
     returnPacket = pp.command(SERV_ID, packet);
+
+    for var1 = 1:15
+        giant(var1, k) = (abs(returnPacket(var1)) > 0.0001) * returnPacket(var1);
+    end
+
+    var1 = 1;
+
     toc
-    
+
     if DEBUG
         disp('Sent Packet:');
         disp(packet);
         disp('Received Packet:');
         disp(returnPacket);
     end
-    
     pause(1) %timeit(returnPacket) !FIXME why is this needed?
 end
-
+csvwrite('test.csv', giant);
+    
 % Clear up memory upon termination
 pp.shutdown()
 clear java;
