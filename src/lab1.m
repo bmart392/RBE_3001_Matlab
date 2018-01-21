@@ -25,7 +25,7 @@ pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
 SERV_ID = 42;            % we will be talking to server ID 37 on
                          % the Nucleo
 
-                         var1 = 0;
+var1 = 0;
                          
 DEBUG   = true;          % enables/disables debug prints
 
@@ -47,7 +47,6 @@ viaPts2 = [1, 4, 7];
 % giant = zeros(9,5);
 % giant = zeros(9,6); % 6 for averaging rows 1,4, and 7
 giant = zeros(9,8); % 6 for averaging rows 1,4, and 7
-
 
 tic
     
@@ -74,7 +73,7 @@ for k = viaPts1
         disp('Received Packet:');
         disp(returnPacket);
     end
-    pause(1) %timeit(returnPacket) !FIXME why is this needed?
+    pause(0.5) %timeit(returnPacket) !FIXME why is this needed?
 end
 
 % This is for taking the averge of the positions so that we have nice
