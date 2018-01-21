@@ -41,16 +41,12 @@ packet = zeros(15, 1, 'single');
 % viaPts = [0, -400, 400, -400, 400, 0];
 viaPts1 = [1, 2, 3, 4, 5];
 viaPts2 = [1, 4, 7];
-% rows1 = [1,2,3,4,5,6,7,8,9,10,11,12,13
 
 % this is a giant matrix that stores the result of polling the status
 % server.
 % giant = zeros(9,5);
 % giant = zeros(9,6); % 6 for averaging rows 1,4, and 7
 giant = zeros(9,8); % 6 for averaging rows 1,4, and 7
-
-% This is our figure object.
-base = figure('Position Graph');
 
 
 tic
@@ -86,9 +82,6 @@ end
 for k = viaPts2
     giant(k, 6) = ((giant(k,1)+giant(k,2)+giant(k,3)+giant(k,4)+giant(k,5))/5);
 end
-
-% Now we want to create a plot of position of the waist over time.
-% We will 0.05 second intervals over 5 seconds. This is 100 samples.
 
 
 csvwrite('test.csv', giant);
