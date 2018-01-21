@@ -4,6 +4,7 @@ function [] = plotBase(time,pos)
 
 % This is our figure object.
 base = figure('Position Graph');
+%plotaxes = axes(
 
 plot(time,pos);
 drawnow;

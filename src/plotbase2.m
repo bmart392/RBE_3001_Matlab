@@ -8,6 +8,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.lang.*;
 
+% 11.44 ticks per degree
+CONST = 11.44;
+
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
 SERV_ID = 42;            % we will be talking to server ID 37 on
@@ -30,9 +33,12 @@ i = 1;   %row of matrix
 figure;
 a1 = axes;
 hold(a1, 'on');
-title('Position vs. Time')
-xlabel('Time in Seconds')
-ylabel('Position')
+axis(a1,'equal');
+axis(a1, 2*1.2*[-1 1 -1 1]);
+box(a1, 'on');
+grid(a1, 'on');
+
+angleread = 1;
 
 tic
 
@@ -44,12 +50,18 @@ for n = 0:25
     basepos = returnPacket(1);
     posmatrix(i,1) = time;
     posmatrix(i,2) = basepos;
-    plot(time,basepos,'-o',...
-    'LineWidth',5,...
-    'MarkerSize',10,'MarkerEdgeColor','b', 'MarkerFaceColor',[0.5,0.5,0.5]);
+    disp(posmatrix(i,2));
+    angleread = (basepos / CONST)*pi/180;
+    disp(angleread);
+    % plot(0,0);
+    % plot([0,2*cos(angleread)], [0,2*sin(angleread)]);
+    % plot(time,basepos,'-o','LineWidth',5,'MarkerSize',10,'MarkerEdgeColor','b',
+    % 'MarkerFaceColor',[0.5,0.5,0.5]);
+    % axis(a1,'equal'); axis(a1, 2*1.2*[-1 1 -1 1]); box(a1, 'on'); grid(a1, 'on');
+    plot(a1, [0,2*cos(angleread)], [0,2*sin(angleread)], 'LineWidth',5);
     drawnow;
     i = i +1;
-    pause(0.5);
+    pause(0.25);
 end
 
 csvwrite('baseplot.csv', posmatrix);
