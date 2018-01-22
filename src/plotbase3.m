@@ -38,16 +38,19 @@ angleread = 1;
 
 tic
 
-for n = 0:25
+for n = 0:80
    % Send packet to the server and get the response
     returnPacket = pp.command(SERV_ID, packet);
     time = toc;
     basepos = returnPacket(1);
-    angleread = (basepos / CONST)*pi/180;
+    %      disp(posmatrix(i,2));
+    angleread = -1*((basepos / CONST)*pi/180);
+    posmatrix(i,1) = time;
+    posmatrix(i,2) = angleread;
     polarplot([angleread, 0], [armlength, 0], 'LineWidth',5);
     drawnow;
     i = i + 1;
-    pause(0.5);
+    pause(0.1);
 end
 
 csvwrite('baseplot.csv', posmatrix);
