@@ -40,10 +40,19 @@ tic
 
 for n = 0:25
    % Send packet to the server and get the response
-    returnPacket = pp.command(SERV_ID, packet);
+    %      returnPacket = pp.command(SERV_ID, packet);
     time = toc;
-    basepos = returnPacket(1);
-    angleread = (basepos / CONST)*pi/180;
+    %      basepos = returnPacket(1);
+    %      posmatrix(i,1) = time;
+    %      posmatrix(i,2) = basepos;
+    %      disp(posmatrix(i,2));
+    angleread = (n*5)*pi/180; % (basepos / CONST)*pi/180;
+    disp(angleread);
+    % plot(0,0);
+    % plot([0,2*cos(angleread)], [0,2*sin(angleread)]);
+    % plot(time,basepos,'-o','LineWidth',5,'MarkerSize',10,'MarkerEdgeColor','b',
+    % 'MarkerFaceColor',[0.5,0.5,0.5]);
+    % axis(a1,'equal'); axis(a1, 2*1.2*[-1 1 -1 1]); box(a1, 'on'); grid(a1, 'on');
     polarplot([angleread, 0], [armlength, 0], 'LineWidth',5);
     drawnow;
     i = i + 1;
