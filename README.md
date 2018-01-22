@@ -1,4 +1,4 @@
-# RBE3001 Matlab Template
+# RBE3001 Matlab From Template
 This is template code for talking to the Default firmware
 
 ## Configure git
