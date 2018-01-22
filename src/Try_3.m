@@ -38,7 +38,7 @@ viaPts2 = [1];
 
 % this is a giant matrix that stores the result of polling the status
 % server.
-giant = zeros(27,2);
+giant = zeros(1,2);
 % This is the row of the csv file we are writing to.
 csvrow = 1; 
 % have we sent the pidpacket?
@@ -48,7 +48,7 @@ sendpid = false;
 figure;
 a1 = axes;
 hold(a1, 'on');
-axis(a1, [0 100 -500 500]);
+axis(a1, [0 100 -400 400]);
 box(a1, 'on');
 grid(a1, 'on');
 
@@ -63,33 +63,33 @@ tic
 
 t = 0:100;
 y = -1*pidpacket(1)*heaviside(t);
-plot(t,y);
-drawnow;
+% plot(t,y);
+
 
 %plot(a1,0,0,toc,pidpacket(1),100,pidpacket(1), 'LineWidth',5);
 %drawnow;
 
-% for k=1:25
-%     
-%     returnstatuspacket = pp.command(STATUSID, statuspacket);
-%     time = toc;
-%     giant(k,1) = time;
-%     giant(k,2) = returnstatuspacket(1);
-%      pause(0.01);
-% 
-% end
-% 
-% pidpacket(1) = 0;
-% 
+for k=1:25
+    toc
+    returnstatuspacket = pp.command(STATUSID, statuspacket);
+    time = toc;
+    giant(k,1) = time;
+    giant(k,2) = returnstatuspacket(1);
+    
+    plot(giant(:));
+    drawnow;
+    pause(0.01);
+
+end
+
+plot(giant(:));
+drawnow;
+
 % returnpidpacket = pp.command(PIDID, pidpacket);
-% 
-% csvwrite('waistreadactual.csv', giant);
+
+csvwrite('waistreadactual.csv', giant);
+disp(giant);
 
 % Clear up memory upon termination
 pp.shutdown()
 clear java;
-
-
-
-
-
