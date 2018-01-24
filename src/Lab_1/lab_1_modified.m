@@ -22,18 +22,27 @@ import java.lang.*;
 
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
+<<<<<<< HEAD:src/Lab_1/lab1.m
 SERV_ID = 42;            % we will be talking to server ID 37 on
                          % the Nucleo
 
 var1 = 0;
                          
 DEBUG   = true;          % enables/disables debug prints
+=======
+try
+  SERV_ID = 37;            % we will be talking to server ID 37 on
+                           % the Nucleo
 
-% Instantiate a packet - the following instruction allocates 64
-% bytes for this purpose. Recall that the HID interface supports
-% packet sizes up to 64 bytes.
-packet = zeros(15, 1, 'single');
+  DEBUG   = true;          % enables/disables debug prints
+>>>>>>> 5e739f26c2f222e7254fb8bfa0e9c73d2ea73f8b:src/lab1.m
 
+  % Instantiate a packet - the following instruction allocates 64
+  % bytes for this purpose. Recall that the HID interface supports
+  % packet sizes up to 64 bytes.
+  packet = zeros(15, 1, 'single');
+
+<<<<<<< HEAD:src/Lab_1/lab1.m
 % The following code generates a sinusoidal trajectory to be
 % executed on joint 1 of the arm and iteratively sends the list of
 % setpoints to the Nucleo firmware. 
@@ -85,6 +94,38 @@ end
 
 csvwrite('test.csv', giant);
     
+=======
+  % The following code generates a sinusoidal trajectory to be
+  % executed on joint 1 of the arm and iteratively sends the list of
+  % setpoints to the Nucleo firmware. 
+  viaPts = [0, -400, 400, -400, 400, 0];
+
+  tic
+
+  % Iterate through a sine wave for joint values
+  for k = viaPts
+      %incremtal = (single(k) / sinWaveInc);
+
+      packet(1) = k;
+
+
+      % Send packet to the server and get the response
+      returnPacket = pp.command(SERV_ID, packet);
+      toc
+
+      if DEBUG
+          disp('Sent Packet:');
+          disp(packet);
+          disp('Received Packet:');
+          disp(returnPacket);
+      end
+
+      pause(1) %timeit(returnPacket) !FIXME why is this needed?
+  end
+catch
+    disp('Exited on error, clean shutdown');
+end
+>>>>>>> 5e739f26c2f222e7254fb8bfa0e9c73d2ea73f8b:src/lab1.m
 % Clear up memory upon termination
 pp.shutdown()
 clear java;
