@@ -90,7 +90,6 @@ try
             'LineWidth',5);
         %plot link2
         plot3([L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
-            (L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
             'LineWidth',5);
         drawnow;
         i = i + 1;
