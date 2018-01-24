@@ -22,8 +22,8 @@ classdef Robot
         
         function setangles(obj,angle1,angle2,angle3)
             obj.waistangle = angle1;
-            obj.elbowangle = angle2;
-            obj.wristangle = angle3;
+            obj.waistangle = angle2;
+            obj.waistangle = angle3;
         end
         
         function calctransmat(obj)
