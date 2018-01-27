@@ -1,15 +1,4 @@
-%%
-% RBE3001 - Laboratory 1 
-% 
-% Instructions
-% ------------
-% Welcome again! This MATLAB script is your starting point for Lab
-% 1 of RBE3001. The sample code below demonstrates how to establish
-% communication between this script and the Nucleo firmware, send
-% setpoint commands and receive sensor data.
-% 
-% IMPORTANT - understanding the code below requires being familiar
-% with the Nucleo firmware. Read that code first.
+%% Lab 2
 
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
@@ -23,9 +12,7 @@ import java.lang.*;
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
 
-try
-    
-    
+try 
     
     % 11.44 ticks per degree
     angconv = -11.44;
@@ -57,11 +44,13 @@ try
     
     pause(2);
   
-    % The angle that we want is 30 degrees.
+    %The angle that we want is 30 degrees.
     pidpacket(1) = 30*angconv;
     pidpacket(2) = 30*angconv;
     pidpacket(3) = 10*angconv;
     returnPacket = pp.command(SERV_ID, pidpacket);
+    
+    pause(2);
 
   
     % Variables to hold the angle fo each link
@@ -113,6 +102,7 @@ try
         % plot3([L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
         %    (L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
         %    'LineWidth',5);
+        
         drawnow;
         i = i + 1;
         pause(0.1);
