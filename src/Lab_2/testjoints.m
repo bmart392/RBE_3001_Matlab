@@ -72,6 +72,8 @@ try
       jointmatrix(i,1) = time;
       jointmatrix(i,2) = returnstatuspacket(j);
       
+      i = i+1;
+      
       pause(1)
     
   end
