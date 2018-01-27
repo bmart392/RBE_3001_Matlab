@@ -75,8 +75,8 @@ try
       pause(1)
     
   end
-
-
+  
+  % save to csv
   csvwrite('joints.csv', jointmatrix);
 
 catch
