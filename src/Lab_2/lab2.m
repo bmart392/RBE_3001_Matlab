@@ -24,25 +24,45 @@ import java.lang.*;
 pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
 
 try
-  SERV_ID = 37;            % we will be talking to server ID 37 on
-                           % the Nucleo
+    
+    
+    
+    % 11.44 ticks per degree
+    angconv = -11.44;
 
-  DEBUG   = true;          % enables/disables debug prints
+    SERV_ID = 37;            % we will be talking to server ID 37 on
+                             % the Nucleo
+    STATUS_ID = 42;          % For when we want to read all data.
 
-  % Instantiate a packet - the following instruction allocates 64
-  % bytes for this purpose. Recall that the HID interface supports
-  % packet sizes up to 64 bytes.
-  packet = zeros(15, 1, 'single');
+    DEBUG   = true;          % enables/disables debug prints
 
-  % The following code generates a sinusoidal trajectory to be
-  % executed on joint 1 of the arm and iteratively sends the list of
-  % setpoints to the Nucleo firmware. 
-  viaPts = [0, -400, 400, -400, 400, 0];
+    % Instantiate a packet - the following instruction allocates 64
+    % bytes for this purpose. Recall that the HID interface supports
+    % packet sizes up to 64 bytes.
+    packet = zeros(15, 1, 'single');
 
+    pidpacket = zeros(15, 1, 'single');
+
+    % The following code generates a sinusoidal trajectory to be
+    % executed on joint 1 of the arm and iteratively sends the list of
+    % setpoints to the Nucleo firmware. 
+    viaPts = [0, -400, 400, -400, 400, 0];
   
+    
+    % The angle that we want is 0 degrees.
+    pidpacket(1) = 0; 
+    pidpacket(2) = 0;
+    pidpacket(3) = 0;
+    returnPacket = pp.command(SERV_ID, pidpacket);
+    
+    pause(2);
   
-  
-  
+    % The angle that we want is 30 degrees.
+    pidpacket(1) = 30*angconv;
+    pidpacket(2) = 30*angconv;
+    pidpacket(3) = 10*angconv;
+    returnPacket = pp.command(SERV_ID, pidpacket);
+
   
     % Variables to hold the angle fo each link
     waistangle = 0;
@@ -65,8 +85,8 @@ try
     tic
 
     for n = 0:80
-       % Send packet to the server and get the response
-        returnPacket = pp.command(SERV_ID, packet);
+        % Send packet to the server and get the response
+        returnPacket = pp.command(STATUS_ID, packet);
         
         % Capture time of sample
         time = toc;
@@ -75,7 +95,7 @@ try
         waistangle = angtodeg(returnPacket(1));
         elbowangle = angtodeg(returnPacket(2));
         wristangle = angtodeg(returnPacket(3));
-        
+            
         %Save the values to a matrix for logging
         posmatrix(i,1) = time;
         posmatrix(i,2) = waistangle;
@@ -83,15 +103,16 @@ try
         posmatrix(i,4) = wristangle;
         
         %plot link 1
-        plot3([0,0,0], [0,0,L1length], 'LineWidth',5);
+        % plot3([0,0,0], [0,0,L1length], 'LineWidth',5);
         %plot link1
-        plot3([0,0,L1length], [L2length*cos(elbowangle) + L1length], ...
-            L2length*sin(waistangle), L2length*sin(elbowangle)], ...
-            'LineWidth',5);
+        % plot3([0,0,L1length], [L2length*cos(elbowangle) + L1length], ...
+        %     L2length*sin(waistangle), L2length*sin(elbowangle)], ...
+        %    'LineWidth',5);
+        
         %plot link2
-        plot3([L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
-            (L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
-            'LineWidth',5);
+        % plot3([L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
+        %    (L2length*cos(elbowangle + L1length), L2length*sin(waistangle), L2length*sin(elbowangle)], ...
+        %    'LineWidth',5);
         drawnow;
         i = i + 1;
         pause(0.1);
@@ -99,7 +120,13 @@ try
 
 
 
-
+  
+  
+    % The angle that we want is 0 degrees.
+    pidpacket(1) = 0;
+    pidpacket(2) = 0;
+    pidpacket(3) = 0;
+    returnPacket = pp.command(SERV_ID, pidpacket);
 
 
 
