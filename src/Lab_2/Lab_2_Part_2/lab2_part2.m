@@ -87,7 +87,7 @@ try
         % Now we have to use a handle so that we only UPDATE a single plot.
         refreshdata(f);
         
-        h = plot3(X1, Y1, Z1);
+        h = plot3(X1, Y1, Z1);  
         
         drawnow;
         
