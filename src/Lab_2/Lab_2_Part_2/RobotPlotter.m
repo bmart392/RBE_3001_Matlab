@@ -1,10 +1,10 @@
 classdef RobotPlotter
-    properties (SetAccess = private)
+    properties %(SetAccess = private)
         % The theta angles are passed in parameters that will be changing
         % when we want to update the plot.
-        Theta1;
-        Theta2;
-        Theta3;
+        Theta1= 0;
+        Theta2 = 0;
+        Theta3 = 0;
         % Link Lengths in meters
         L1; % = 0.135;
         L2; % = 0.175;

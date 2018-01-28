@@ -35,7 +35,7 @@ clear all; close all; clc;
     fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
     set(f, 'Position', fig_pos);
     title('Stick figure plot');
-    xlabel('X Axis'); ylabel('Y Axis'); zlabel('Z Axis');
+    xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
 
     % These variables hold the plotting code.
     TheArm = zeros(3,4);

@@ -19,15 +19,18 @@ pp = PacketProcessor(7);
 try 
     
     angconv = 11.44;         % 11.44 ticks per degree
-    SERV_ID = 37;            % controls the robot
-    STATUS_ID = 42;          % reads robot position
+    SERV_ID = 37;            % controls the r
+    STATUS_ID = 42;          % For when we want to read all data.
     DEBUG   = true;          % enables/disables debug prints
     
     % Instantiate a packet - the following instruction allocates 64
     % bytes for this purpose. Recall that the HID interface supports
     % packet sizes up to 64 bytes.
     statuspacket = zeros(15, 1, 'single');
-    %pidpacket = zeros(15, 1, 'single');
+    pidpacket = zeros(15, 1, 'single');
+    
+    % The returned packet
+    returnPacket = [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15]';
     
     % Here we create the robotplotter object.
     lengths = [ 0.135; 0.175; 0.16928;];
@@ -44,8 +47,8 @@ try
     %% Plotting code.
     
     % Code for the graph.
-    f = figure;
-    
+    % f = figure;
+    figure;
 
     % These 3 commands work AFTER plot3()
     axis on, grid on, axis equal;  hold on;
@@ -56,7 +59,7 @@ try
     0.9*fig_size(3), 0.8*fig_size(4)];
     set(f, 'Position', fig_pos);
     title('Stick figure plot');
-    xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
+    xlabel('X Axis'); ylabel('Y Axis'); zlabel('Z Axis');
 
     % These variables hold the plotting code.
     TheArm = zeros(3,4);
@@ -67,11 +70,10 @@ try
     Z1 = zeros(4,1);
     
     % loop for 1 second or so.
-    for k = 1:20
+    for k = 1:10
         
         % Send packet to the server and get the response
-        returnPacket = pp.command(STATUS_ID, statuspacket);
-        disp(returnPacket);
+        returnPacket = pp.command(STATUS_ID, packet);
         
         % Now we take in the angles and convert to degrees. 
         robotAngles(1,1)  = -1*degtorad*returnPacket(1)*angconv;
@@ -82,11 +84,10 @@ try
 %         robotAngles(3,1)  =    degtorad * (k+5);
         
         % Now we set the robot object angles.
-        plotme.setAngles(robotAngles);
+        plotme.setangles(robotAngles);
         disp(robotAngles);
         
         % Get the x, y, and z values given the robot transformations given.
-        disp("here");
         TheArm = plotArm3d(plotme);
         disp('This is the Arm');
         disp(TheArm);
@@ -105,7 +106,7 @@ try
         
         drawnow;
         
-        pause(0.25);
+        pause(0.1);
         
     end
     
