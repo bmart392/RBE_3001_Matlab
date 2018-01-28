@@ -108,18 +108,11 @@ try
         pause(0.1);
     end
 
-
-
-  
-  
     % The angle that we want is 0 degrees.
     pidpacket(1) = 0;
     pidpacket(2) = 0;
     pidpacket(3) = 0;
     returnPacket = pp.command(SERV_ID, pidpacket);
-
-
-
 
 csvwrite('baseplot.csv', posmatrix);
 

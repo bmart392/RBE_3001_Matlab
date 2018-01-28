@@ -13,10 +13,10 @@ import java.lang.*;
 pp = PacketProcessor(7); 
 
 try
-  SERV_ID = 37;            % This controls the robot
+  SERV_ID  = 37;            % This controls the robot
   STATUSID = 42;           % This gives the status of the robot
 
-  DEBUG   = true;          % enables/disables debug prints
+  DEBUG    = true;          % enables/disables debug prints
 
   % Instantiate a packet - the following instruction allocates 64
   % bytes for this purpose. Recall that the HID interface supports
@@ -74,7 +74,7 @@ try
       
       i = i+1;
       
-      pause(1)
+      pause(1);
     
   end
   
