@@ -50,8 +50,7 @@ classdef RobotPlotter
             % d_h_params.tdh(0,0,0,0);
             % T1 = d_h_params.tdh(L1,(q(1,1)*pi/180),0,pi/2);
             % T1 = tdh(obj.L1,(obj.Theta1*pi/180),0,pi/2);
-            disp("THeta")
-            disp(obj.Theta1)
+            disp(obj.L1)
             T1 = tdh(obj.L1,pi/2,0,pi/2);
             T2 = tdh(0,(obj.Theta2*pi/180),obj.L2,0);
             T3 = tdh(0,(obj.Theta3*pi/180),obj.L3,0);

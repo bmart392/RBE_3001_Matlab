@@ -1,15 +1,10 @@
 %% Lab 2 part 2
 
-javaaddpath('../lib/hid4java-0.5.1.jar');
 
-import org.hid4java.*;
-import org.hid4java.event.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.lang.*;
+%% This code does not work yet!!!!!  --Andrew S
 
-% Create a PacketProcessor object to send data to the nucleo firmware
-pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
+
+clear all; close all; clc; 
 
 try 
     % 11.44 ticks per degree
@@ -22,8 +17,8 @@ try
     % Instantiate a packet - the following instruction allocates 64
     % bytes for this purpose. Recall that the HID interface supports
     % packet sizes up to 64 bytes.
-    packet = zeros(15, 1, 'single');
-    pidpacket = zeros(15, 1, 'single');
+    % packet = zeros(15, 1, 'single');
+    % pidpacket = zeros(15, 1, 'single');
     
     % The returned packet
     returnPacket = [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15]';
@@ -40,10 +35,11 @@ try
     %% Here we have plotting code.
     
     % Here we have some code for the graph.
-    f = figure;
+    % f = figure;
+    figure;
 
     % These 3 commands work AFTER plot3()
-    axis on, grid on, hold on; axis equal;
+    axis on, grid on, axis equal;  hold on;
 
     % center the figure on screen and resize it
     fig_size = get(0, 'Screensize');
@@ -61,33 +57,39 @@ try
     Y1 = zeros(3,1);
     Z1 = zeros(3,1);
     
-    % loop for 5 seconds or so.
-    for k = 1:50
+    % loop for 1 seconds or so.
+    for k = 1:10
         
         % Send packet to the server and get the response
-        returnPacket = pp.command(STATUS_ID, packet);
+        % returnPacket = pp.command(STATUS_ID, packet);
         
         % Now we take in the angles and convert to degrees. The waist I
         % believe is inverted, hence the -1.
-        robotAngles(1,1)  = -1*degtorad*returnPacket(1)*angconv;
-        robotAngles(2,1)  =    degtorad*returnPacket(2)*angconv;
-        robotAngles(3,1)  =    degtorad*returnPacket(3)*angconv;
+        % robotAngles(1,1)  = -1*degtorad*returnPacket(1)*angconv;
+        % robotAngles(2,1)  =    degtorad*returnPacket(2)*angconv;
+        % robotAngles(3,1)  =    degtorad*returnPacket(3)*angconv;
+        robotAngles(1,1)  = -1*degtorad * 0;
+        robotAngles(2,1)  =    degtorad * 10;
+        robotAngles(3,1)  =    degtorad * (k+5);
         
         % Now we set the robot object angles.
         plotme.setangles(robotAngles);
         
         % Get the x, y, and z values given the robot transformations given.
         TheArm = plotArm3d(plotme);
+        disp(TheArm);
         
         % Get the respective components we want.
-        X1 = RobotArm(1,:)';
-        Y1 = RobotArm(2,:)';
-        Z1 = RobotArm(3,:)';
+        X1 = TheArm(1,:)';
+        Y1 = TheArm(2,:)';
+        Z1 = TheArm(3,:)';
         
         % Now we have to use a handle so that we only UPDATE a single plot.
         refreshdata(f);
         
-        h = plot3(X1, Y1, Z1);  
+        plot3(X1, Y1, Z1);  
+        
+        % h = plot3(X1, Y1, Z1);  
         
         drawnow;
         
@@ -101,5 +103,5 @@ catch
 end
 
 % Clear up memory upon termination
-pp.shutdown()
+% pp.shutdown()
 clear java;

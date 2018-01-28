@@ -1,4 +1,18 @@
-    % Zero the arm
+
+javaaddpath('../lib/hid4java-0.5.1.jar');
+
+import org.hid4java.*;
+import org.hid4java.event.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.lang.*;
+
+% Create a PacketProcessor object to send data to the nucleo firmware
+pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
+  
+
+
+% Zero the arm
     
     % The angle that we want is 0 degrees.
     % pidpacket(1) = 0; 
