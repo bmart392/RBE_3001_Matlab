@@ -75,10 +75,10 @@ pp = PacketProcessor(7);
         readings(3,1) = returnstatuspacket(7);
         answer = kinematics(readings);
         % put in matrix
-        jointmatrix(i, (2*m)-1) = time;
-        jointmatrix(i, 2*m)   = answer(4,1);
-        jointmatrix(i, 2*m+1) = answer(4,2);
-        jointmatrix(i, 2*m+2) = answer(4,3);
+        jointmatrix(i, (4*m)-3) = time;
+        jointmatrix(i, (4*m)-2)   = answer(4,1);
+        jointmatrix(i, (4*m)-1) = answer(4,2);
+        jointmatrix(i, 4*m) = answer(4,3);
       end
       
       pause(2);
