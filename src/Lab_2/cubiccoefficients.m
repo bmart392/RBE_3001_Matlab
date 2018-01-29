@@ -4,10 +4,10 @@ function T = cubiccoefficients(startTime, endTime, startVel, endVel, startPositi
 rowechmatrix = zeros(4);
 
 % These are the (1,4) matrix for solving for t, t^2, and t^3.
-positionInitial = ([0 (startTime) (startTime * startTime) (startTime * startTime * startTime) ]));
-positionFinal = ([0 (endTime) (endTime * endTime) (endTime * endTime * endTime) ]));
-velocityInitial = ([0 0 (2 * startTime) (3 * startTime * startTime) ]));
-velocityFinal = ([0 0 (2 * endTime) (3 * endTime * endTime) ]));
+positionInitial = ([0 (startTime) (startTime * startTime) (startTime * startTime * startTime) ]);
+positionFinal = ([0 (endTime) (endTime * endTime) (endTime * endTime * endTime) ]);
+velocityInitial = ([0 0 (2 * startTime) (3 * startTime * startTime) ]);
+velocityFinal = ([0 0 (2 * endTime) (3 * endTime * endTime) ]);
 
 % We are doing the Ax=B form.
 % A is the matrix with the 4 matrices above combined into one 4x4 matrix.
@@ -21,7 +21,7 @@ rowechmatrix(4,:) = velocityFinal;
 
 % Now we define the B Matrix.
 
-bMatrix = ([startPosition endPosition startVelocity endVelocity]);
+bMatrix = ([startPosition endPosition startVel endVel]);
 
 % Now we take the inverse of the A matrix. WE SHOULD CHECK TO SEE IF WE CAN OR CANNOT DO THE INVERSE OF THE MATRIX!!!!!!!
 
