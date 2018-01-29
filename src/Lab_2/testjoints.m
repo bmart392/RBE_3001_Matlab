@@ -39,9 +39,9 @@ try
  
   tic                  % Begin time tracking
   
-  for j = 1:3
+  for j = 0:2
       % move joint 30 degrees
-      pidpacket(j) = 30 * angconv;
+      pidpacket((j*3)+1) = 30 * angconv;
       returnpidpacket = pp.command(PIDID, pidpacket);
       
       % save time
@@ -52,14 +52,14 @@ try
       
       % put in matrix
       jointmatrix(i,1) = time;
-      jointmatrix(i,2) = returnstatuspacket(j);
+      jointmatrix(i,2) = returnstatuspacket((j*3)+1);
       
       i = i+1;
       
       % pause(1)
       
       % move back to home position
-      pidpacket(j) = 0;
+      pidpacket((j*3)+1) = 0;
       returnpidpacket = pp.command(PIDID, pidpacket);
       
       % save time
@@ -70,7 +70,7 @@ try
       
       % put in matrix
       jointmatrix(i,1) = time;
-      jointmatrix(i,2) = returnstatuspacket(j);
+      jointmatrix(i,2) = returnstatuspacket((j*3)+1);
       
       i = i+1;
       
