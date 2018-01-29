@@ -38,6 +38,8 @@ pp = PacketProcessor(7);
   i = 1;               % row of matrix
   time = 0;            % make sure time starts at 0  
  
+  endeffectLocation = zeros(5,3);
+  
   % These are the desired angle ticks.
   desiredpos = [ 268 177 170;
                  19 268 567;
@@ -45,8 +47,10 @@ pp = PacketProcessor(7);
                  -528 -105 1118;
                  -695 -126 2314 ];
   
-     % theseones = [1 4 7];
-             
+  theseones = [1 4 7];
+      
+  readings = zeros(3,1);
+  
   tic                  % Begin time tracking
   
   for m = 1:5
@@ -58,39 +62,43 @@ pp = PacketProcessor(7);
       
       % send the packet with data for the mth location
       returnpidpacket = pp.command(PIDID, pidpacket);
-      
+            
       %-track the location of the arm getting to the mth location --
       % track the status of the arm while moving to each position
-      for w = 0:10
-          % save time
-          time = toc;
-          % check status
-          returnstatuspacket = pp.command(STATUSID, statuspacket);
-
-          % put in matrix
-          jointmatrix(i,2*(m-1)) = time;
-          jointmatrix(i,2*m) = returnstatuspacket((j*3)+1);
-
-          i = i+1;
+      for i = 1:10
+        % save time
+        time = toc;
+        % check status
+        returnstatuspacket = pp.command(STATUSID, statuspacket);
+        readings(1,1) = returnstatuspacket(1);
+        readings(2,1) = returnstatuspacket(4);
+        readings(3,1) = returnstatuspacket(7);
+        answer = kinematics(readings);
+        % put in matrix
+        jointmatrix(i, (2*m)-1) = time;
+        jointmatrix(i, 2*m)   = answer(4,1);
+        jointmatrix(i, 2*m+1) = answer(4,2);
+        jointmatrix(i, 2*m+2) = answer(4,3);
       end
+      
       pause(2);
     
   end
   
 % move back to home position
 for d=0:2
-          pidpacket((d*3)+1) = 1;
+    pidpacket((d*3)+1) = 1;
 end
 
 returnpidpacket = pp.command(PIDID, pidpacket);
 
 pause(2);
-  
-  % save to csv
-  csvwrite('joints.csv', jointmatrix);
+
+% save to csv
+csvwrite('joints.csv', jointmatrix);
 
 % catch
-    % disp('Exited on error, clean shutdown');
+% disp('Exited on error, clean shutdown');
 % end
 
 
