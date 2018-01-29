@@ -13,7 +13,7 @@ clc; clear all; close all;
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);
 
-try
+% try
     SERV_ID = 37;            % controls the robot
     STATUS_ID = 42;          % reads robot position
     DEBUG   = true;          % enables/disables debug prints
@@ -22,6 +22,8 @@ try
     % bytes for this purpose. Recall that the HID interface supports
     % packet sizes up to 64 bytes.
     statuspacket = zeros(15, 1, 'single');
+    
+    % robotAngles = [0 0 0]';     % matrix to hold angles
 
     % Creating the robot structure.
     Robot.l1 = 0.135;
@@ -31,6 +33,7 @@ try
     % y0 is the initial conditions.
     y0 = kinematics([0; 0; 0]);           
 
+    
     %% Plotting code.
     
     f = figure; % create figure
@@ -45,14 +48,21 @@ try
     fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
     0.9*fig_size(3), 0.8*fig_size(4)];
     set(f, 'Position', fig_pos);
-    axis((Robot.l2 + Robot.l3) * [-1 1 -1 1 -0.5 1.5]);
+    axis((Robot.l2 + Robot.l3) * [-1 1 -1 1 -1 1]);
     title('Stick figure plot');
     xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
     
+        
     % Setting the "handle" field in "Robot" structure to be the handle of
     % the arm plot. 
+
     Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
         'color', [0 0.4 0.7], 'LineWidth', 5);
+    
+    % These are the respective i, j, k component column vectors.
+    X1 = zeros(4,1);
+    Y1 = zeros(4,1);
+    Z1 = zeros(4,1);
     
     for k = 1:200
         
@@ -67,8 +77,8 @@ try
         
         % Fill robotAngles matrix with encoder ticks read from packet  
         robotAngles(1,1) = returnPacket(1);
-        robotAngles(2,1) = returnPacket(4);
-        robotAngles(3,1) = returnPacket(7);
+        robotAngles(2,1) = returnPacket(2);
+        robotAngles(3,1) = returnPacket(3);
         
         % Plot the robot transformations given.
         RobotPlotter(Robot, robotAngles);
@@ -80,9 +90,9 @@ try
     end
     
     % csvwrite('baseplot.csv', posmatrix);
-catch
-     disp('Exited on error, clean shutdown');
-end
+% catch
+     % disp('Exited on error, clean shutdown');
+% end
 
 % Clear up memory upon termination
 pp.shutdown()
