@@ -39,16 +39,16 @@ try
   
   % move all joints to some angle
   pidpacket(1) = baseAngle * angconv;
-  pidpacket(2) = elbowAngle * angconv;
-  pidpacket(3) = wristAngle * angconv;
+  pidpacket(4) = elbowAngle * angconv;
+  pidpacket(7) = wristAngle * angconv;
   returnpidpacket = pp.command(PIDID, pidpacket);
   
   pause(2)
   
   % move all joints back to home position
   pidpacket(1) = 0;
-  pidpacket(2) = 0;
-  pidpacket(3) = 0;
+  pidpacket(4) = 0;
+  pidpacket(7) = 0;
   returnpidpacket = pp.command(PIDID, pidpacket);
   
   % get time stamp
@@ -59,8 +59,8 @@ try
   % put in matrix
   jointmatrix(1,1) = time;
   jointmatrix(1,2) = returnstatuspacket(1);
-  jointmatrix(1,2) = returnstatuspacket(2);
-  jointmatrix(1,2) = returnstatuspacket(3);
+  jointmatrix(1,2) = returnstatuspacket(4);
+  jointmatrix(1,2) = returnstatuspacket(7);
   
   
   % save to csv
