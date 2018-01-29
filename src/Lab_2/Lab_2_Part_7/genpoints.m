@@ -7,6 +7,6 @@ function point = genpoints(coefficients,time)
 %   Detailed explanation goes here
 point = (coefficients(1) + coefficients(2)*time + ... 
     coefficients(3)*time^2 + coefficients(4)*time^3);
-disp(point);
+%disp(point);
 end
 
