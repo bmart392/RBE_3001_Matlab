@@ -1,0 +1,8 @@
+function coefficients = gentraj(t0, tf, v0, vf, p0, p1)
+%GENTRAJ Summary of this function goes here
+%   Detailed explanation goes here
+coefficients = [ 1 t0 t0^2 t0^3;
+    0 1 2*t0 3 * t0^2;
+    
+end
+

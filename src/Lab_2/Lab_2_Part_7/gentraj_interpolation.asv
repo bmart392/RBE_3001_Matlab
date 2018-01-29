@@ -1,0 +1,16 @@
+function points = gentraj_interpolation(t0, tf, v0, vf, q0, qf, numpoints)
+%GENTRAJ_INTERPOLATION Summary of this function goes here
+%   Detailed explanation goes here
+    for n = 1:numpoints
+    coeffs = gencoeff(t0, tf, v0, vf, q0, qf);
+    
+    points(1,1) = genpoints(coeffs,t0);
+    
+    
+    n=n+1;
+ 
+    end
+     
+    
+end
+
