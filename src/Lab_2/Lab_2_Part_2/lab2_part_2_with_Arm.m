@@ -26,7 +26,7 @@ try
     % Creating the robot structure.
     Robot.l1 = 0.135;
     Robot.l2 = 0.175; 
-    Robot.l3 = 0.16928;
+    Robot.l3  = 0.16928;
     
     % y0 is the initial conditions.
     y0 = kinematics([0; 0; 0]);           
@@ -54,7 +54,7 @@ try
     Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
         'color', [0 0.4 0.7], 'LineWidth', 5);
     
-    for k = 1:200
+    for k = 1:6
         
         % Send packet to the server and get the response
         if (mod(k,2) == 0) 
@@ -79,7 +79,7 @@ try
         pause(0.1);
     end
     
-    % csvwrite('baseplot.csv', posmatrix);
+    csvwrite('baseplot.csv', posmatrix);
 catch
      disp('Exited on error, clean shutdown');
 end

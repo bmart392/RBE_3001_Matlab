@@ -38,32 +38,43 @@ pp = PacketProcessor(7);
   i = 1;               % row of matrix
   time = 0;            % make sure time starts at 0  
  
+  % These are the desired angle ticks.
+  desiredpos = [ 268 177 170;
+                 19 268 567;
+                 -250 623 610;
+                 -528 -105 1118;
+                 -695 -126 2314 ];
+  
+     % theseones = [1 4 7];
+             
   tic                  % Begin time tracking
   
-  for j = 0:2
+  for m = 1:5
       % move joint 30 degrees
-      pidpacket((j*3)+1) = 30 * angconv;
-      disp(pidpacket((j*3)+1));
+      for j=0:2
+          pidpacket((j*3)+1) = desiredpos(m,j+1);
+      end
+      
       returnpidpacket = pp.command(PIDID, pidpacket);
       
       % save time
       time = toc;
       
       % check status
-      returnstatuspacket = pp.command(STATUSID, statuspacket);
+      % returnstatuspacket = pp.command(STATUSID, statuspacket);
       
       % put in matrix
-      jointmatrix(i,1) = time;
-      jointmatrix(i,2) = returnstatuspacket((j*3)+1);
+       % jointmatrix(i,1) = time;
+      % jointmatrix(i,2) = returnstatuspacket((j*3)+1);
       
-      i = i+1;
+      % i = i+1;
       
       % pause(1)
       
       % move back to home position
-      pidpacket((j*3)+1) = 0;
+      % pidpacket((j*3)+1) = 0;
       
-      returnpidpacket = pp.command(PIDID, pidpacket);
+      % returnpidpacket = pp.command(PIDID, pidpacket);
       
       % save time
       time = toc;
@@ -77,9 +88,16 @@ pp = PacketProcessor(7);
       
       i = i+1;
       
-      pause(1);
+      pause(2);
     
   end
+  
+% move back to home position
+pidpacket = [1 0 0 1 0 0 1 0 0 00 00 00 00 00 00 ];
+
+returnpidpacket = pp.command(PIDID, pidpacket);
+
+pause(2);
   
   % save to csv
   csvwrite('joints.csv', jointmatrix);
