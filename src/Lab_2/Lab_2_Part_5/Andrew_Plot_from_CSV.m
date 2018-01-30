@@ -1,5 +1,7 @@
 %% Plotting code.
 
+clc; clear all; close all;
+
 f = figure; % create figure
 axes;
 hold on;
@@ -12,7 +14,7 @@ fig_size = get(0, 'Screensize');
 fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
 0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
-axis((Robot.l2 + Robot.l3) * [-1 1 -1 1 -0.5 1.5]);
+% axis((Robot.l2 + Robot.l3) * [-1 1 -1 1 -0.5 1.5]);
 title('Stick figure plot');
 xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
 
@@ -54,5 +56,5 @@ Ys = importedFromCSV(:,2);
 Zs = importedFromCSV(:,3);
 
 % Plot the end-effector coordinates.
-plot3(Xs, Ys, Zs);
+plot3(Xs, Ys, Zs, 'LineWidth', 5);
 drawnow;
