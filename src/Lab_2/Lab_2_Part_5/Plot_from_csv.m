@@ -25,18 +25,39 @@ i = 1;
 % Read in the csv file.
 M = dlmread('joints.csv');
 
-importedFromCSV = [];
+% X Coordinates
+Xs = [];
+
+% Y Coordinates
+Ys = [];
+
+% Z Coordinates
+Zs = [];
 
 % We have a 10x4 for each translation/points
 % n = x, y or z components
 % m = 
 % l =
+
+% The reformatted data from the .csv file.
+importedFromCSV = [];
+
 for n=1:3
     for m=1:5
         for l=1:10
-        importedFromCSV(i,n) = M(l,(m*4)-(n-1));
+        importedFromCSV(i,n) = M(l,(m*4)-(3-n));
         i=i+1;
         end
     end
+    % We reset the counter because we start at the top again.
+    i = 1;
 end
-plot3(M(:,1), M(:,2), M(:,3));
+
+% Fill in the respective column vectors.
+Xs = importedFromCSV(:,1);
+Ys = importedFromCSV(:,2);
+Zs = importedFromCSV(:,3);
+
+% Plot the end-effector coordinates.
+plot3(Xs, Ys, Zs);
+drawnow;
