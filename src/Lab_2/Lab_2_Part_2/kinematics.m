@@ -8,10 +8,10 @@ function T = kinematics(q1) %T = RobotPlotter(R, q1)
     L2 = 0.175; 
     L3 = 0.16928;
 
-    disp("Degree readouts");
-    disp(q1(1,1)/angconv);
-    disp(q1(2,1)/angconv);
-    disp(q1(3,1)/angconv);
+    %disp("Degree readouts");
+    %disp(q1(1,1)/angconv);
+    %disp(q1(2,1)/angconv);
+   % disp(q1(3,1)/angconv);
     
     % scaler = 1000;
 
@@ -50,10 +50,10 @@ function T = kinematics(q1) %T = RobotPlotter(R, q1)
     RobotArm = cat(2, RobotArm, T1(1:3,4));
     RobotArm = cat(2, RobotArm, T2(1:3,4));
     RobotArm = cat(2, RobotArm, T3(1:3,4));
-    disp("T2");
-    disp(T2(1:3,4));
-    disp("T3");
-    disp(T3(1:3,4));
+%     disp("T2");
+%     disp(T2(1:3,4));
+%     disp("T3");
+%     disp(T3(1:3,4));
     % Now a row is point, with that transpose
     T = RobotArm';
 

@@ -54,16 +54,16 @@ try
     Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
         'color', [0 0.4 0.7], 'LineWidth', 5);
     
-    for k = 1:6
+    for k = 1:250
         
         % Send packet to the server and get the response
         if (mod(k,2) == 0) 
         returnPacket = pp.command(STATUS_ID, statuspacket);
         
-        disp('Encoder ticks read:');
-        disp(returnPacket(1));
-        disp(returnPacket(2));
-        disp(returnPacket(3));
+%         disp('Encoder ticks read:');
+%         disp(returnPacket(1));
+%         disp(returnPacket(2));
+%         disp(returnPacket(3));
         
         % Fill robotAngles matrix with encoder ticks read from packet  
         robotAngles(1,1) = returnPacket(1);
@@ -79,9 +79,9 @@ try
         pause(0.1);
     end
     
-    csvwrite('baseplot.csv', posmatrix);
+   % csvwrite('baseplot.csv', posmatrix);
 catch
-     disp('Exited on error, clean shutdown');
+    disp('Exited on error, clean shutdown');
 end
 
 % Clear up memory upon termination
