@@ -21,7 +21,7 @@ rowechmatrix(4,:) = velocityFinal;
 
 % Now we define the B Matrix.
 
-bMatrix = ([startPosition endPosition startVel endVel]);
+bMatrix = ([startPosition startVel endPosition  endVel]);
 
 % Now we take the inverse of the A matrix. WE SHOULD CHECK TO SEE IF WE CAN OR CANNOT DO THE INVERSE OF THE MATRIX!!!!!!!
 
