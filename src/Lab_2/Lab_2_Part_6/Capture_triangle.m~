@@ -63,7 +63,7 @@ pidpacket= zeros(15, 1, 'single');
 
 
 
-jointmatrix = [10,12];  % matrix to hold joint angles and time
+jointmatrix = [10,9];  % matrix to hold joint angles and time
 
 time = 0;            % make sure time starts at 0  
 
@@ -114,10 +114,10 @@ for m = 1:3
         drawnow;
 
         % put in matrix
-        jointmatrix(i, (4*m)-3) = time;
-        jointmatrix(i, (4*m)-2) = readings(1,1);
-        jointmatrix(i, (4*m)-1) = readings(2,1);
-        jointmatrix(i, 4*m) = readings(3,1);
+        jointmatrix(i, (3*m)-2) = time; %jointmatrix(i, (4*m)-3) = time;
+        %jointmatrix(i, (4*m)-2) = readings(1,1);
+        jointmatrix(i, (3*m)-1) = readings(1,1); %jointmatrix(i, (4*m)-1) = readings(2,1);
+        jointmatrix(i, 3*m) = readings(2,1);
     end
 
 

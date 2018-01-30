@@ -1,4 +1,4 @@
-function points = capturepoints()
+function points = capturepoints(STATUSID, statuspacket, pp)
 readings = zeros(3,1);
 desiredpos = zeros(3,3);
 prompt = 'Do you want to set the encoder values? type capture to set values  or n to skip: ';
@@ -25,7 +25,7 @@ while inputstr == 'n'
     end
 end
 
-desiredpos(:,1) = readings;
+desiredpos(1,:) = readings;
 
  inputstr = 'n';
  
@@ -42,7 +42,7 @@ while inputstr == 'n'
     end
 end
 
-desiredpos(:,2) = readings;
+desiredpos(2,:) = readings;
 
  inputstr = 'n';
 
@@ -59,7 +59,7 @@ while inputstr == 'n'
     end
 end
 
-desiredpos(:,3) = readings;
+desiredpos(3,:) = readings;
 points = desiredpos;
 
 end
