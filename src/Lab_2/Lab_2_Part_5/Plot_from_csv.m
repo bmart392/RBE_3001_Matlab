@@ -37,8 +37,6 @@ Zs = [];
 % The reformatted data from the .csv file.
 importedFromCSV = [];
 
-% We have a 10x4 for each translation/points
-
 for n=1:3
     for m=1:5
         for l=1:10
@@ -46,6 +44,8 @@ for n=1:3
         i=i+1;
         end
     end
+    % We reset the counter because we start at the top again.
+    i = 1;
 end
 
 % Fill in the respective column vectors.
