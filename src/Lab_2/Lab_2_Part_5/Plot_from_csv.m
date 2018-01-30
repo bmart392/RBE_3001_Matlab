@@ -50,7 +50,7 @@ end
 
 % Fill in the respective column vectors.
 Xs = importedFromCSV(:,1);
-Ys = inportedFromCSV(:,2);
+Ys = importedFromCSV(:,2);
 Zs = importedFromCSV(:,3);
 
 % Plot the end-effector coordinates.
