@@ -20,12 +20,12 @@ points = zeros(numpoints, 1);
 time = 0:(tf/(numpoints-1)):tf;
 
 % Calculate the coefficients of the quintic polynomial equation
-coeffs = gencoeff(t0, tf, q0, qf, v0, vf, a0, af);
+coeffs = gencoeff_quintic(t0, tf, q0, qf, v0, vf, a0, af);
 
 % Calculate the position at every time value except the last value and
 % then fill the points array with those values
 for n = 1:numpoints
-    points(n,1) = genpoints(coeffs,time(n));
+    points(n,1) = genpoints_quintic(coeffs,time(n));
 end
 
 end
