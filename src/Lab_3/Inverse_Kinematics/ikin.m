@@ -1,10 +1,16 @@
-% This 
+% This is the inverse kinematics file. This is the one to use. Don't use
+% another one. 
 
-function T = ikin(x, y, z)
+% The input is a column vector.
+function T = ikin(endeffectlocation)
 
 l1 = 0.135; % The straight up link.
 l2 = 0.175; % The shoulder link.
 l3 = 0.16928; % The elbow link.
+
+x = endeffectlocation(1,1);
+y = endeffectlocation(2,1);
+z = endeffectlocation(3,1);
 
 % First, we check to see if the location is even possible to be reached in
 % terms of x,y,z location. WE ARE IGNORING ROTATION FOR NOW.
