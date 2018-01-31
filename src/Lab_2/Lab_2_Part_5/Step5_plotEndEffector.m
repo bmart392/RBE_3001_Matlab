@@ -12,7 +12,7 @@ grid on;
 % center the figure on screen and resize it
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
-0.9*fig_size(3), 0.8*fig_size(4)];
+    0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
 % axis((Robot.l2 + Robot.l3) * [-1 1 -1 1 -0.5 1.5]);
 title('Stick figure plot');
@@ -42,8 +42,8 @@ importedFromCSV = [];
 for n=1:3
     for m=1:5
         for l=1:10
-        importedFromCSV(i,n) = M(l,(m*4)-(3-n));
-        i=i+1;
+            importedFromCSV(i,n) = M(l,(m*4)-(3-n));
+            i=i+1;
         end
     end
     % We reset the counter because we start at the top again.

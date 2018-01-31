@@ -20,12 +20,13 @@ L3 = 0.16928;
 %      ---------------------------------
 %  1   |   L1    theta1    0     pi/2
 %  2   |   L2    theta2    0      0
-%  3   |   L3    theta3    0      0
+%  3   |   L3    theta3  -pi/2    0
 
 % tdh(d, theta, a, alpha)
 
 % Create our transformation matrices
 T0 = [0 0 0]'; % Create the vertical matrix.
+
 % d_h_params.tdh(0,0,0,0);
 % T1 = d_h_params.tdh(L1,(q(1,1)*pi/180),0,pi/2);
 T1 = tdh(L1,(q(1,1)*pi/180),0,pi/2);
@@ -41,12 +42,12 @@ axis on, grid on, hold on; axis equal;
 % center the figure on screen and resize it
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
-0.9*fig_size(3), 0.8*fig_size(4)];
+    0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
-title('Stick figure plot');
-xlabel('X Axis');
-ylabel('Y Axis');
-zlabel('Z Axis');
+title('Plot Angles (Deg) -30, 50 -20');
+xlabel('X Axis[m]');
+ylabel('Y Axis[m]');
+zlabel('Z Axis[m]');
 
 % We redefine these 2 trasformations so that they start from the previous
 % transformation.
@@ -59,7 +60,7 @@ RobotArm = [0 0 0]';
 RobotArm = cat(2, RobotArm, T1(1:3,4));
 RobotArm = cat(2, RobotArm, T2(1:3,4));
 RobotArm = cat(2, RobotArm, T3(1:3,4));
-RobotArm
+
 % Now we get the x, y, and z coordinates and create an x and y and z column
 % vectors.
 X1 = RobotArm(1,:)';

@@ -1,3 +1,4 @@
+%% Step 1: Static 3D Plot
 
 clear all; close all; clc
 

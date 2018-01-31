@@ -1,8 +1,8 @@
+%% Step 6: Plot each joint position and velocity
 
 f = figure; % create figure
 axes;
 hold on;
-%axis equal;
 box on;
 grid on;
 
@@ -10,12 +10,12 @@ grid on;
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
-axis([0 18 -20 80]);
+axis([0 7.5 -20 80]);
 title('Plotting triangle path');
 xlabel('Time [s]'); ylabel('Position [degrees]');
 
 % This is the giant csv file read in.
-M = dlmread('interpolationjoints.csv');
+M = dlmread('triangle_joints.csv');
 
 % X Coordinates
 Xs = [];
@@ -24,23 +24,24 @@ Xs = [];
 Ys = [];
 
 % The reformatted data from the .csv file.
-importedFromCSV = zeros(60,4);
+importedFromCSV = [];
 
 % Counter for counting the rows in the l for loop
 i = 1;
+
 %iterate through each axis
-for m=1:4
+for n=1:4
     % iterate through the columns for the data from each axis
-    
-    
-    % iterate through the rows of the csv
-    for l=1:60
-        importedFromCSV(l,m) = M(l,m);
+    for m=1:3
         
+        % iterate through the rows of the csv
+        for l=1:10
+            importedFromCSV(i,n) = M(l,(m*4)-(4-n));
+            i=i+1;
+        end
     end
-    
-    
-    
+    % We reset the counter because we start at the top again.
+    i = 1;
 end
 
 % Fill in the respective column vectors.
@@ -60,7 +61,6 @@ J2s(:,2) = importedFromCSV(:,3)./11.4;
 vJ2s = importedFromCSV(:,1);
 for w = 1:29
     vJ2s(w,2) = (J2s((w+1),2)-J2s(w,2))/(J2s(w+1,1)-J2s(w,1));
-    
 end
 
 
@@ -95,7 +95,7 @@ grid on;
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(g, 'Position', fig_pos);
-axis([0 9 -25 25]);
+axis([0 7.5 -200 200]);
 title('Plotting triangle path velocity');
 xlabel('Time [s]'); ylabel('Velocity [degrees/s]');
 plot(vJ1s(:,1),vJ1s(:,2),vJ2s(:,1),vJ2s(:,2), ...

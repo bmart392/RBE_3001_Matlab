@@ -1,8 +1,8 @@
 % Lab 2 part 2
 
-clear all; close all; clc; 
+clear all; close all; clc;
 
-% try 
+try
     % Here we create the robotplotter object.
     lengths = [ 0.135; 0.175; 0.16928;];
     
@@ -26,17 +26,17 @@ clear all; close all; clc;
     % Here we have some code for the graph.
     f = figure;
     % figure;
-
+    
     % These 3 commands work AFTER plot3()
     axis on, grid on, axis equal;  hold on;
-
+    
     % center the figure on screen and resize it
     fig_size = get(0, 'Screensize');
     fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
     set(f, 'Position', fig_pos);
     title('Stick figure plot');
     xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
-
+    
     % These variables hold the plotting code.
     TheArm = zeros(3,4);
     
@@ -74,9 +74,9 @@ clear all; close all; clc;
         % Now we have to use a handle so that we only UPDATE a single plot.
         refreshdata(f);
         
-        plot3(X1, Y1, Z1, 'LineWidth', 5);  
+        plot3(X1, Y1, Z1, 'LineWidth', 5);
         
-        % h = plot3(X1, Y1, Z1);  
+        % h = plot3(X1, Y1, Z1);
         
         % drawnow;
         
@@ -85,6 +85,6 @@ clear all; close all; clc;
     end
     
     % csvwrite('baseplot.csv', posmatrix);
-% catch
-    % disp('Exited on error, clean shutdown');
-% end
+catch
+    disp('Exited on error, clean shutdown');
+end
