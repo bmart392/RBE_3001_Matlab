@@ -22,7 +22,6 @@ import java.lang.*;
 
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7); % !FIXME why is the deviceID == 7?
-
 try
   SERV_ID = 37;            % we will be talking to server ID 37 on
                            % the Nucleo
@@ -64,8 +63,6 @@ try
 catch
     disp('Exited on error, clean shutdown');
 end
-
-
 % Clear up memory upon termination
 pp.shutdown()
 clear java;
