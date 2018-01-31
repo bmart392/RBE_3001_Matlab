@@ -8,6 +8,9 @@ l1 = 0.135; % The straight up link.
 l2 = 0.175; % The shoulder link.
 l3 = 0.16928; % The elbow link.
 
+% Radians to degrees.
+angconv = 180 / pi;
+
 x = endeffectlocation(1,1);
 y = endeffectlocation(2,1);
 z = endeffectlocation(3,1);
@@ -50,7 +53,7 @@ theta3 = pi - acos(clamp(((l2^2) + (l3^2) - (magend)) / ...
 
 % Throwing errors for dayz
 if (~(isReal(theta3)))
-   error("Imaginary theta1 angle. You scored 10 points. Try again?");
+   error("Imaginary theta3 angle. You scored 30 points. Try again?");
 end
 
 % We are choosing elbow down, btw.
@@ -70,9 +73,10 @@ theta2 = alpha + beta;
 
 % Throwing errors for dayz
 if (~(isReal(theta2)))
-   error("Imaginary theta1 angle. You scored 10 points. Try again?");
+   error("Imaginary theta2 angle. You scored 20 points. Try again?");
 end
 
-T = [theta1 theta2 theta3]';
+% Return degrees, not radians.
+T =  angconv.*([theta1 theta2 theta3]');
 
 end
