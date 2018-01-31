@@ -2,7 +2,7 @@
 % another one. 
 
 % The input is a column vector.
-function T = ikin(endeffectlocation)
+function T = inverse_kinematics(endeffectlocation)
 
 l1 = 0.135; % The straight up link.
 l2 = 0.175; % The shoulder link.
@@ -14,6 +14,9 @@ angconv = 180 / pi;
 x = endeffectlocation(1,1);
 y = endeffectlocation(2,1);
 z = endeffectlocation(3,1);
+
+% 1024 ticks is the upper limit   - this may need to be checked later again
+% -1024 ticks is the lower limit
 
 % First, we check to see if the location is even possible to be reached in
 % terms of x,y,z location. WE ARE IGNORING ROTATION FOR NOW.
