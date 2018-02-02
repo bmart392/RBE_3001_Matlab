@@ -4,9 +4,7 @@
 % position, not the path MOVING TO THE POSITION.
 
 %% Part 1: Optimize Communication Speed
-%
-% calculate the average time it takes to send
-% and receive packets
+
 
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
@@ -25,44 +23,90 @@ try
     PID_ID = 37;            % controls the robot
     STATUS_ID = 42;         % reads robot position
     DEBUG   = true;         % enables/disables debug prints
+
+     % initialize packets to send and read positions
+     statuspacket = zeros(15,1,'single');
+     pidpacket = zeros(15,1,'single');
+
+angconv = 11.44;    % 11.44 ticks per degree
+time = 0;           % initalize time equal to zero
+numsamples = 30;    % Decide how many times to sample the arm position
+
+% Create a matrix to store the results in
+samples = zeros((2*numsamples)+2,15);
+
+i = 1;              % Variable to track the row of "samples"
+                    % data is stored in
+
+POINT1 = 1;         % Set constant for determining answer of user input
+POINT2 = 2;         % Set constant for determining answer of user input
+EXIT = 3;           % Set constant for determining answer of user input
+
+% make sure the robot is in the home position
+pidpacket(1) = 0;
+pidpacket(4) = 0;
+pidpacket(7) = 0;
+returnpidpacket = pp.command(PID_ID, pidpacket);
+
+% Ask the user what they want to do
+userinput = dialog_box_3option('Would you like to go to a point?','','Point 1', 'Point 2','Exit the script');
+
+%Determine if the script will run
+if(userinput ~= EXIT)
     
-    % initialize packets to send and read positions
-    statuspacket = zeros(15,1,'single');
-    pidpacket = zeros(15,1,'single');
-    
-    angconv = 11.44;    % 11.44 ticks per degree
-    time = 0;           % initalize time equal to zero
-    
-    % make sure the robot is in the home position
-    pidpacket(1) = 0;
-    pidpacket(4) = 0;
-    pidpacket(7) = 0;
-    returnpidpacket = pp.command(PID_ID, pidpacket);
-    
-    tic     % start time tracking
-    
-    % move a joint 50 times
-    % will be 100 samples (send and receive time)
-    for i = 1:24
-       % move link 2 (elbow) 10 degrees 
-       pidpacket(4) = 10 * angconv;
-       returnpidpacket = pp.command(PID_ID, pidpacket);
-       
-       % read position
-       returnstatuspacket = pp.command(STATUS_ID, statuspacket);
-       
-       % move link 2 back to home position
-       pidpacket(4) = 0;
-       returnpidpacket = pp.command(PID_ID, pidpacket);
+    % Determine if the arm will go to Point 1
+    if(userinput == POINT1)
+        disp('Go to point 1');
+        tic     % start time tracking
+        
+        % Move the arm to point 1
+        pidpacket(1) = points(1,1);
+        pidpacket(4) = points(1,2);
+        pidpacket(7) = points(1,3);
+        returnpidpacket = pp.command(PID_ID, pidpacket);
+        
+        for i = i:numsamples
+            % read position
+            returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+            
+            time = toc; % Read the time of the sample
+            
+            % Record the status packet of the arm
+            samples(i,:) = returnstatuspacket;
+        end
+        i = i + 1;
+        samples(i,:) = 0;
+        
+        % Else the arm will go to Point 2
+    else
+        disp('go to point 2');
+        disp('Go to point 1');
+        tic     % start time tracking
+        
+        % Move the arm to point 1
+        pidpacket(1) = points(2,1);
+        pidpacket(4) = points(2,2);
+        pidpacket(7) = points(2,3);
+        returnpidpacket = pp.command(PID_ID, pidpacket);
+        
+        for i = i:numsamples
+            % read position
+            returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+            
+            time = toc; % Read the time of the sample
+            
+            % Record the status packet of the arm
+            samples(i,:) = returnstatuspacket;
+        end
+        i = i + 1;
+        samples(i,:) = 0;
     end
-    
-    time = toc;             % save total time
-    avgtime = time/100;     % calculate avg time
-    disp(avgtime);
-catch
-    disp('Exited on error, clean shutdown');
 end
 
-% Clear up memory upon termination
+catch
+   disp('Exited on error, clean shutdown');
+end
+
+Clear up memory upon termination
 pp.shutdown()
 clear java;

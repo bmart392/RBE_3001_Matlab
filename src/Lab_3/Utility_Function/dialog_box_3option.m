@@ -21,6 +21,8 @@ switch choice
         input = 2;
     case option3
         input = 3;
+    otherwise
+        input = 3;
         
 end
 end
