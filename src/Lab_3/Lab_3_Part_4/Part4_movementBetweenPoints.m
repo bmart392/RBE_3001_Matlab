@@ -37,6 +37,7 @@ try
     pidpacket = zeros(15,1,'single');
     
     angconv = 11.44;    % 11.44 ticks per degree
+    time = 0;
     
     % y0 is the initial conditions.
     y0 = kinematics([0; 0; 0]);
@@ -59,47 +60,47 @@ try
     q2 = [90; 45; 100];
     q3 = [-15; 25; 10];
     
-    vertex1 = kinematics(q1);
-    vertex2 = kinematics(q2);
-    vertex3 = kinematics(q3);
+    % matrix to hold the 3 vertices in task space
+    vertices = [0 0 0; 0 0 0; 0 0 0];
+    vertices(1,:)= kinematics(q1);
+    vertices(2,:) = kinematics(q2);
+    vertices(3,:) = kinematics(q3);
     
     %% solve for IK of each vertex before moving to point
     
-    % solve for position one
-    pos1 = inverse_kinematics(vertex1);
+    tic % start time tracking
     
-    % move to position one
-    pidpacket(1) = pos1(1,1);
-    pidpacket(4) = pos1(2,1);
-    pidpacket(7) = pos1(3,1);
-    returnpidpacket = pp.command(PID_ID, pidpacket);
-    
-    % solve for positon two
-    pos2 = inverse_kinematics(vertex2);
-    
-    % move to position two
-    pidpacket(1) = pos2(1,1);
-    pidpacket(4) = pos2(2,1);
-    pidpacket(7) = pos2(3,1);
-    returnpidpacket = pp.command(PID_ID, pidpacket);
-    
-    % solve for positon three
-    pos3 = inverse_kinematics(vertex3);
-    
-    % move to position three
-    pidpacket(1) = pos3(1,1);
-    pidpacket(4) = pos3(2,1);
-    pidpacket(7) = pos3(3,1);
-    returnpidpacket = pp.command(PID_ID, pidpacket);
-    
-    % solve for position one
-    pos1 = inverse_kinematics(vertex1);
-    
-    % move back to position one
-    pidpacket(1) = pos1(1,1);
-    pidpacket(4) = pos1(2,1);
-    pidpacket(7) = pos1(3,1);
-    returnpidpacket = pp.command(PID_ID, pidpacket);
+    for m = 1:3 % I don't think this will go back to the first vertex
+        % solve for position one in joint space
+        desiredpos = inverse_kinematics(vertex(1,:));
+        
+        % fill a packet with the proper data for each the mth location
+        for j=0:2
+            pidpacket((j*3)+1) = desiredpos(m,j+1);
+        end
+        
+        % move to position one
+        returnpidpacket = pp.command(PID_ID, pidpacket);
+        
+        % track the status of the robot while moving to positions
+        for i = 1:10
+            % save time
+            time = toc;
+            % check status
+            returnstatuspacket = pp.command(STATUSID, statuspacket);
+            readings(1,1) = returnstatuspacket(1);
+            readings(2,1) = returnstatuspacket(4);
+            readings(3,1) = returnstatuspacket(7);
+            
+            % put in matrix
+            jointmatrix(i, (4*m)-3) = time;
+            jointmatrix(i, (4*m)-2) = readings(1,1);
+            jointmatrix(i, (4*m)-1) = readings(2,1);
+            jointmatrix(i, 4*m) = readings(3,1);
+        end
+    end
+    % save to csv
+    csvwrite('positions.csv', jointmatrix);
     
     %% 3D plot of the task space points
     f2 = figure; % create figure
@@ -119,7 +120,7 @@ try
     xlabel('X Axis [mm]'); ylabel('Y Axis [mm]'); zlabel('Z Axis [mm]');
     
     % read from csv file and store in a Matrix
-    Positions = dlmread('positions.csv');% MAKE SURE THIS IS THE RIGHT CSV
+    Positions = dlmread('positions.csv');
     
     % The reformatted data from the .csv file.
     importedFromCSV = [];
@@ -143,8 +144,6 @@ try
     plot3(endXs, endYs, endZs, 'LineWidth', 3);
     drawnow;
     
-    
-    
     %% Plot the corresponding x, y, z tip locations
     f1 = figure; % create figure
     axes;
@@ -159,8 +158,6 @@ try
     axis([0 7.5 -20 80]);   % may need to be changed
     title('Corresponding x, y, and z tip locations');
     xlabel('Time [s]'); ylabel('Position [mm]');
-    
-    
     
 catch
     disp('Exited on error, clean shutdown');
