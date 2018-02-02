@@ -65,14 +65,15 @@ try
     vertices(1,:)= kinematics(q1);
     vertices(2,:) = kinematics(q2);
     vertices(3,:) = kinematics(q3);
+    vertices(4,:) = kinematics(q1);
     
     %% solve for IK of each vertex before moving to point
     
     tic % start time tracking
     
-    for m = 1:3 % I don't think this will go back to the first vertex
+    for m = 1:4
         % solve for position one in joint space
-        desiredpos = inverse_kinematics(vertex(1,:));
+        desiredpos = inverse_kinematics(vertex(m,:));
         
         % fill a packet with the proper data for each the mth location
         for j=0:2
