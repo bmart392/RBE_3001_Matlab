@@ -20,9 +20,9 @@ switch choice
     case option2
         input = 2;
     case option3
-        input = 3;
+        input = 0;
     otherwise
-        input = 3;
+        input = 0;
         
 end
 end

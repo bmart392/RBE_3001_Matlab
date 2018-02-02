@@ -15,6 +15,8 @@ switch choice
     case 'No'
         input = 0;
     case 'Cancel'
-        input = 0;
+        input = 2;
+    otherwise
+        input = 2;
 end
 end
