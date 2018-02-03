@@ -64,13 +64,12 @@ end
 % Now we solve for alpha, the angle from the horizontal to link 2.
 
 alpha = atan2( endloc(3,1), ((endloc(1,1)^2 + endloc(2,1)^2)^(0.5)) );
-disp(alpha*(180/pi));
+
 
 % Here we solve for beta.
 
 beta = acos(clamp(((l2^2) + (magend^2) - (l3^2))...
     / (2 * l2 * magend), -1, 1));
-disp(beta*(180/pi));
 
 % Theta2 as elbow down.
 

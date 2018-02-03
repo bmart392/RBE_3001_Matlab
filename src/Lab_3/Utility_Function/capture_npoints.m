@@ -8,13 +8,14 @@ EXIT = 2;           % Set constant for determining answer of user input
 
 inputstr = NO;
 
-for i = 1:numreadings+1
+for i = 1:numreadings
+    
     while inputstr == NO
         returnstatuspacket = pp.command(STATUSID, statuspacket);
         readings(1) = returnstatuspacket(1);
         readings(2) = returnstatuspacket(4);
         readings(3) = returnstatuspacket(7);
-        disp(readings);
+        
         prompt = ['J0 = ', num2str(readings(1)), newline , ...
             'J1 = ', num2str(readings(2)), newline , ...
             'J2 = ', num2str(readings(3)), newline , ...
@@ -33,4 +34,5 @@ for i = 1:numreadings+1
     end
     
     points(i,:) = readings;
+    inputstr = NO;
 end
