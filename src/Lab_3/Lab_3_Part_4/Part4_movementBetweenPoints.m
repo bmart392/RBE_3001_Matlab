@@ -14,6 +14,10 @@
 % create a plot with three lines corresponding to the x, y, and z values
 % of the tip location in mm vs time
 
+% ***BEFORE RUNNING THIS CODE, CHECK THE POINTS ARE IN THE TASK SPACE***
+% ***ALSO CHECK THE FOR LOOPS THAT FILL THE MATRICES FROM THE CSV FILE***
+% ***AXIS FOR GRAPHS MAY NOT BE THE RIGHT SIZE
+
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
@@ -56,11 +60,13 @@ try
     
     %% Fill vertices using kinematics
     % ***check to make sure these are in the workspace
+    % vector q holds angles (in deg) of base, elbow, and wrist joints
     q1 = [30; 30; 30];
     q2 = [90; 45; 100];
     q3 = [-15; 25; 10];
     
     % matrix to hold the 3 vertices in task space
+    % calculates the end effector positions
     vertices = [0 0 0; 0 0 0; 0 0 0];
     vertices(1,:)= kinematics(q1);
     vertices(2,:) = kinematics(q2);
@@ -164,8 +170,6 @@ try
     endXs(:,1) = importedFromCSV(:,1);
     endYs(:,1) = importedFromCSV(:,1);
     endZs(:,1) = importedFromCSV(:,1);
-    
-    
     
     plot(endXs(:,1),endXs(1,:), endYs(:,1), endYs(1,:),...
         endZs(:,1),endZs(1,:));
