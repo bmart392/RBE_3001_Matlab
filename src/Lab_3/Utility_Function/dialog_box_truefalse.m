@@ -13,7 +13,7 @@ switch choice
     case 'Yes'
         input = 1;
     case 'No'
-        input = 0;
+        input = -1;
     case 'Cancel'
         input = 2;
     otherwise

@@ -125,18 +125,14 @@ pp = PacketProcessor(7);
                 % message(i,1) = toc;
                 % message(i,2:end) = returnstatuspacket;
                 samples(i,1) = toc;
-                for w=2:16
-                    samples(i,w) = returnstatuspacket(w-1,1);
-                end
-                
+                for w=2:
+                samples(i,2:15+2) = returnstatuspacket';
                 disp(size(time));
                 % Record the status packet of the arm
                 % samples(i,:) = message;
             end
             % Here we are plotting the first position.
-            disp("This is samples");
-            disp(samples(i,:)./angconv);
-            pos1 = plotArm3([samples(i,1+1)/angconv; samples(i,4+1)/angconv; samples(i,7+1)/angconv]);
+            pos1 = plotArm3([samples(i,1)/angconv; samples(i,4)/angconv; samples(i,7)/angconv]);
             disp(samples(i,:)./angconv);
             
             i = i + 1;
@@ -168,13 +164,10 @@ pp = PacketProcessor(7);
                 samples(i,:) = cat(2,time,((returnstatuspacket)'));
             end
             % Here we are plotting the first position.
-%             disp('This is i: ');
-%             disp(i);
-            %pos2 = plotArm3([-samples(i,1)/angconv; samples(i,4)/angconv; samples(i,7)/angconv]);  
-            disp("This is samples");
-            disp(samples(i,:)./angconv);
+            disp('This is i: ');
+            disp(i);
             pos2 = plotArm3([-samples(i,1)/angconv; samples(i,4)/angconv; samples(i,7)/angconv]);
-
+            disp(samples(i,:)./angconv);
             
             i = i + 1;
             samples(i,:) = 0;

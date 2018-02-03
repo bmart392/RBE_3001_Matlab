@@ -128,7 +128,7 @@ try
     for n=1:3
         for m=1:5 % these will change depending on size of csv
             for l=1:10 % these will change depending on size of csv
-                importedFromCSV(i,n) = M(l,(m*4)-(3-n));
+                importedFromCSV(i,n) = Positions(l,(m*4)-(3-n));
                 i=i+1;
             end
         end
@@ -159,6 +159,17 @@ try
     axis([0 7.5 -20 80]);   % may need to be changed
     title('Corresponding x, y, and z tip locations');
     xlabel('Time [s]'); ylabel('Position [mm]');
+    
+    % add the time stamp to the matrices
+    endXs(:,1) = importedFromCSV(:,1);
+    endYs(:,1) = importedFromCSV(:,1);
+    endZs(:,1) = importedFromCSV(:,1);
+    
+    
+    
+    plot(endXs(:,1),endXs(1,:), endYs(:,1), endYs(1,:),...
+        endZs(:,1),endZs(1,:));
+    legend('X Coordinates','Y Coordinates','Z Coordinates')
     
 catch
     disp('Exited on error, clean shutdown');

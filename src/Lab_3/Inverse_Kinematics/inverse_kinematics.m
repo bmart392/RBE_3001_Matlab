@@ -31,10 +31,10 @@ if (toobig==true || toohigh==true || toolow==true)
 end
 
 % Find theta1, the waist angle.
-theta1 = atan2(y, x);
+theta1 = atan2(-y, x);
 
 % Throwing errors for dayz
-if (~(isReal(theta1)))
+if (~(isreal(theta1)))
    error("Imaginary theta1 angle. You scored 10 points. Try again?");
 end
 
@@ -45,17 +45,17 @@ end
 endloc = [x y (z - l1)]';
 
 % This is the magnitude of the wanted location vector.
-magend = ((endloc(1,1)^2) + (endloc(2,1)^2) + (endloc(3,1)^2))^.5;
+magend = ((endloc(1,1)^2) + (endloc(2,1)^2) + (endloc(3,1)^2))^(0.5);
 
 % Next, we calculate the angle of the upper link against the horizontal
 % created by the first link like from the diagram in the slides. We are
 % calling that angle theta3.
 
-theta3 = pi - acos(clamp(((l2^2) + (l3^2) - (magend)) / ...
-    (2 * l2 * l3)), -1, 1);
+theta3 = pi - acos(clamp(((l2^2) + (l3^2) - (magend^2)) / ...
+    (2 * l2 * l3), -1, 1));
 
 % Throwing errors for dayz
-if (~(isReal(theta3)))
+if (~(isreal(theta3)))
    error("Imaginary theta3 angle. You scored 30 points. Try again?");
 end
 
@@ -63,23 +63,25 @@ end
 
 % Now we solve for alpha, the angle from the horizontal to link 2.
 
-alpha = atan2( endloc(3,1), (endloc(1,1)^2 + endloc(2,1)^2) );
+alpha = atan2( endloc(3,1), ((endloc(1,1)^2 + endloc(2,1)^2)^(0.5)) );
+disp(alpha*(180/pi));
 
 % Here we solve for beta.
 
-beta = acos(clamp((((endloc(1,1)^2) + (magend^2) - (endloc(2,1)^2))...
-    / (2 * endloc(1,1) * magend)), -1, 1));
+beta = acos(clamp(((l2^2) + (magend^2) - (l3^2))...
+    / (2 * l2 * magend), -1, 1));
+disp(beta*(180/pi));
 
 % Theta2 as elbow down.
 
-theta2 = alpha + beta;
+theta2 = alpha - beta;
 
 % Throwing errors for dayz
-if (~(isReal(theta2)))
+if (~(isreal(theta2)))
    error("Imaginary theta2 angle. You scored 20 points. Try again?");
 end
 
 % Return degrees, not radians.
-T =  radiansToDegrees.*([theta1 theta2 theta3]');
+T =  radiansToDegrees.*([theta1 theta2 theta3+(pi/2)]');
 
 end
