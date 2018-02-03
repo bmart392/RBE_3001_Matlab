@@ -9,7 +9,7 @@ l2 = 0.175; % The shoulder link.
 l3 = 0.16928; % The elbow link.
 
 % Radians to degrees.
-angconv = 180 / pi;
+radiansToDegrees = 180 / pi;
 
 x = endeffectlocation(1,1);
 y = endeffectlocation(2,1);
@@ -80,6 +80,6 @@ if (~(isReal(theta2)))
 end
 
 % Return degrees, not radians.
-T =  angconv.*([theta1 theta2 theta3]');
+T =  radiansToDegrees.*([theta1 theta2 theta3]');
 
 end

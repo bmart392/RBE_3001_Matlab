@@ -154,8 +154,8 @@ try
                 % Record the status packet of the arm
                 samples(i,:) = returnstatuspacket;
             end
-            % Here we are plotting the first position.
-            pos2 = plotArm3(samples(i,1), samples(i,4), samples(i,7));
+                        % Here we are plotting the first position.
+            pos1 = plotArm3(samples(i,1), samples(i,4), samples(i,7));
             
             i = i + 1;
             samples(i,:) = 0;
