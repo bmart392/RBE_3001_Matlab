@@ -26,10 +26,10 @@ i = 1;
 
 % Iterate through for time
 for q=1:totalsamples
-    if q <= 150    
+    if q <= numsamples_point1    
     importedFromCSV(q,1) = M(q,1);
-    elseif q > 150
-    importedFromCSV(q,1) = M(q,1) + M(150,1);
+    elseif q > numsamples_point1
+    importedFromCSV(q,1) = M(q,1) + M(numsamples_point1,1);
     end
 end
 
@@ -46,7 +46,7 @@ J1s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
 J1s(1:totalsamples,2) = importedFromCSV(1:totalsamples,2)./11.4;
 
 vJ1s = importedFromCSV(:,1);
-for k = 1:149
+for k = 1:totalsamples-1
     vJ1s(k,2) = (J1s((k+1),2)-J1s(k,2))/(J1s(k+1,1)-J1s(k,1));
 end
 
@@ -54,7 +54,7 @@ J2s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
 J2s(1:totalsamples,2) = importedFromCSV(1:totalsamples,3)./11.4;
 
 vJ2s = importedFromCSV(:,1);
-for w = 1:149
+for w = 1:totalsamples-1
     vJ2s(w,2) = (J2s((w+1),2)-J2s(w,2))/(J2s(w+1,1)-J2s(w,1));
     
 end
@@ -63,16 +63,24 @@ J3s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
 J3s(1:totalsamples,2) = importedFromCSV(1:totalsamples,4)./11.4;
 
 vJ3s = importedFromCSV(:,1);
-for p = 1:149
+for p = 1:totalsamples-1
     vJ3s(p,2) = (J3s((p+1),2)-J3s(p,2))/(J3s(p+1,1)-J3s(p,1));
 end
 
-times = importedFromCSV(:,1);
+%times = importedFromCSV(:,1);
 
 plot(J1s(1:totalsamples,1),J1s(1:totalsamples,2),J2s(1:totalsamples,1),J2s(1:totalsamples,2),...
     J3s(1:totalsamples,1),J3s(1:totalsamples,2));
 legend('Joint 1 Position','Joint 2 Position','Joint 3 Position')
 
+disp('vJ1s');
+disp(vJ1s);
+
+disp('vJ2s');
+disp(vJ2s);
+
+disp('vJ3s');
+disp(vJ3s);
 
 
 g = figure; % create figure
@@ -85,7 +93,7 @@ grid on;
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(g, 'Position', fig_pos);
-axis([0 9 -25 25]);
+axis([0 3.5 -300 300]);
 title('Plotting triangle path velocity');
 xlabel('Time [s]'); ylabel('Velocity [degrees/s]');
 plot(vJ1s(:,1),vJ1s(:,2),vJ2s(:,1),vJ2s(:,2), ...
