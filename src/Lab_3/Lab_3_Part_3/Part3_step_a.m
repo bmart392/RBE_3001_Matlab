@@ -16,6 +16,7 @@ import java.lang.*;
 
 clc; clear all; close all;
 
+
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);
 
@@ -51,6 +52,7 @@ NO = -1;          % Set constant for determining answer of user input
 pidpacket(1) = 0;
 pidpacket(4) = 0;
 pidpacket(7) = 0;
+
 returnpidpacket = pp.command(PID_ID, pidpacket);
 
 %% These are the initalizations for using the inverse kinematics.
@@ -139,6 +141,9 @@ while(userinput ~= EXIT)
         % Create an empty row between the data sets
         samples(i,:) = zeros(1,16);
         
+        % Increment the global row counter
+        i = i + 1;
+        
         % Else the arm will go to Point 2
     elseif userinput == POINT2
         
@@ -176,6 +181,9 @@ while(userinput ~= EXIT)
         
         % Create an empty row between the data sets
         samples(i,:) = zeros(1,16);
+        
+        % Increment the global row counter
+        i = i + 1;
     end
     pause(2);
     
