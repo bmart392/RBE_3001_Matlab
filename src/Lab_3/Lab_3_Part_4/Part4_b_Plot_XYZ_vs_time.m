@@ -1,9 +1,6 @@
 %% Part4b: Plot the corresponding x, y, z tip locations
 
-
-% Fill in the time stamp - only for 2d
-TimeStamps = Positions(:,1);
-
+clc; clear all; close all;
 
 %% Create Figure
 f2 = figure; % create figure
@@ -31,10 +28,19 @@ endZs = [];        % Z Coordinates
 Positions = dlmread('positions.csv');
 
 % add the time stamp to the matrices
-endXs(:,1) = importedFromCSV(:,1);
-endYs(:,1) = importedFromCSV(:,1);
-endZs(:,1) = importedFromCSV(:,1);
+endXs(:,1) = Positions(:,1);
+endYs(:,1) = Positions(:,1);
+endZs(:,1) = Positions(:,1);
 
-plot(endXs(:,1),endXs(1,:), endYs(:,1), endYs(1,:),...
-    endZs(:,1),endZs(1,:));
+% fill x positions
+endXs(:,2) = Positions(:,2);
+
+% fill y positions
+endYs(:,2) = Positions(:,3);
+
+% fill z positions
+endZs(:,2) = Positions(:,4);
+
+plot(endXs(:,1),endXs(:,2), endYs(:,1), endYs(:,2),...
+    endZs(:,1),endZs(:,2), 'LineWidth', 3);
 legend('X Coordinates','Y Coordinates','Z Coordinates')
