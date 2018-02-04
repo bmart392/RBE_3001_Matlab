@@ -9,7 +9,7 @@ fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
 axis([0 4 -180 180]);
-title('Plotting triangle path');
+title('Angular Position of Joints');
 xlabel('Time [s]'); ylabel('Position [degrees]');
 % This is the giant csv file read in.
 M = dlmread('moveToPoints.csv');
@@ -94,7 +94,7 @@ fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(g, 'Position', fig_pos);
 axis([0 3.5 -300 300]);
-title('Plotting triangle path velocity');
+title('Angular Velocities of Joints');
 xlabel('Time [s]'); ylabel('Velocity [degrees/s]');
 plot(vJ1s(:,1),vJ1s(:,2),vJ2s(:,1),vJ2s(:,2), ...
     vJ3s(:,1),vJ3s(:,2));

@@ -14,6 +14,9 @@
 % create a plot with three lines corresponding to the x, y, and z values
 % of the tip location in mm vs time
 
+% ***ALSO CHECK THE FOR LOOPS THAT FILL THE MATRICES FROM THE CSV FILE***
+% ***AXIS FOR GRAPHS MAY NOT BE THE RIGHT SIZE
+
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
@@ -41,13 +44,13 @@ time = 0;
 row_counter = 1;    % row counter for the csv file
 
 %% Fill vertices using kinematics
-
+% ***check to make sure these are in the workspace
 % vector q holds angles (in deg) of base, elbow, and wrist joints
 % Column is the point
 qs = angconv.*cat(2, [30; 30; 30], [-10; 60; 20], [15; 25; -10]);
 
 % matrix to hold the 3 vertices in task space
-% calculates the end effector positions (x,y,z)
+% calculates the end effector positions
 vertices = [0 0 0; 0 0 0; 0 0 0; 0 0 0];
 for h = 1:4
     if h == 4
@@ -59,12 +62,8 @@ for h = 1:4
     end
 end
 
-% Transpose the matrix to work with inverse_kinematics
-% becomes 3x4 matrix
-vertices = vertices';
-
 % make sure the robot is at vertex 1
-desiredang(1:3,1) = inverse_kinematics(vertices(:,1));
+desiredang(:,1) = inverse_kinematics(vertices(:,1));
 
 % fill a packet with the proper data for each the mth location
 for j=0:2
@@ -78,12 +77,18 @@ pause(2);   % make sure it has time to get there
 
 tic % start time tracking
 
-for P=1:4
-    desiredang(:,P) = inverse_kinematics(vertices(:,P));
-end
+% Transpose the matrix to work with inverse_kinematics
+% becomes 3x4 matrix
+vertices = vertices';
 
-for m = [1 2 3 1]
+for P=1:3
+desiredang(:,m) = inverse_kinematics(vertices(:,m));
+
+
+for m = [2 3 1]
     % solve for position one in joint space
+    desiredang(:,m) = inverse_kinematics(vertices(:,m));
+    disp(desiredang);
     
     % fill a packet with the proper data for each the mth location
     for j=0:2
@@ -94,14 +99,14 @@ for m = [1 2 3 1]
     returnpidpacket = pp.command(PID_ID, pidpacket);
     
     % track the status of the robot while moving to positions
-    for i = 1:200
+    for i = 1:100
         % save time
         time = toc;
         % check status
         returnstatuspacket = pp.command(STATUS_ID, statuspacket);
         for V=1:3
             readings(V,1) = returnstatuspacket(V*3-2);
-        end
+        end        
         % put in matrix
         jointmatrix(row_counter, 1) = time;
         for k=2:4
