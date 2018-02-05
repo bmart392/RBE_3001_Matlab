@@ -9,10 +9,6 @@
 % to that point
 %
 % save the task space points at each time step
-% create a 3D plot of the task space plot
-%
-% create a plot with three lines corresponding to the x, y, and z values
-% of the tip location in mm vs time
 
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
@@ -27,99 +23,100 @@ clc; clear all; close all;
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);
 
-%try
-PID_ID = 37;            % controls the robot
-STATUS_ID = 42;         % reads robot position
-DEBUG   = true;         % enables/disables debug prints
-
-% initialize packets to send and read positions
-statuspacket = zeros(15,1,'single');
-pidpacket = zeros(15,1,'single');
-
-angconv = 11.44;    % 11.44 ticks per degree
-time = 0;
-row_counter = 1;    % row counter for the csv file
-
-%% Fill vertices using kinematics
-
-% vector q holds angles (in deg) of base, elbow, and wrist joints
-% Column is the point
-qs = angconv.*cat(2, [30; 30; 30], [-10; 60; 20], [15; 25; -10]);
-
-% matrix to hold the 3 vertices in task space
-% calculates the end effector positions (x,y,z)
-vertices = [0 0 0; 0 0 0; 0 0 0; 0 0 0];
-for h = 1:4
-    if h == 4
-        Matrix = kinematics(qs(:,1));
-        vertices(h,1:3) = Matrix(4,:);
-    else
-        Matrix = kinematics(qs(:,h));
-        vertices(h,1:3) = Matrix(4,:);
-    end
-end
-
-% Transpose the matrix to work with inverse_kinematics
-% becomes 3x4 matrix
-vertices = vertices';
-
-% make sure the robot is at vertex 1
-desiredang(1:3,1) = inverse_kinematics(vertices(:,1));
-
-% fill a packet with the proper data for each the mth location
-for j=0:2
-    pidpacket((j*3)+1) = (angconv*(desiredang(j+1,1)));
-end
-returnpidpacket = pp.command(PID_ID, pidpacket);
-
-pause(2);   % make sure it has time to get there
-
-%% solve for IK of each vertex before moving to point
-
-tic % start time tracking
-
-for P=1:4
-    desiredang(:,P) = inverse_kinematics(vertices(:,P));
-end
-
-for m = [1 2 3 1]
-    % solve for position one in joint space
+try
+    PID_ID = 37;      % controls the robot
+    STATUS_ID = 42;   % reads robot position
+    DEBUG = true;     % enables/disables debug prints
     
-    % fill a packet with the proper data for each the mth location
+    % initialize packets to send and read positions
+    statuspacket = zeros(15,1,'single');
+    pidpacket = zeros(15,1,'single');
+    
+    angconv = 11.44;    % 11.44 ticks per degree
+    time = 0;           % make sure time starts at zero
+    row_counter = 1;    % row counter for the csv file
+    
+    %% Fill vertices using kinematics
+    
+    % Vector q holds angles (in deg) of base, elbow, and wrist joints
+    % Each column holds the angle for each vertex
+    % Kinematics takes encoder ticks so need to convert from degrees to
+    % ticks
+    qs = angconv.*cat(2, [30; 30; 30], [-10; 60; 20], [15; 25; -10]);
+    
+    % Matrix to hold the 3 vertices in task space
+    vertices = [0 0 0; 0 0 0; 0 0 0; 0 0 0];
+    
+    % Calculates the end effector positions (x,y,z) using forward kinematics
+    for h = 1:4
+        if h == 4
+            Matrix = kinematics(qs(:,1));
+            vertices(h,1:3) = Matrix(4,:);  % only want the last row of the
+                                            % matrix kinematics returns
+        else
+            Matrix = kinematics(qs(:,h));
+            vertices(h,1:3) = Matrix(4,:);
+        end
+    end
+    
+    % Transpose the matrix to work with inverse_kinematics
+    % becomes 3x4 matrix
+    vertices = vertices';
+    
+    % make sure the robot is at vertex 1
+    desiredang(1:3,1) = inverse_kinematics(vertices(:,1));
+    
+    % fill a packet with the proper data for the first vertex
     for j=0:2
-        pidpacket((j*3)+1) = (angconv*(desiredang(j+1,m)));
+        pidpacket((j*3)+1) = (angconv*(desiredang(j+1,1)));
     end
-    
-    % move to position
     returnpidpacket = pp.command(PID_ID, pidpacket);
     
-    % track the status of the robot while moving to positions
-    for i = 1:200
-        % save time
-        time = toc;
-        % check status
-        returnstatuspacket = pp.command(STATUS_ID, statuspacket);
-        for V=1:3
-            readings(V,1) = returnstatuspacket(V*3-2);
-        end
-        % put in matrix
-        jointmatrix(row_counter, 1) = time;
-        for k=2:4
-            jointmatrix(row_counter, k) = (readings(k-1,1));
-        end
-        row_counter = row_counter +1;
+    pause(2);   % make sure it has time to get there
+    
+    %% solve for IK of each vertex before moving to each point
+    
+    % calculate the angles using inverse_kinematics given the x,y,z positions
+    for P=1:4
+        desiredang(:,P) = inverse_kinematics(vertices(:,P));
     end
     
+    tic % start time tracking
+    
+    for m = [1 2 3 1]
+        % fill a packet with the proper data for each the mth location
+        for j=0:2
+            pidpacket((j*3)+1) = (angconv*(desiredang(j+1,m)));
+        end
+        
+        % move to position
+        returnpidpacket = pp.command(PID_ID, pidpacket);
+        
+        % track the status of the robot while moving to positions
+        for i = 1:200
+            % save time
+            time = toc;
+            % check status
+            returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+            for V=1:3
+                readings(V,1) = returnstatuspacket(V*3-2);
+            end
+            % put in matrix
+            jointmatrix(row_counter, 1) = time;
+            for k=2:4
+                jointmatrix(row_counter, k) = (readings(k-1,1));
+            end
+            row_counter = row_counter +1;
+        end     
+    end
+    
+    pause(1);
+    % save to csv
+    csvwrite('positions.csv', jointmatrix);
+    
+catch
+    disp('Exited on error, clean shutdown');
 end
-
-pause(1);
-% save to csv
-csvwrite('positions.csv', jointmatrix);
-
-
-% catch
-%     disp('Exited on error, clean shutdown');
-% end
 
 % Clear up memory upon termination
 pp.shutdown()

@@ -1,3 +1,7 @@
+%% Part 3b:
+ % plot the position and velocity of the joints
+
+ %% Plot the positions
 f = figure; % create figure
 axes;
 hold on;
@@ -40,7 +44,7 @@ for m= 2:4
         importedFromCSV(l,m) = M(l,(m*3)-4);        
     end
 end
-disp(importedFromCSV);
+
 % Fill in the respective column vectors.
 J1s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
 J1s(1:totalsamples,2) = importedFromCSV(1:totalsamples,2)./11.4;
@@ -67,22 +71,11 @@ for p = 1:totalsamples-1
     vJ3s(p,2) = (J3s((p+1),2)-J3s(p,2))/(J3s(p+1,1)-J3s(p,1));
 end
 
-%times = importedFromCSV(:,1);
-
 plot(J1s(1:totalsamples,1),J1s(1:totalsamples,2),J2s(1:totalsamples,1),J2s(1:totalsamples,2),...
     J3s(1:totalsamples,1),J3s(1:totalsamples,2));
 legend('Joint 1 Position','Joint 2 Position','Joint 3 Position')
 
-disp('vJ1s');
-disp(vJ1s);
-
-disp('vJ2s');
-disp(vJ2s);
-
-disp('vJ3s');
-disp(vJ3s);
-
-
+%% Plot the velocities
 g = figure; % create figure
 axes;
 hold on;

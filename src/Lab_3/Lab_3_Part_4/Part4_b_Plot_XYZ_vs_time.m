@@ -1,8 +1,10 @@
 %% Part4b: Plot the corresponding x, y, z tip locations
+ % create a 2D plot with three lines corresponding to the x, y, and z 
+ % values of the tip location in mm vs time
 
 clc; clear all; close all;
 
-%% Create Figure
+%% Create the Figure
 f2 = figure; % create figure
 axes;
 hold on;
@@ -13,7 +15,6 @@ grid on;
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(f2, 'Position', fig_pos);
-%axis([0 7.5 -20 80]);   % may need to be changed
 title('Corresponding x, y, and z tip locations');
 xlabel('Time [s]'); ylabel('Position [mm]');
 
@@ -27,7 +28,7 @@ endZs = [];        % Z Coordinates
 % read from csv file and store in a Matrix
 Positions = dlmread('positions.csv');
 
-% add the time stamp to the matrices
+% add the time stamps to the matrices
 endXs(:,1) = Positions(:,1);
 endYs(:,1) = Positions(:,1);
 endZs(:,1) = Positions(:,1);

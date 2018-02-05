@@ -1,3 +1,5 @@
+%% Test program to see where each vertex is
+
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
