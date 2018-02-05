@@ -11,13 +11,23 @@ l3 = 0.16928; % The elbow link.
 % Radians to degrees.
 radiansToDegrees = 180 / pi;
 
-angconv = 11.4;
+angconv = 4096/360;
 
 x = endeffectlocation(1,1);
 y = endeffectlocation(2,1);
 z = endeffectlocation(3,1);
 
+% These are the physical angular limits of the arm. These all need to be tested manually.
+theta1max = 85; % In degrees
+theta1min = -85; % In degrees, again.
 
+theta2max = 85; % The should is all the way up
+theta2min = -25; % This is the lowest the shoulder can go. This needs to be tested further.
+
+theta3max = 80; % 
+theta3min = -80; % 
+
+%% Below we have the actual math and error testing going on. 
 
 % 1024 ticks is the upper limit   - this may need to be checked later again
 % -1024 ticks is the lower limit
@@ -82,6 +92,20 @@ theta2 = alpha - beta;
 % Throwing errors for dayz
 if (~(isreal(theta2)))
    error("Imaginary theta2 angle.");
+end
+
+% Here we do the final error checking to see if the angles are out of bounds.
+
+if (theta1 < theta1min || theta1 > theta1max)
+    error(" The Waist angle (Theta 1) is out of range. Try again.");
+end
+
+if (theta2 < theta2min || theta2 > theta2max)
+    error(" The Shoulder angle (Theta 2) is out of range. Try again.");
+end
+
+if (theta3 < theta3min || theta3 > theta3max)
+    error(" The Elbow angle (Theta 3) is out of range. Try again.");
 end
 
 % Return degrees, not radians.
