@@ -108,7 +108,7 @@ if (theta3 < theta3min || theta3 > theta3max)
     error(" The Elbow angle (Theta 3) is out of range. Try again.");
 end
 
-% Return degrees, not radians.
+% Return degrees, not radians, and in a column vector.
 T =  radiansToDegrees.*([theta1 ((pi/2)+theta2) theta3+(pi/2)]');
 
 end
