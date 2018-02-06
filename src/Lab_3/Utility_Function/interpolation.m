@@ -7,12 +7,9 @@ function points = interpolation( start_point, end_point, num_steps)
 %   returns a set of points
 
 for i = 1:3
-    
-    
     points(i,:) = linspace(start_point(i,1),end_point(i,1)...
         ,num_steps+2);
-
 end
-    
+
 end
 

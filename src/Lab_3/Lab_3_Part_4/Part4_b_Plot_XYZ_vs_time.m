@@ -13,7 +13,6 @@ grid on;
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(f2, 'Position', fig_pos);
-%axis([0 7.5 -20 80]);   % may need to be changed
 title('Corresponding x, y, and z tip locations');
 xlabel('Time [s]'); ylabel('Position [mm]');
 

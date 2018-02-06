@@ -62,19 +62,10 @@ for L=1:allrows %size(importedFromCSV, 1) % For all rows
     endeffectLoc(L,1:3) = temp1(4,1:3);
 end
 
-% disp(size(importedFromCSV, 2));
-
-disp(endeffectLoc);
-
 % Fill in the respective column vectors.
 endXs = 1000.*endeffectLoc(:,1);
-%endXs(601,1) = endXs(200,1);
-
 endYs = 1000.*endeffectLoc(:,2);
-%endYs(601,1) = endYs(200,1);
-
 endZs = 1000.*endeffectLoc(:,3);
-%endZs(601,1) = endZs(200,1);
 
 % Plot the end-effector coordinates.
 plot3(endXs, endYs, endZs, 'LineWidth', 3);
