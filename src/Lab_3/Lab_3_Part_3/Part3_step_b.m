@@ -1,5 +1,7 @@
 %% Part 3: Plots
 
+clc; clear all; close all;
+
 f = figure; % create figure
 axes;
 hold on;
@@ -47,30 +49,37 @@ end
 J1s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
 J1s(1:totalsamples,2) = importedFromCSV(1:totalsamples,2)./11.44;
 
-vJ1s = importedFromCSV(:,1);
-for k = 1:totalsamples-1
-    vJ1s(k,2) = (J1s((k+1),2)-J1s(k,2))/(J1s(k+1,1)-J1s(k,1));
-end
-
 J2s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
 J2s(1:totalsamples,2) = importedFromCSV(1:totalsamples,3)./11.44;
 
-vJ2s = importedFromCSV(:,1);
-for w = 1:totalsamples-1
-    vJ2s(w,2) = (J2s((w+1),2)-J2s(w,2))/(J2s(w+1,1)-J2s(w,1));
-    
-end
-
-J3s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1);
+J3s(1:totalsamples,1) = importedFromCSV(1:totalsamples,1); % This is time
 J3s(1:totalsamples,2) = importedFromCSV(1:totalsamples,4)./11.44;
 
-vJ3s = importedFromCSV(:,1);
-for p = 1:totalsamples-1
-    vJ3s(p,2) = (J3s((p+1),2)-J3s(p,2))/(J3s(p+1,1)-J3s(p,1));
+% This is for storing the result of kinematics in the for loop.
+temp3 = zeros(4,3);
+
+TheRobot = [0 0 0];
+
+for LP=1:totalsamples-1
+temp3 = kinematics([J1s(LP,2) J2s(LP,2) J3s(LP,2)]');
+% A row is a point, 4x3
+TheRobot = cat(1, TheRobot, temp3(4,:));
 end
 
-plot(J1s(1:totalsamples,1),J1s(1:totalsamples,2),J2s(1:totalsamples,1),J2s(1:totalsamples,2),...
-    J3s(1:totalsamples,1),J3s(1:totalsamples,2),'LineWidth', 2);
+% disp(size(TheRobot));
+
+TheTimes = J1s(2:end,1);
+Xes = TheRobot(2:end,1);
+Yes = TheRobot(2:end,2);
+Zes = TheRobot(2:end,3);
+
+disp(Zes);
+% disp(size(TheTimes));
+% disp(size(Xes));
+% disp(size(Yes));
+% disp(size(Zes));
+
+plot(J1s(1:totalsamples,1),J1s(1:totalsamples,2),J2s(1:totalsamples,1),J2s(1:totalsamples,2),    J3s(1:totalsamples,1),J3s(1:totalsamples,2),'LineWidth', 2);
 legend('Joint 1 Position','Joint 2 Position','Joint 3 Position')
 
 g = figure; % create figure
@@ -83,10 +92,11 @@ grid on;
 fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(g, 'Position', fig_pos);
-axis([0 3.5 -300 300]);
-title('Angular Velocities of Joints');
-xlabel('Time [s]'); ylabel('Velocity [degrees/s]');
-plot(vJ1s(:,1),vJ1s(:,2),vJ2s(:,1),vJ2s(:,2), ...
-    vJ3s(:,1),vJ3s(:,2),'LineWidth', 2);
+% axis([0 3.5 -30 300]);
+title('X, Y, Z Positions of Joints');
+% xlabel('Time [s]'); ylabel('Velocity [degrees/s]');
+xlabel('Time [s]'); ylabel('Linear Position [mm]');
 
-legend('Joint 1 Velocity','Joint 2 Velocity','Joint 3 Velocity')
+plot(TheTimes,Xes,TheTimes,Yes,TheTimes,Zes,'LineWidth', 2);
+
+legend('End Effect X','End Effect Y','End Effect Z')
