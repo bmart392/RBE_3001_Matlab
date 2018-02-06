@@ -1,9 +1,10 @@
 %% Part4b: Plot the corresponding x, y, z tip locations
+% reads from positions.csv
 
 clc; clear all; close all;
 
-%% Create Figure
-f2 = figure; % create figure
+%% Create Figure for plotting x, y, and z end effector coordinates
+f2 = figure;
 axes;
 hold on;
 box on;
@@ -11,7 +12,7 @@ grid on;
 
 % center the figure on screen and resize it
 fig_size = get(0, 'Screensize');
-fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
+fig_pos = [0, 0, 0.9*fig_size(3), 0.8*fig_size(4)];
 set(f2, 'Position', fig_pos);
 title('Corresponding x, y, and z tip locations');
 xlabel('Time [s]'); ylabel('Position [mm]');

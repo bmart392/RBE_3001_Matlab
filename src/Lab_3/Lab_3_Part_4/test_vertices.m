@@ -1,3 +1,6 @@
+%% Test the vertices
+ % this script was used to see where each vertex was in the task space
+ 
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
@@ -29,7 +32,7 @@ for m=[1 2 3 1]
     end
     returnpidpacket = pp.command(PID_ID, pidpacket);
     
-    pause(5);
+    pause(5); % wait 5 seconds before going to the next one
 end
 
 % Clear up memory upon termination

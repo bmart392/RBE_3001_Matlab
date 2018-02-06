@@ -1,12 +1,13 @@
 %% Part 5: Interpolation graph
+ % reads from interpolated_positions.csv
  % graph the 3d task space 
- % graph the x,y,z end effector postions
- % graph the x,y,z end effector velocities
- % graph the x,y,z end effector accelerations
+ % graph the x,y, and z end effector postions
+ % graph the x,y, and z end effector velocities
+ % graph the x,y, and z end effector accelerations
 
 clc ; clear all; close all;
 %% Create Figure for 3D Plot
-f1 = figure; % create figure
+f1 = figure;
 axes;
 hold on;
 axis equal;
@@ -20,10 +21,8 @@ set(f1, 'Position', fig_pos);
 title('3D plot of the End Effector Path After Interpolation');
 xlabel('X Axis [mm]'); ylabel('Y Axis [mm]'); zlabel('Z Axis [mm]');
 
-% Number of rows in the csv file
-allrows = 360;
-
-angconv = 11.44;
+allrows = 360;      % Number of rows in the csv file
+angconv = 11.44;    % Number of ticks per degree
 
 % Matrices for 3D plot end effector
 endXs = [];        % X Coordinates
@@ -39,21 +38,22 @@ importedFromCSV = [];
 % The joint angle matrix
 endeffectLoc = [];
 
-% this is only a temporary array for reading in the encoder ticks and
+% Create a temporary array for reading in the encoder ticks and
 % converting into end effector locations in the second for loop below.
-temp1 = []; % This is a 4x3
+% This is a 4x3
+temp1 = []; 
 
 for i=1:allrows
-    for n=2:4 % all columns
+    for n=2:4   % all columns
         % Positions holds the time and encoder ticks
         % divide by angconv converts the encoder ticks to degrees.
         importedFromCSV(i,n-1) = (Positions(i,n))/angconv;
     end
 end
 
-% This for loop converts all of the joint angles into x,y, and z using
+% Convert all of the joint angles into x,y, and z using
 % forward kinematics and then stores the values into an array.
-for L=1:allrows %size(importedFromCSV, 1) % For all rows
+for L=1:allrows  % For all rows
     temp1 = kinematics([importedFromCSV(L,1); ...
         importedFromCSV(L,2); importedFromCSV(L,3)]);
     endeffectLoc(L,1:3) = temp1(4,1:3);
@@ -114,7 +114,6 @@ fig_size = get(0, 'Screensize');
 fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(f3, 'Position', fig_pos);
 axis([0 4.25 -2000 1500]);
-%  axis([0 4.25 -10000 8000]);
 title('Corresponding x, y, and z Tip Velocities After Interpolation');
 xlabel('Time [s]'); ylabel('Velocity [mm/sec]');
 
