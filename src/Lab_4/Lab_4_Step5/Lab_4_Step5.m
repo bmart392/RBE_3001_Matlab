@@ -54,6 +54,16 @@ try
     % start time tracking
     tic  
     
+    % Determine the number of samples to take for each point along the
+    % trajectory
+    NUM_SAMPLES = 5;
+    
+    % Initialize a matrix to hold the values sampled from the robot
+    arm_samples = zeros(3,3*(NUM_STEPS+2)*NUM_SAMPLES);
+    
+    % Intitialize an index to track the index of the samples matrix
+    arm_samples_index = 1;
+    
     % In a loop
     %   Move the robot to a postion
     %   sampel the position x times
@@ -61,26 +71,19 @@ try
     %   update the live plot with the position
     %   update the live plot with the velocity
     for i = 1:size(trajectory)
-        % Move 
+        % Move te robot to the the next point in the trajectory
         send_point(PID_ID,pidpacket,trajectory(:,i));
+                
+        % Collect NUM_SAMPLES number of samples for each trajectory point
+        arm_samples(:,arm_samples_index) = collect_n_samples(...
+            NUM_SAMPLES,STATUS_ID,pp);
         
-        arm_samples = collect_n_samples(NUMSAMPLES,STATUS_ID,pp);
+        % Increment the index of the samples array 
+        arm_samples_index = arm_samples_index + NUM_SAMPLES + 1;
+    
     end
     
-    % move a joint 50 times
-    % will be 100 samples (send and receive time)
-    for i = 1:24
-        % move link 2 (elbow) 10 degrees
-        pidpacket(4) = 10 * angconv;
-        returnpidpacket = pp.command(PID_ID, pidpacket);
-        
-        % read position
-        returnstatuspacket = pp.command(STATUS_ID, statuspacket);
-        
-        % move link 2 back to home position
-        pidpacket(4) = 0;
-        returnpidpacket = pp.command(PID_ID, pidpacket);
-    end
+    
     
     time = toc;             % save total time
     avgtime = time/100;     % calculate avg time
