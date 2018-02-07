@@ -1,3 +1,4 @@
+% INPUT: Joint angles in encoder ticks!!!!!!!!!!!!!!!
 function T = kinematics(q1) %T = RobotPlotter(R, q1)
 
 degtorad = pi/180;    % Degrees to radians
@@ -22,14 +23,14 @@ q1(3,1) = q1(3,1)*degtorad/angconv;
 %      ---------------------------------
 %  1   |   L1    theta1    0     pi/2
 %  2   |   0     theta2    L2      0
-%  3   |   0     theta3    L3   -pi/2
+%  3   |   0     theta3    L3      0
 
 % tdh(d, theta, a, alpha)
 
 % Create transformation matrices
 T1 = tdh(L1, q1(1,1) , 0, pi/2);
 T2 = tdh(0, q1(2,1), L2, 0);
-T3 = tdh(0, q1(3,1)-pi/2, L3, 0);
+T3 = tdh(0, q1(3,1)-(pi/2), L3, 0);
 
 % Redefine these 2 trasformations so they start from
 % the previous transformation.
@@ -45,7 +46,7 @@ RobotArm = cat(2, RobotArm, T1(1:3,4));
 RobotArm = cat(2, RobotArm, T2(1:3,4));
 RobotArm = cat(2, RobotArm, T3(1:3,4));
 
-% Now a row is point, with that transpose
+% Now a row is point, with that transpose, which means 4x3
 T = RobotArm';
 
 % The code below demonstrates how to display the robot.

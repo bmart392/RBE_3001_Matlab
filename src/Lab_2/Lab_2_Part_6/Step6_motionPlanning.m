@@ -16,7 +16,7 @@ pp = PacketProcessor(7);
 try
     
     CAPTURE = 1;
-    WOCAPTURE = 0;
+    WOCAPTURE = 1;
     
     % Creating the robot structure.
     Robot.l1 = 0.135;
