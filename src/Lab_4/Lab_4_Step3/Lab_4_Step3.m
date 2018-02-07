@@ -2,7 +2,7 @@
 % move the robot so the end effector is directly
 % over the base frame, all joints fully extended
 % read the joint angles
-% calculate the jacobian, then calculate the determinant
+% calculate the jacobian, then calculate the determinant of Jp
 % determinant should be infinity because robot
 % is in a sigular configuration
 
@@ -32,17 +32,14 @@ try
     
     % ***make sure the robot is in the upright position
     % read the position angles
-    returnstatuspacket = pp.command(STATUS_ID, statuspacket);
-    for i=1:3
-        jointangles(i,1) = returnstatuspacket(i*3-2);
-    end
+    jointangles = collect_n_samples(1,STATUS_ID,pp);
     
     % use jacob0 to calculate the jacobian
     jacobian = jacob0(jointangles);
     
     % take the determinant of the jacobian and display it
     % determinant should be infinity
-    det_jacob = det(jacobian);
+    det_jacob = det(jacobian(1:3,1:3));
     disp(det_jacob);
     
 catch
