@@ -17,15 +17,15 @@ theta3 = q(3,1)*degreesToRadians;
         % This half above is the linear velocity angle contributions
 j = [ (-1*((sin(theta1))*L3*(cos(theta2+theta3))+L2*(sin(theta1))))      (-1*(cos(theta1))*L3*(sin(theta2 + theta3)))      (-1*(cos(theta1))*L3*(sin(theta2 + theta3)));
 
-           ((cos(theta1))*L3*(cos(theta2+theta3))+L2*(cos(theta1)))         (-1*(sin(theta1))*L3*(sin(theta2 + theta3)))      (-1*(sin(theta1))*L3*(sin(theta2 + theta3)));
+           ((cos(theta1))*L3*(cos(theta2+theta3))+L2*(cos(theta1)))      (-1*(sin(theta1))*L3*(sin(theta2 + theta3)))      (-1*(sin(theta1))*L3*(sin(theta2 + theta3)));
 
-                                    0                                               (-1*L3*(cos(theta2 + theta3)))                    (-1*L3*(cos(theta2 + theta3)));
+                                    0                                           (-1*L3*(cos(theta2 + theta3)))                    (-1*L3*(cos(theta2 + theta3)));
         % This half below is the rotational velocity angle ontributions
-                               cos(theta1)                                                    cos(theta1)                                       cos(theta1);
+                                    0                                                    -sin(theta1)                                     -sin(theta1);
 
-                              -sin(theta1)                                                   -sin(theta1)                                      -sin(theta1);
+                                    0                                                     cos(theta1)                                      cos(theta1);
 
-                                    0                                                             0                                                  0
+                                    1                                                         0                                                  0
             ];
  
  end
