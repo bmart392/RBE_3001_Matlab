@@ -9,9 +9,27 @@
 %                       
 function samples = collect_n_samples( numsamples, STATUS_ID, pp )
 
-angconv = 11.4; % ticks per degree
+angconv = 11.44; % ticks per degree
 % Create the array to hold the values sampled from the robot
 samples = zeros(3,numsamples);
+
+
+
+
+
+
+
+%% Ben! Do we need this???? You are sending statuspacket below 
+% without defining it.
+statuspacket = zeros(15,1,'single');
+
+
+
+
+
+
+
+
 
 % Take numsamples number of position samples
 % and store them in the return matrix
