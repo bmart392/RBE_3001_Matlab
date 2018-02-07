@@ -4,9 +4,12 @@
 %           STATUS_ID = the ID number of the status server
 %           pp = an initialized packet server object
 %   
-%   OUTPUT: samples = a 3 x n array of samples where a cooumn is a point
+%   OUTPUT: samples = a 3 x n array of samples where a column 
+%                       is a point in degrees
+%                       
 function samples = collect_n_samples( numsamples, STATUS_ID, pp )
 
+angconv = 11.4; % ticks per degree
 % Create the array to hold the values sampled from the robot
 samples = zeros(3,numsamples);
 
@@ -22,5 +25,6 @@ for i = 1:numsamples
         samples(j,i) = returnstatuspacket((3*j)-2);
     end
 end
+samples = samples ./ angconv;
 end
 
