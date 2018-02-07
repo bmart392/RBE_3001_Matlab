@@ -41,9 +41,9 @@ try
     jacobian = jacob0(jointangles);
     
     % take the determinant of the jacobian and display it
-    % determinant should be infinity
     det_jacob = det(jacobian);
-    disp(det_jacob);
+    d
+    
     
 catch
     disp('Exited on error, clean shutdown');
