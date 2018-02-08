@@ -14,11 +14,12 @@
 
 
 function trajectory = gentraj_versioned_fullrobot_quintic(...
-    version,start_points,end_points,time_elapsed,abbreviated_numsteps,joint1_pointcharacteristics,joint2_pointcharacteristics,...
-    joint3_pointcharacteristics,numsteps)
+    version,vertices,time_elapsed,...
+    abbreviated_numsteps,joint1_pointcharacteristics,...
+    joint2_pointcharacteristics,joint3_pointcharacteristics,numsteps)
 
 WITHSTANDARDASSUMPTIONS = 1;
- NOASSUMPTIONS = 1;
+NOASSUMPTIONS = 1;
 
 switch version
     case WITHSTANDARDASSUMPTIONS
@@ -31,37 +32,36 @@ switch version
         
         ASSUMED_INITIAL_ACCELEREATION = 0; % m/s^2
         ASSUMED_FINAL_ACCELERATION = 0; % m/s^2
+        
+        COLUMNS = 2;
+        ROWS = 1;
+        num_vertices = size(vertices,COLUMNS);
+        num_dimensions = size(vertices,ROWS);
+        
+        i = 1;
+        
+        trajectory = zeros(num_dimensions,(num_vertices-1)*abbreviated_numsteps);
+        disp(trajectory);
+        
+        
+        for j = 1:num_dimensions
+            for k = 1:num_vertices-1              
+                positions = gentraj_interpolation_quintic(ASSUMED_START_TIME,...
+                    time_elapsed, vertices(j,k), vertices(j,k+1), ...
+                    ASSUMED_INITIAL_VELOCITY, ASSUMED_FINAL_VELOCTIY, ...
+                    ASSUMED_INITIAL_ACCELEREATION, ASSUMED_FINAL_ACCELERATION,...
+                    abbreviated_numsteps)';
+                for w = 1:abbreviated_numsteps
+                    trajectory(j,i+w-1) = positions(w);
+                end
+                
+                i = i + abbreviated_numsteps;
+            end
+            i = 1;
             
-        FIRST_JOINT = 1;
-        SECOND_JOINT = 2;
-        THIRD_JOINT = 3;
+        end
         
-        % Calculate the trajectory of the first joint using the given and
-        % assumed characteristics.
-        trajectory(:,1) = gentraj_interpolation_quintic(ASSUMED_START_TIME,...
-            time_elapsed, start_points(FIRST_JOINT), end_points(FIRST_JOINT), ...
-            ASSUMED_INITIAL_VELOCITY, ASSUMED_FINAL_VELOCTIY, ...
-            ASSUMED_INITIAL_ACCELEREATION, ASSUMED_FINAL_ACCELERATION,...
-            abbreviated_numsteps);
         
-        % Calculate the trajectory of the second joint using the given
-        %  and assumed characteristics.
-        trajectory(:,2) = gentraj_interpolation_quintic(ASSUMED_START_TIME,...
-            time_elapsed, start_points(SECOND_JOINT), end_points(SECOND_JOINT), ...
-            ASSUMED_INITIAL_VELOCITY, ASSUMED_FINAL_VELOCTIY, ...
-            ASSUMED_INITIAL_ACCELEREATION, ASSUMED_FINAL_ACCELERATION,...
-            abbreviated_numsteps);
-        
-        % Calculate the trajectory of the third joint using the given
-        % and assumed characteristics.
-        trajectory(:,3) = gentraj_interpolation_quintic(ASSUMED_START_TIME,...
-            time_elapsed, start_points(THIRD_JOINT), end_points(THIRD_JOINT), ...
-            ASSUMED_INITIAL_VELOCITY, ASSUMED_FINAL_VELOCTIY, ...
-            ASSUMED_INITIAL_ACCELEREATION, ASSUMED_FINAL_ACCELERATION,...
-            abbreviated_numsteps);
-
-        % Transpose the matrix 
-        trajectory = trajectory';
         
         
     case NOASSUMPTIONS
