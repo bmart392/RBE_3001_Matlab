@@ -172,8 +172,6 @@ switch version
             joint3_pointcharacteristics(4),joint3_pointcharacteristics(5), ...
             joint3_pointcharacteristics(6), joint3_pointcharacteristics(7), ...
             joint3_pointcharacteristics(8), numsteps, CALCENDPOINT);
-        
-        trajectory = trajectory;
 end
 
 end
