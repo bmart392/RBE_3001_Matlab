@@ -3,7 +3,7 @@
 % over the base frame, all joints fully extended
 % read the joint angles
 % calculate the jacobian, then calculate the determinant of Jp
-% determinant should be infinity because robot
+% determinant should be zero because robot
 % is in a sigular configuration
 
 javaaddpath('../lib/hid4java-0.5.1.jar');
@@ -38,7 +38,7 @@ try
     jacobian = jacob0(jointangles);
     
     % take the determinant of the jacobian and display it
-    % determinant should be infinity
+    % determinant should be zero
     det_jacob = det(jacobian(1:3,1:3));
     disp(det_jacob);
     
