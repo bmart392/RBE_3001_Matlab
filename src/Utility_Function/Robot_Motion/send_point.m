@@ -6,6 +6,8 @@
 % 
 % OUTPUTS:  none
 function returnpidpacket = send_point(PID_ID, pp, pidpacket,point)
+angconv = 11.4;
+point = point.*angconv;
 % Assign the pidpacket the joint angles
 pidpacket(1) = point(1,1);
 pidpacket(4) = point(2,1);
