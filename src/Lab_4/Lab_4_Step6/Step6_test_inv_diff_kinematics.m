@@ -19,7 +19,7 @@ import java.lang.*;
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);
 
-% try
+ try
     STATUS_ID = 42;         % reads robot position
     DEBUG   = true;         % enables/disables debug prints
     
@@ -37,7 +37,7 @@ pp = PacketProcessor(7);
     returnstatuspacket = pp.command(STATUS_ID, statuspacket);
     
     for j = 1:3
-        q_joint_angles(j,1) = returnstatuspacket((3*j)-2);
+        q_joint_angles(j,1) = (returnstatuspacket((3*j)-2)./11.44);
     end
     
     
@@ -47,9 +47,9 @@ pp = PacketProcessor(7);
     % display the joint velocities
     disp(q_dot);
     
-% catch
-%     disp('Exited on error, clean shutdown');
-% end
+catch
+    disp('Exited on error, clean shutdown');
+end
 
 % Clear up memory upon termination
 pp.shutdown()

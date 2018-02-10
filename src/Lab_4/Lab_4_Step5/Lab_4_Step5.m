@@ -2,6 +2,7 @@
 %
 % calculate the task-space velocity vector and live-plot it
 % on the graph
+
 clear java;
 
 javaaddpath('../lib/hid4java-0.5.1.jar');

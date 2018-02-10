@@ -35,7 +35,7 @@ try
     returnstatuspacket = pp.command(STATUS_ID, statuspacket);
     
     for j = 1:3
-        jointangles(j,1) = returnstatuspacket((3*j)-2);
+        jointangles(j,1) = (returnstatuspacket((3*j)-2)./11.44);
     end
     
     % use jacob0 to calculate the jacobian
