@@ -8,7 +8,7 @@
 
 clc; clear all; close all;
 
-javaaddpath('../lib/hid4java-0.5.1.jar');
+javaaddpath('lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -32,7 +32,11 @@ try
     
     % ***make sure the robot is in the upright position
     % read the position angles
-    jointangles = collect_n_samples(1,STATUS_ID,pp);
+    returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+    
+    for j = 1:3
+        jointangles(j,1) = returnstatuspacket((3*j)-2);
+    end
     
     % use jacob0 to calculate the jacobian
     jacobian = jacob0(jointangles);

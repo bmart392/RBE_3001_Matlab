@@ -33,10 +33,8 @@ velocity = zeros(3,1);  % Intialize a matrix to hold the velocity
 % Intitialize an index to track the index of the samples matrix
 arm_samples_index = 1;
 
-
 global Robot;
 Robot.name = '3001 Arm';
-
 
 % Create the values for the robot arm lengths
 Robot.l1 = 0.135;       % Link 1
@@ -45,8 +43,6 @@ Robot.l3  = 0.16928;    % Link 3
 
 % Calculate the initial home position of the arm for plotting
 y0 = kinematics([0; 0; 0]);
-
-
 
 % Initialize Live plot of robot
 f = init_stickplot(Robot);
@@ -59,7 +55,6 @@ Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
 % set the second handle of the robot to be the quiver3 function initially 
 % plotting a 0 vector
 Robot.handle2 = quiver3(y0(4,1),y0(4,2),y0(4,3),0,0,0,'LineWidth',5);
-
 
 try
     
@@ -140,9 +135,7 @@ try
         
         % Allow time for the plot to be rendered
         pause(0.015);
-    end
-    
-    
+    end   
     
 catch
     disp('Exited on error, clean shutdown');
