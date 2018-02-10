@@ -5,11 +5,11 @@
 %           angles
 % 
 % OUTPUTS:  none
-function returnpidpacket = send_point(PID_ID, pidpacket,point)
+function returnpidpacket = send_point(PID_ID, pp, pidpacket,point)
 % Assign the pidpacket the joint angles
-pidpacket(1) = point(1);
-pidpacket(4) = point(2);
-pidpacket(7) = point(3);
+pidpacket(1) = point(1,1);
+pidpacket(4) = point(2,1);
+pidpacket(7) = point(3,1);
 
 % Send the pidpacket
 returnpidpacket = pp.command(PID_ID, pidpacket);

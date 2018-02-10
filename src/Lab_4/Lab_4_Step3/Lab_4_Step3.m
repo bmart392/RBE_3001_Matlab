@@ -6,6 +6,8 @@
 % determinant should be zero because robot
 % is in a sigular configuration
 
+clc; clear all; close all;
+
 javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
@@ -13,8 +15,6 @@ import org.hid4java.event.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.lang.*;
-
-clc; clear all; close all;
 
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);

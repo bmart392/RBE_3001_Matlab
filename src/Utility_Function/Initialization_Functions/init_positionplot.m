@@ -1,4 +1,4 @@
-% This function initializes the figure used for plotting the velocity
+% This function initializes the figure used for plotting line graphs
 % INPUTS:   none
 %
 % OUTPUTS: f = the figure
