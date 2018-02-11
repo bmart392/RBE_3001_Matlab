@@ -114,7 +114,7 @@ try
     % put in matrix
     jointmatrix(row_counter, 1) = time;
 
-    jointmatrix(row_counter, 2:) = readings';
+    jointmatrix(row_counter, 2:end) = readings';
     
     row_counter = row_counter + 1;
 

@@ -22,6 +22,8 @@ PID_ID = 37;            % controls the robot
 STATUS_ID = 42;         % reads robot position
 DEBUG   = true;         % enables/disables debug prints
 
+COLLECT_POS_VEL = 4;    % Tell collect_n_samples to collect position and velocity
+
 % initialize packets to send and read positions
 statuspacket = zeros(15,1,'single');
 pidpacket = zeros(15,1,'single');
@@ -110,7 +112,7 @@ try
             arm_samples_index:arm_samples_index+NUM_SAMPLES-1));
         
         % Calculate the average velocity for the given samples
-        velocity = calc_velocity(arm_samples(1:4,arm_samples_index:arm_samples_index+NUM_SAMPLES-1));
+        velocity = forw_diff_kinematics(arm_samples(2:4,arm_samples_index+NUM_SAMPLES-1),arm_samples(5:7,arm_samples_index+NUM_SAMPLES-1));
         
         % Place the calculated velocities in the samples matrix
         for k = arm_samples_index:arm_samples_index+NUM_SAMPLES
