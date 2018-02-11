@@ -13,7 +13,7 @@
 %                       holds all of the data collected for a 
 %                       given point in time
 %
-function samples = collect_n_samples( numsamples, STATUS_ID, pp,statuspacket )
+function samples = collect_n_samples(version,numsamples, STATUS_ID, pp,statuspacket )
 
 angconv = 11.44; % ticks per degree
 % Create the array to hold the values sampled from the robot

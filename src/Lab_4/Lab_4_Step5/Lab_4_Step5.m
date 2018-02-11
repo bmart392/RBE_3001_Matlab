@@ -5,7 +5,7 @@
 
 clear java;
 
-javaaddpath('../lib/hid4java-0.5.1.jar');
+javaaddpath('..lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -70,11 +70,11 @@ try
     ELAPSED_TIME = 2;   % Total time for the robot to travel
     % from one vertex to the next
     
-    NUM_STEPS = 25;    % Number of steps between vertices
+    NUM_STEPS = 150;    % Number of steps between vertices
     
     % Determine the number of samples to take for each point along the
     % trajectory
-    NUM_SAMPLES = 30;
+    NUM_SAMPLES = 1;
     
     % Calculate the trajectory in xyz coordinates
     trajectory_xyz = full_trajgen_cubic...
@@ -84,7 +84,7 @@ try
     trajectory_angles = inversekinematics_general(trajectory_xyz);
     
     % Initialize a matrix to hold the values sampled from the robot
-    arm_samples = zeros(4,(size(trajectory_angles,2))*NUM_SAMPLES);
+    arm_samples = zeros(7,(size(trajectory_angles,2))*NUM_SAMPLES);
     
     % Send the robot to the first vertex
     send_point(PID_ID, pp, pidpacket, trajectory_angles(:,1));
@@ -102,15 +102,16 @@ try
         send_point(PID_ID,pp,pidpacket,trajectory_angles(:,i));
         
         % Collect NUM_SAMPLES number of samples for each trajectory point
-        collected_samples = collect_n_samples(...
+        collected_samples = collect_n_samples(COLLECT_POS_VEL,...
             NUM_SAMPLES,STATUS_ID,pp,statuspacket);
         
-        % Save the samples to the samples matrix
-        arm_samples(1:4 , ...
-            arm_samples_index:arm_samples_index+NUM_SAMPLES-1)= ...
-            matrix_merge(collected_samples, arm_samples(1:4 , ...
-            arm_samples_index:arm_samples_index+NUM_SAMPLES-1));
         
+        % Save the samples to the samples matrix
+        arm_samples(1:7 , ...
+            arm_samples_index:arm_samples_index+NUM_SAMPLES-1)= ...
+            matrix_merge(collected_samples, arm_samples(1:7 , ...
+            arm_samples_index:arm_samples_index+NUM_SAMPLES-1));
+       
         % Calculate the average velocity for the given samples
         velocity = forw_diff_kinematics(arm_samples(2:4,arm_samples_index+NUM_SAMPLES-1),arm_samples(5:7,arm_samples_index+NUM_SAMPLES-1));
         
@@ -137,7 +138,7 @@ try
         arm_samples_index = arm_samples_index + NUM_SAMPLES ;
         
         % Allow time for the plot to be rendered
-        pause(0.015);
+        pause(0.01);
     end   
     
 catch
