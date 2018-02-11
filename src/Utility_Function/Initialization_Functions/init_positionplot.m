@@ -16,7 +16,7 @@ fig_pos = [0,0,0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
 
 % Set the axis lengths [x_min x_max y_min y_max]
-axis([0 4 -180 180]);
+axis([0 3.5 0 75]);
 
 title('Angular Position of Joints');    % Set the title of the graph
 xlabel('Time [s]');                     % Set the x-axis label
