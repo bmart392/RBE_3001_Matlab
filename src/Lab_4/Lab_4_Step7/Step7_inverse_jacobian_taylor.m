@@ -1,8 +1,8 @@
 %% Step 7: Test inverse jacobian taylor
-% 
+%
 % First, we set an arbitray position with y = 0.
 % Second, we rotate the plot so that we only see the X-Z plane.
-% 
+%
 % Third, we use ginput() to sample somewhere in the graph of the task-space
 % of the robot arm and then let the arm move to that position. Instead of
 % having to use a pause function, the deltaQ term is what makes the arm
@@ -10,7 +10,7 @@
 
 clc; clear all; close all;
 
- 
+
 % The code for plotting I copied from lab 2.
 
 % Creating the robot structure.
@@ -27,7 +27,7 @@ y0 = forward_kinematics([0; 0; 0]);
 clickoffset = y0(4,:);
 
 % The read in click position
-readclick = zeros(3,1);
+readclick = []; % zeros(3,1);
 
 % From clicking on the graph
 wantedJointAngles = zeros(3,1);
@@ -43,6 +43,9 @@ zero = zeros(3,1);
 
 % This is the deltaQ that will be passed into the RobotPlotter2
 deltaq = [ 0; 0; 0 ];
+
+% This is the read in click location
+clickhere = [0 0 0];
 
 %% Plotting code.
 
@@ -82,32 +85,41 @@ Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
 while (true)
     
     % First, we grab the x,y,z data ONCE from the graph.
-    [x,y,z] = ginput(1);
+    % [x,y,z] = ginput(1);
+    % clickhere = ginput(1);
     
+    % This function I downloaded off the internet. See the file in the
+    % Utilities folder.
+    clickhere = ginput3d(1);
+    disp(clickhere);
     % We need to remember that the 0 on the graph is actually y0.
     
-    readclick(1,1) = x - clickoffset(1,1);
-    readclick(2,1) = 0 - clickoffset(2,1);
-    readclick(3,1) = z - clickoffset(3,1);
+    readclick(1,1) = clickhere(1,1) - clickoffset(1,1);
+    % readclick(1,2) = clickhere(1,2) - clickoffset(2,1);
+    readclick(1,3) = clickhere(1,3) - clickoffset(3,1);
     
-    wantedJointAngles = inverse_kinematics(readclick);
+    disp(readclick);
+    
+    % wantedJointAngles = inverse_kinematics(readclick);
     
     % Here we initialize the deltaq so that we can have somewhere to go
     % in the following for loop. In the start of this function, this
     % should be zero.
-    deltaq = inversejacobtaylor(wantedJointAngles, q0, [0
-        
+    
+    % deltaq = inversejacobtaylor(wantedJointAngles, q0, [0
+    
     % Start navigating to the clicked position on the graph when the
     % error is non-zero.
-    while (deltaq ~= zero)
-    % Figure out the deltaq given the wanted angles and the current
-    % angles, aka deltaq.
-    deltaq = inversejacobtaylor(wantedJointAngles, q0, [0 0 0]);
     
-    % Then we pass in the joint angles aka deltaq
-    RobotPlotter2(Robot, 4);
-    
-    % Make sure to add the difference back in.
-    q0 = q0 + deltaq;
-    end
+    %     while deltaq ~= zero
+    %     % Figure out the deltaq given the wanted angles and the current
+    %     % angles, aka deltaq.
+    %     deltaq = inversejacobtaylor(wantedJointAngles, q0, [0 0 0]);
+    %
+    %     % Then we pass in the joint angles aka deltaq
+    %     RobotPlotter2(Robot, 4);
+    %
+    %     % Make sure to add the difference back in.
+    %     q0 = q0 + deltaq;
+    %     end
 end
