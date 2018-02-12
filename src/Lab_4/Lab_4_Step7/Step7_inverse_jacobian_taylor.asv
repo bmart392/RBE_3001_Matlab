@@ -43,9 +43,6 @@ zero = zeros(3,1);
 % This is the deltaQ that will be passed into the RobotPlotter2
 deltaq = [ 0; 0; 0 ];
 
-% 
-qi = q0;
-
 % This is the read in click location
 clickhere = [0 0 0];
 
@@ -74,6 +71,7 @@ view([ 0 -90 0]);
 Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
     'color', [0 0.4 0.7], 'LineWidth', 5);
 
+qi = [];
 
 % Without code after here, the robot will be plotted in the start
 % position.
@@ -109,7 +107,7 @@ while (true)
     
     % We have to initialize the angles at the current position.
     % Note that we only want the final positions in column vectors.
-    qi = inversejacobtaylor(wantedEndEffectorPosition, q0, ...
+    qi = inversejacobtaylor(wantedEndEffectorPosition, q0, ... 
         [0.002; 0.002; 0.002]);
     
     disp("This is qi");
@@ -120,34 +118,27 @@ while (true)
     % in the following for loop. In the start of this function, this
     % should be zero.
     
-    % Initialize
     initialPos = forward_kinematics(qi);
-    
-    % (deltaq ~= zeros(3,1))
-    % Figure out the deltaq given the wanted angles and the current
-    % angles, aka deltaq.
-    deltaq = inversejacobtaylor(wantedEndEffectorPosition, ...
-        q0, ...
-        [0.002; 0.002; 0.002]);
-    
     
     % Start navigating to the clicked position on the graph when the
     % error is non-zero.
-    while (abs(wantedEndEffectorPosition(1,1) - initialPos(4,1)) > 0.002...
-            ||  ...
-            abs(wantedEndEffectorPosition(2,1) - initialPos(4,2)) > 0.002 ...
-            || ...
-            abs(wantedEndEffectorPosition(3,1) - initialPos(4,3)) > 0.002 )
+    while ( abs(wantedEndEffectorPosition - initialPos(4,:)) > ...
+            [0.002; 0.002; 0.002])
+        % (deltaq ~= zeros(3,1))    
+        % Figure out the deltaq given the wanted angles and the current
+        % angles, aka deltaq.
+        deltaq = inversejacobtaylor(wantedEndEffectorPosition, q0, ...
+            [0.002; 0.002; 0.002]);
         
         % Make sure to add the difference back in.
         qi = qi + deltaq;
         
-%         disp("This is deltaq");
-%         disp(deltaq);
-        disp("This is qi");
-        disp(qi);
+        disp("This is deltaq");
+        disp(deltaq);
+        disp("This is q0");
+        disp(q0);
         % Then we pass in the joint angles aka deltaq
-        RobotPlotter2(Robot, q0);
+        RobotPlotter2(Robot, qo);
         
         initialPos = forward_kinematics(qi);
     end

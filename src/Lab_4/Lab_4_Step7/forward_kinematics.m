@@ -1,5 +1,5 @@
 % INPUT: Joint angles in degrees.
-function T = kinematics(q1) %T = RobotPlotter(R, q1)
+function T = forward_kinematics(q1) %T = RobotPlotter(R, q1)
 
 degtorad = pi/180;    % Degrees to radians
 angconv = 11.44;      % 11.44 ticks per degree
