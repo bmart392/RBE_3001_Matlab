@@ -1,22 +1,20 @@
 clc; clear all; close all;
 % y0 is the initial condition.
 y0 = forward_kinematics([0; 0; 0]);
-% The click offset
-clickoffset = y0(4,:);
-% From clicking on the graph
-currentJointAngles = zeros(3,1);
+
 % Start pos angles
 q0 = zeros(3,1);
+
 % iterating/current angles
 qi = zeros(3,1);
 
 qi_xyz = zeros(3,1);
 
-threshold = [0.1; 0.00; 0.1];
-% This is the deltaQ that will be passed into the RobotPlotter2
-%q = [ 0 1; 0 1; 0 1];
+threshold = [0.005; 0.00; 0.005];
+
+
 % Now this read in position is the wanted end effector position.
-wantedEndEffectorPosition = [0.2; 0; 0.1];% clickhere';
+wantedEndEffectorPosition = [0.1; 0; 0.1]; % pd;
 
 case1 = abs((wantedEndEffectorPosition(1)-qi_xyz(1))) >= threshold(1);
 case3 = abs((wantedEndEffectorPosition(3)-qi_xyz(3))) >= threshold(3);
@@ -29,6 +27,7 @@ while (case1 || case3)
     %qi = qi + deltaq(:,1);
     qi_xyz = kinematics_general(qi);
     
+    disp('qi_xyz');
     disp(qi_xyz);
     
     case1 = abs((wantedEndEffectorPosition(1)-qi_xyz(1))) >= threshold(1);
@@ -37,4 +36,5 @@ while (case1 || case3)
     disp(case1);
     disp('case3');
     disp(case3);
+    pause(2);
 end
