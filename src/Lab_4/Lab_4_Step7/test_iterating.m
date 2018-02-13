@@ -12,7 +12,6 @@ qi_xyz = zeros(3,1);
 
 threshold = [0.01; 0.00; 0.01];
 
-
 % Now this read in position is the wanted end effector position.
 wantedEndEffectorPosition = [0.1; 0; 0.1]; % pd;
 
@@ -32,9 +31,10 @@ while (case1 || case3)
     
     case1 = abs((wantedEndEffectorPosition(1)-qi_xyz(1))) >= threshold(1);
     case3 = abs((wantedEndEffectorPosition(3)-qi_xyz(3))) >= threshold(3);
+    
     disp('case1');
     disp(case1);
     disp('case3');
     disp(case3);
-    pause(0.5);
+    pause(0.05);
 end
