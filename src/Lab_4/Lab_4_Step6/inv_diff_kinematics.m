@@ -25,7 +25,7 @@ for i = 1:3
 end
 
 % take the inverse of Jp
-inv_Jp = inv(Jp);
+inv_Jp = pinv(Jp);
 
 % calculate the joint velocities
 q_dot = inv_Jp * p_dot;

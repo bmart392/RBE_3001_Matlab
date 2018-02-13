@@ -34,7 +34,8 @@ elseif nargin==1
     end
     
     % End of Suspend figure functions
-    set(gcf,'Pointer','fullcross')
+    % set(gcf,'Pointer','fullcross')
+    set(gcf,'Pointer','crosshair')
     for i=1:N
         if ~waitforbuttonpress
             XYZ_inic= get(gca,'currentpoint');

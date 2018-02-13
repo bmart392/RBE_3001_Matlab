@@ -34,17 +34,17 @@ wantedEndEffectorPosition = zeros(3,1);
 % From clicking on the graph
 currentJointAngles = zeros(3,1);
 
-% From iterating through the deltaq while loop.
+% Start pos angles
 q0 = zeros(3,1);
+
+% iterating/current angles
+qi = zeros(3,1);
 
 % No more error
 zero = zeros(3,1);
 
 % This is the deltaQ that will be passed into the RobotPlotter2
-deltaq = [ 0; 0; 0 ];
-
-%
-qi = q0;
+deltaq = [ 0 1; 0 1; 0 1];
 
 % This is the read in click location
 clickhere = [0 0 0];
@@ -74,16 +74,6 @@ view([ 0 -90 0]);
 Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
     'color', [0 0.4 0.7], 'LineWidth', 5);
 
-
-% Without code after here, the robot will be plotted in the start
-% position.
-
-% This is where things get tricky. We need to update the angles by
-% adding deltaQ to qi, the current angles.
-% The current angles are initialized to the 0 position, and then deltaQ
-% is iteratively added to qi until a the difference between the final
-% position and the forward kinematics reaches a certain threshold.
-
 % We are going to assume that this is an infinite loop.
 while (true)
     
@@ -105,35 +95,16 @@ while (true)
     % Now this read in position is the wanted end effector position.
     wantedEndEffectorPosition = clickhere'; % readclick;
     
-    % disp(readclick);
-    
-    disp("This is qi");
-    disp(qi);
-
-    % Figure out the deltaq given the wanted angles and the current
-    % angles, aka deltaq.
-    deltaq = inversejacobtaylor(wantedEndEffectorPosition, ...
-        qi, ...
-        [0.002; 0.002; 0.002]);
-    
-    % Start navigating to the clicked position on the graph when the
-    % error is non-zero.
-    while (abs(wantedEndEffectorPosition(1,1) - initialPos(4,1)) > 0.002...
-            ||  ...
-            abs(wantedEndEffectorPosition(3,1) - initialPos(4,3)) > 0.002 )
-        
-        deltaq = inversejacobtaylor(wantedEndEffectorPosition, ...
-            qi, [0.002; 0.002; 0.002]);
+    while (deltaq(:,2) == [ 1; 1; 1 ])
+        deltaq = inverse_kin_jacobs(wantedEndEffectorPosition, ...
+            q0, qi, [0.002; 0.002; 0.002]);
         
         % Make sure to add the difference back in.
-        qi = qi + deltaq;
-        
-        %         disp("This is deltaq");
-        %         disp(deltaq);
-        disp("This is qi");
-        disp(qi);
+        qi = qi + deltaq(:,1);
         
         % Then we pass in the joint angles aka deltaq
         RobotPlotter2(Robot, qi);
     end
+    % We restart the process from where we currenly are.
+    q0 = qi;
 end
