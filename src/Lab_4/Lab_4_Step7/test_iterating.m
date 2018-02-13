@@ -29,8 +29,10 @@ while (case1 || case3)
     disp('qi_xyz');
     disp(qi_xyz);
     
-    case1 = abs((wantedEndEffectorPosition(1)-qi_xyz(1))) >= threshold(1);
-    case3 = abs((wantedEndEffectorPosition(3)-qi_xyz(3))) >= threshold(3);
+    case1 = (wantedEndEffectorPosition(1)-qi_xyz(1)) >= threshold(1) ...
+        || (wantedEndEffectorPosition(1)-qi_xyz(1)) <= -threshold(1);
+    case3 = (wantedEndEffectorPosition(3)-qi_xyz(3)) >= threshold(3) ...
+        || (wantedEndEffectorPosition(3)-qi_xyz(3)) <= -threshold(3);
     
     disp('case1');
     disp(case1);
