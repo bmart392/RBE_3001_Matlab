@@ -43,7 +43,7 @@ zero = zeros(3,1);
 % This is the deltaQ that will be passed into the RobotPlotter2
 deltaq = [ 0; 0; 0 ];
 
-% 
+%
 qi = q0;
 
 % This is the read in click location
@@ -107,48 +107,33 @@ while (true)
     
     % disp(readclick);
     
-    % We have to initialize the angles at the current position.
-    % Note that we only want the final positions in column vectors.
-    qi = inversejacobtaylor(wantedEndEffectorPosition, q0, ...
-        [0.002; 0.002; 0.002]);
-    
     disp("This is qi");
     disp(qi);
-    % wantedJointAngles = inverse_kinematics(readclick);
-    
-    % Here we initialize the deltaq so that we can have somewhere to go
-    % in the following for loop. In the start of this function, this
-    % should be zero.
-    
-    % Initialize
-    initialPos = forward_kinematics(qi);
-    
-    % (deltaq ~= zeros(3,1))
+
     % Figure out the deltaq given the wanted angles and the current
     % angles, aka deltaq.
     deltaq = inversejacobtaylor(wantedEndEffectorPosition, ...
-        q0, ...
+        qi, ...
         [0.002; 0.002; 0.002]);
-    
     
     % Start navigating to the clicked position on the graph when the
     % error is non-zero.
     while (abs(wantedEndEffectorPosition(1,1) - initialPos(4,1)) > 0.002...
             ||  ...
-            abs(wantedEndEffectorPosition(2,1) - initialPos(4,2)) > 0.002 ...
-            || ...
             abs(wantedEndEffectorPosition(3,1) - initialPos(4,3)) > 0.002 )
+        
+        deltaq = inversejacobtaylor(wantedEndEffectorPosition, ...
+            qi, [0.002; 0.002; 0.002]);
         
         % Make sure to add the difference back in.
         qi = qi + deltaq;
         
-%         disp("This is deltaq");
-%         disp(deltaq);
+        %         disp("This is deltaq");
+        %         disp(deltaq);
         disp("This is qi");
         disp(qi);
-        % Then we pass in the joint angles aka deltaq
-        RobotPlotter2(Robot, q0);
         
-        initialPos = forward_kinematics(qi);
+        % Then we pass in the joint angles aka deltaq
+        RobotPlotter2(Robot, qi);
     end
 end
