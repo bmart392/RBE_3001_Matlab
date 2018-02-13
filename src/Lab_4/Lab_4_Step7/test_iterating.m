@@ -10,7 +10,7 @@ qi = zeros(3,1);
 
 qi_xyz = zeros(3,1);
 
-threshold = [0.005; 0.00; 0.005];
+threshold = [0.01; 0.00; 0.01];
 
 
 % Now this read in position is the wanted end effector position.
@@ -36,5 +36,5 @@ while (case1 || case3)
     disp(case1);
     disp('case3');
     disp(case3);
-    pause(2);
+    pause(0.5);
 end
