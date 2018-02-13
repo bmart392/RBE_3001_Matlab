@@ -16,7 +16,7 @@ end
 coordinates = zeros(3,size_angles(2));
 
 % Convert the input angles from degrees to encoder ticks
-angconv = 11.4; % ticks per degree
+angconv = 4096/360; % ticks per degree
 anglesinticks = angles(:,:).*angconv;    
 
 LASTROW = 4;    % Create a constant to pull from the last row of .
