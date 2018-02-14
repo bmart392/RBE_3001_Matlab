@@ -19,7 +19,7 @@ import java.lang.*;
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);
 
- try
+try
     STATUS_ID = 42;         % reads robot position
     DEBUG   = true;         % enables/disables debug prints
     
@@ -28,24 +28,26 @@ pp = PacketProcessor(7);
     statuspacket = zeros(15,1,'single');
     
     % arbitrary end effector velocities
-    p_dot = [5; 5; 1];
+    p_dot = [0; 0; 0.01];
     
     q_joint_angles = zeros(3,1);
     
     % ***make sure the robot is in the upright position
     % read the position angles
-    returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+    q_joint_angles = collect_n_samples(7,1,STATUS_ID,pp,statuspacket);
+    %disp('joint angles (deg)');
+    %disp(q_joint_angles);
     
-    for j = 1:3
-        q_joint_angles(j,1) = (returnstatuspacket((3*j)-2)./11.44);
-    end
-    
+    % convert to radians
+    q_joint_angles_rad = q_joint_angles .* (pi/180);
     
     % calculate the joint velocities
-    q_dot = inv_diff_kinematics( q_joint_angles, p_dot);
+    %q_dot = inv_diff_kinematics( [0;pi/2;pi/2], p_dot);
+    q_dot = inv_diff_kinematics( q_joint_angles_rad, p_dot);
     
-    % display the joint velocities
-    disp(q_dot);
+    % display the joint velocities in degrees per second
+    disp('joint velocities in degrees per second');
+    disp(q_dot*(180/pi));
     
 catch
     disp('Exited on error, clean shutdown');

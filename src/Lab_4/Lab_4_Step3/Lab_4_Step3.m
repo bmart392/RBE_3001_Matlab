@@ -19,36 +19,36 @@ import java.lang.*;
 % Create a PacketProcessor object to send data to the nucleo firmware
 pp = PacketProcessor(7);
 
-try
+ %try
     STATUS_ID = 42;         % reads robot position
     DEBUG   = true;         % enables/disables debug prints
     
+    angleconv = 11.4;       % 11.4 ticks per degree
+    
     % initialize packets to send and read positions
     statuspacket = zeros(15,1,'single');
-    pidpacket = zeros(15,1,'single');
     
-    angconv = 11.44;          % 11.44 ticks per degree
-    jointangles = zeros(3,1); % column vector to hold joint angles
+    % column vector to hold joint angles
+    jointangles = zeros(3,1); 
     
     % ***make sure the robot is in the upright position
-    % read the position angles
-    returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+    % read the position angles degrees
+    jointangles = collect_n_samples(7,1,STATUS_ID,pp,statuspacket);
     
-    for j = 1:3
-        jointangles(j,1) = (returnstatuspacket((3*j)-2)./11.44);
-    end
+    % convert to radians
+    jointangles_rad = jointangles .* (pi/180);
     
     % use jacob0 to calculate the jacobian
-    jacobian = jacobrad2(jointangles.*(pi/180));
+    jacobian = jacob0(jointangles_rad);
     
     % take the determinant of the jacobian and display it
     % determinant should be zero
-    det_jacob = det(jacobian(1:3,1:3));
+    det_jacob = det(jacobian);
     disp(det_jacob);
     
-catch
-    disp('Exited on error, clean shutdown');
-end
+% catch
+%     disp('Exited on error, clean shutdown');
+% end
 
 % Clear up memory upon termination
 pp.shutdown()

@@ -15,7 +15,7 @@
 %
 function samples = collect_n_samples(version,numsamples, STATUS_ID, pp,statuspacket )
 
-angconv = 11.44; % ticks per degree
+angconv = 4096/360; % ticks per degree
 % Create the array to hold the values sampled from the robot
 samples = zeros(10,numsamples);
 

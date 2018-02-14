@@ -18,16 +18,16 @@ q1(3,1) = q1(3,1);
 
 %          d     theta          a    alpha
 %      -------------------------------------
-%  1   |   L1    theta1         0     -pi/2
+%  1   |   L1    theta1         0     pi/2
 %  2   |   0     theta2         L2      0
-%  3   |   0     theta3+pi/2    L3      0
+%  3   |   0     theta3-(pi/2)  L3      0   
 
 % tdh(d, theta, a, alpha)
 
 % Create transformation matrices
-T1 = tdh(L1, q1(1,1) , 0, -pi/2);
+T1 = tdh(L1, q1(1,1) , 0, pi/2);
 T2 = tdh(0, q1(2,1), L2, 0);
-T3 = tdh(0, q1(3,1)+(pi/2), L3, 0);
+T3 = tdh(0, q1(3,1)-(pi/2), L3, 0);
 
 % Redefine these 2 trasformations so they start from
 % the previous transformation.

@@ -88,14 +88,26 @@ disp("End of click here");
 wantedEndEffectorPosition = clickhere'; 
 
 current_pos = collect_n_samples(COLLECT_POS,num_samples,STATUS_ID,pp,statuspacket);
+disp('starting position (deg)');
+disp(current_pos ./11.4);
 
-end_position_angles = taylor_approximation(current_pos*pi/180,wantedEndEffectorPosition,threshold);
+current_pos_rad = (current_pos./11.4)*(pi/180);
+end_position_angles = taylor_approximation(current_pos_rad,wantedEndEffectorPosition,threshold);
 
+disp('calculated taylor_approx (deg)');
 disp(end_position_angles*180/pi);
 
 RobotPlotter2(Robot,end_position_angles);
 
-send_point(PID_ID,pp,pidpacket,end_position_angles.*(180/pi).*(11.4).*[0;1;1]);
+sent_position = end_position_angles.*(180/pi).*(11.4).*[0;1;1];
+
+disp("position being sent (ticks)");
+disp(sent_position./11.4);
+
+send_point(PID_ID,pp,pidpacket,sent_position);
+
+disp('difference in desired and sent');
+disp((current_pos - sent_position)./11.4);
 
 end 
 
