@@ -81,7 +81,7 @@ case3 = (wantedEndEffectorPosition(3)-qi_xyz(3)) >= threshold(3) ...
 %disp((abs((wantedEndEffectorPosition-qi_xyz)) >= threshold));
 while (case1 || case3)
     qi = inverse_kin_jacobs2(wantedEndEffectorPosition, ...
-        q0, qi.*[0;1;1], [case1; 0; case3]);
+        q0, qi, [case1; 0; case3]);
     % Make sure to add the difference back in.
     %qi = qi + deltaq(:,1);
     temp1 =  forward_kinematics_rad(qi);
@@ -97,10 +97,6 @@ while (case1 || case3)
         || (wantedEndEffectorPosition(3)-qi_xyz(3)) <= -threshold(3);
     
     disp('case1');
-    disp(wantedEndEffectorPosition(1));
-    disp(qi_xyz(1));
-    disp(wantedEndEffectorPosition(1)-qi_xyz(1));
-    disp(threshold(1));
     disp(case1);
     disp('case3');
     disp(wantedEndEffectorPosition(3)-qi_xyz(3));

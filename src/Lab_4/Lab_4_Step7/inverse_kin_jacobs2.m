@@ -9,17 +9,17 @@ function Qi = inverse_kin_jacobs2(pd, q0, qi, inthreshold)
 robotZeroPosition = forward_kinematics_rad([ 0; 0; 0]);
 
 % This is the starting position jacobian with input radians.
-initial_jacobian_matrix = jacobrad2(q0);
+initial_jacobian_matrix = jacobrad2(qi);
 
 % This is the top part of the initial position jacobian.
 %initial_position_jacobian = initial_jacobian_matrix(1:3,:);
 
 % This is the pseudo inverse of the top part of the jacobian.
-inverse_jacobian = pinv(initial_jacobian_matrix); 
+inverse_jacobian = pinv(initial_jacobian_matrix(1:3,:)); 
 disp(inverse_jacobian);
-%inverse_position_jacobian = [ 0 1 0; -1 0 0; 0 0 1];
-inverse_position_jacobian = [ 0 0.1698 0; -0.16461 0 0; 0 0 5.7143];
- %inverse_position_jacobian = inverse_jacobian(1:3,1:3)';
+% inverse_position_jacobian = [ 0 1 0; -1 0 0; 0 0 1];
+%inverse_position_jacobian = [ 0 0.1698 0; -0.16461 0 0; 0 0 5.7143];
+inverse_position_jacobian = inverse_jacobian;
 
 % Where we want to go taking into account the forward kinematics of 0,0,0.
 finalForwardKinematics = pd; % - (robotZeroPosition(4,:)');

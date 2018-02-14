@@ -27,7 +27,7 @@ J22 = ((-1)*L2*sin(theta1)*sin(theta2))-(L3*sin(theta1)*cos(theta2+theta3));
 J23 = ((-1)*L3*sin(theta1)*cos(theta2+theta3));
 
 % j31 = 0
-J31 = 0;%(-1*L3*cos(theta1)*cos(theta2+theta3));
+J31 = 0; %(-1*L3*cos(theta1)*cos(theta2+theta3));
 % j32 = (L3*s23)-(L2*c2)
 J32 = (L3*sin(theta2+theta3))-(L2*cos(theta2));
 % j33 = L3*s23
@@ -40,10 +40,10 @@ j = [ J11 J12 J13 ;
 
       J31 J32 J33 ;                         
         % This half below is the rotational velocity angle ontributions
-       0                                                                  (-1)*sin(theta1)                                                         (-1)*sin(theta1);
+       0   (-1)*sin(theta1)   (-1)*sin(theta1);
 
-       0                                                                  cos(theta1)                                                              cos(theta1);
+       0    cos(theta1)       cos(theta1);
 
-       1                                                                  0                                                                        0];
+       1      0                   0];
         
  end
