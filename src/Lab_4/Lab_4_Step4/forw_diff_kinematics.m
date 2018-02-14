@@ -11,7 +11,7 @@ function p_dot = forw_diff_kinematics( q_joint_angles, ...
 
 % Calculate the jacobian matrix given the joint variables
 % jacobian_matrix is a 6x3
-jacobian_matrix = jacob0(q_joint_angles);
+jacobian_matrix = jacobrad2(q_joint_angles*(pi/180));
 
 Jp = zeros(3,3);
 

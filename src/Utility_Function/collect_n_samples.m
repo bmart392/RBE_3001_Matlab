@@ -19,12 +19,16 @@ angconv = 11.44; % ticks per degree
 % Create the array to hold the values sampled from the robot
 samples = zeros(10,numsamples);
 
+% All of the following collect time
 POS = 1; % Sample only position
 VEL = 2; % Sample only velocity
 TOR = 3; % Sample only torque
 POSVEL = 4; % Sample position and velocity
 POSTOR = 5; % Sample position and torque
 POSVELTOR = 6; % Sample position, velocity, and torque
+
+% The following do not collect time
+POS_NOTIME = 7; % Sample only position
 
 switch version
     case POS
@@ -162,6 +166,22 @@ switch version
         end
         samples = cat(1,samples(1,:),(samples(2:4,:) ./ angconv),...
             (samples(6:8,:) ./ angconv),samples(8:10,:));
+        
+        case POS_NOTIME
+        % Take numsamples number of position samples
+        % and store them in the return matrix
+        for i = 1:numsamples
+            % read the status packet
+            returnstatuspacket = pp.command(STATUS_ID, statuspacket);
+            
+            
+            % Iterate through the returnstatuspacket to find the joint angles and
+            % put them in the columns of samples
+            for j = 1:3
+                samples(j,i) = returnstatuspacket((3*j)-2);
+            end
+        end
+        samples = (samples(1:3,:) ./ angconv);
         
     otherwise
         % Take numsamples number of position samples

@@ -39,7 +39,7 @@ try
     end
     
     % use jacob0 to calculate the jacobian
-    jacobian = jacob0(jointangles);
+    jacobian = jacobrad2(jointangles.*(pi/180));
     
     % take the determinant of the jacobian and display it
     % determinant should be zero
