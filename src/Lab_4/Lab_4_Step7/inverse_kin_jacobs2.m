@@ -16,8 +16,10 @@ initial_jacobian_matrix = jacobrad2(q0);
 
 % This is the pseudo inverse of the top part of the jacobian.
 inverse_jacobian = pinv(initial_jacobian_matrix); 
+disp(inverse_jacobian);
 %inverse_position_jacobian = [ 0 1 0; -1 0 0; 0 0 1];
- inverse_position_jacobian = inverse_jacobian(1:3,1:3)';
+inverse_position_jacobian = [ 0 0.1698 0; -0.16461 0 0; 0 0 5.7143];
+ %inverse_position_jacobian = inverse_jacobian(1:3,1:3)';
 
 % Where we want to go taking into account the forward kinematics of 0,0,0.
 finalForwardKinematics = pd; % - (robotZeroPosition(4,:)');

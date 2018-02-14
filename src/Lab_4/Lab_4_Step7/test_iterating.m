@@ -56,7 +56,10 @@ Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
     
     % Now this read in position is the wanted end effector position.
     wantedEndEffectorPosition = clickhere'; % readclick;
-
+    
+    disp(wantedEndEffectorPosition);
+    disp(kinematics_general([0;0;0]));
+    
 % Start pos angles
 q0 = zeros(3,1);
 
@@ -65,7 +68,7 @@ qi = zeros(3,1);
 % The iterator.
 qi_xyz = zeros(3,1);
 
-threshold = [0.001; 0; 0.001];
+threshold = [0.01; 0; 0.01];
 
 % Now this read in position is the wanted end effector position.
 %wantedEndEffectorPosition = [0.1; 0; 0.1]; % pd;
@@ -78,7 +81,7 @@ case3 = (wantedEndEffectorPosition(3)-qi_xyz(3)) >= threshold(3) ...
 %disp((abs((wantedEndEffectorPosition-qi_xyz)) >= threshold));
 while (case1 || case3)
     qi = inverse_kin_jacobs2(wantedEndEffectorPosition, ...
-        q0, qi, [case1; 0; case3]);
+        q0, qi.*[0;1;1], [case1; 0; case3]);
     % Make sure to add the difference back in.
     %qi = qi + deltaq(:,1);
     temp1 =  forward_kinematics_rad(qi);
@@ -94,8 +97,14 @@ while (case1 || case3)
         || (wantedEndEffectorPosition(3)-qi_xyz(3)) <= -threshold(3);
     
     disp('case1');
+    disp(wantedEndEffectorPosition(1));
+    disp(qi_xyz(1));
+    disp(wantedEndEffectorPosition(1)-qi_xyz(1));
+    disp(threshold(1));
     disp(case1);
     disp('case3');
+    disp(wantedEndEffectorPosition(3)-qi_xyz(3));
+    disp(threshold(3));
     disp(case3); 
     
     RobotPlotter2(Robot,qi);
