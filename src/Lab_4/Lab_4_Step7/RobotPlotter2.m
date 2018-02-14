@@ -6,7 +6,7 @@
 function RobotPlotter2(R, q1)
 
 % solves for the beginning and end of every link
-transformation_matrix = forward_kinematics(q1);
+transformation_matrix = forward_kinematics_rad(q1);
 
 %disp(transformation_matrix);
 

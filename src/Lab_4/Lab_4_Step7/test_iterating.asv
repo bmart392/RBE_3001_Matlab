@@ -1,17 +1,4 @@
-%% Step 7: Test inverse jacobian taylor
-%
-% First, we set an arbitray position with y = 0.
-% Second, we rotate the plot so that we only see the X-Z plane.
-%
-% Third, we use ginput() to sample somewhere in the graph of the task-space
-% of the robot arm and then let the arm move to that position. Instead of
-% having to use a pause function, the deltaQ term is what makes the arm
-% move in intervals.
-
 clc; clear all; close all;
-
-% The code for plotting I copied from lab 2.
-
 % Creating the robot structure.
 Robot.l1 = 0.135;
 Robot.l2 = 0.175;
@@ -19,8 +6,6 @@ Robot.l3  = 0.16928;
 
 % y0 is the initial condition.
 y0 = forward_kinematics([0; 0; 0]);
-
-% disp(y0);
 
 % The click offset
 clickoffset = y0(4,:);
@@ -30,21 +15,6 @@ readclick = []; % zeros(3,1);
 
 % From clicking on the graph
 wantedEndEffectorPosition = zeros(3,1);
-
-% From clicking on the graph
-currentJointAngles = zeros(3,1);
-
-% Start pos angles
-q0 = zeros(3,1);
-
-% iterating/current angles
-qi = zeros(3,1);
-
-% No more error
-zero = zeros(3,1);
-
-% This is the deltaQ that will be passed into the RobotPlotter2
-deltaq = [ 0 1; 0 1; 0 1];
 
 % This is the read in click location
 clickhere = [0 0 0];
@@ -74,14 +44,6 @@ view([ 0 -90 0]);
 Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
     'color', [0 0.4 0.7], 'LineWidth', 5);
 
-% We are going to assume that this is an infinite loop.
-while (true)
-    
-    % First, we grab the x,y,z data ONCE from the graph.
-    % [x,y,z] = ginput(1);
-    % clickhere = ginput(1);
-    % This function I downloaded off the internet. See the file in the
-    % Utilities folder.
     clickhere = ginput3d(1);
     disp("Click here");
     disp(clickhere);
@@ -94,17 +56,47 @@ while (true)
     
     % Now this read in position is the wanted end effector position.
     wantedEndEffectorPosition = clickhere'; % readclick;
+
+% Start pos angles
+q0 = zeros(3,1);
+
+% iterating/current angles
+qi = zeros(3,1);
+% The iterator.
+qi_xyz = zeros(3,1);
+
+threshold = [0.0001; 0; 0.0001];
+
+% Now this read in position is the wanted end effector position.
+%wantedEndEffectorPosition = [0.1; 0; 0.1]; % pd;
+
+case1 = (wantedEndEffectorPosition(1)-qi_xyz(1)) >= threshold(1) ...
+    || (wantedEndEffectorPosition(1)-qi_xyz(1)) <= -threshold(1);
+case3 = (wantedEndEffectorPosition(3)-qi_xyz(3)) >= threshold(3) ...
+    || (wantedEndEffectorPosition(3)-qi_xyz(3)) <= -threshold(3);
+
+%disp((abs((wantedEndEffectorPosition-qi_xyz)) >= threshold));
+while (case1 || case3)
+    qi = inverse_kin_jacobs2(wantedEndEffectorPosition, ...
+        q0, qi, [case1; 0; case3]);
+    % Make sure to add the difference back in.
+    %qi = qi + deltaq(:,1);
+    temp1 =  forward_kinematics_rad(qi);
+    qi_xyz = temp1(4,:)';
     
-    while (deltaq(:,2) == [ 1; 1; 1 ])
-        deltaq = inverse_kin_jacobs(wantedEndEffectorPosition, ...
-            q0, qi, [0.002; 0.002; 0.002]);
-        
-        % Make sure to add the difference back in.
-        qi = qi + deltaq(:,1);
-        
-        % Then we pass in the joint angles aka deltaq
-        c
-    end
-    % We restart the process from where we currenly are.
-    q0 = qi;
+    %disp('qi_xyz magnitude: ');
+    %disp((((qi_xyz(1,1) - 0.2) ^2) + ...
+     %   (qi_xyz(2,1)^2) + ((qi_xyz(3,1)- 0.2)^2) )^.5 );
+    
+    case1 = (wantedEndEffectorPosition(1)-qi_xyz(1)) >= threshold(1) ...
+        || (wantedEndEffectorPosition(1)-qi_xyz(1)) <= -threshold(1);
+    case3 = (wantedEndEffectorPosition(3)-qi_xyz(3)) >= threshold(3) ...
+        || (wantedEndEffectorPosition(3)-qi_xyz(3)) <= -threshold(3);
+    
+    disp('case1');
+    disp(case1);
+    disp('case3');
+    disp(case3); 
+    
 end
+% q0 = qi;
