@@ -81,10 +81,8 @@ EXIT = 2;
 
 %% Plotting and Calculation
 while 1
-    
     % Go to user selected point
-    if(user_input == YES)
-        
+    if(user_input == YES) 
         % Select the point to go to
         clickhere = ginput3d(1);
         disp("Click here");
@@ -94,25 +92,41 @@ while 1
         % Now this read in position is the wanted end effector position.
         wantedEndEffectorPosition = clickhere';
         
+        % Here we read in the position of the arm in joint angles in
+        % radians.
         current_pos = collect_n_samples(COLLECT_POS,num_samples,STATUS_ID,pp,statuspacket);
+        
+        % We calculate the forward kinematics position using the radian
+        % angles.
         disp('starting position (xyz)');
         disp(forward_kinematics_rad(current_pos));
         
+        % This function takes in the current angular position, the wanted
+        % end effector position, and the threshold, and then outputs the
+        % joint angles required, in radians, to get to the wanted position.
         end_position_angles = taylor_approximation(current_pos,wantedEndEffectorPosition,threshold);
         
+        % This is the location of the arm in the task space given the joint
+        % angles (radians) returned form the taylor approximation.
         end_position_xyz = forward_kinematics_rad(end_position_angles);
-       
-        disp('calculated taylor_approx (xyz)');
-        disp(forward_kinematics_rad(end_position_angles));
         
+        disp('calculated taylor_approx (xyz, in meters');
+        disp(end_position_xyz);
+        
+        % Send to the plotter
         RobotPlotter2(Robot,end_position_angles);
         
-        sent_position = (end_position_angles+[0; pi/2; -pi/2]).*(180/pi);%*[0;1;1];
+        % We are using the remainder function so that the angles can't get
+        % horrendously huge. Notice we are still in radians.
+        sent_position = rem(end_position_angles, pi).*[0;1;1];
+        % rem(end_position_angles, pi/2);%*[0;1;1];
+        % +[0; 0; -pi/2]
         
+        % This function takes in radians!!!!
         send_point(PID_ID,pp,pidpacket,sent_position);
         
-        disp('Sent Position ');
-        disp(sent_position);
+        disp('Sent Position in joint angles and degrees');
+        disp(sent_position.*(180/pi));
         
     end
     

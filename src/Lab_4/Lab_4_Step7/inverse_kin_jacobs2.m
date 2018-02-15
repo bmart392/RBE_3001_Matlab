@@ -10,8 +10,9 @@ current_position_jacobian_matrix = jacob0(qi);
 % this is the forward kinematics of the current location.
 currentposition = forward_kinematics_rad(qi);
 
-% Calculate deltaq
-deltaq = (current_position_jacobian_matrix \ (pd-(currentposition(4,:)')));
+% Calculate deltaq, also, notice the 0.2; that is a damper. LEAVE IT IN!!
+deltaq = 0.2*((current_position_jacobian_matrix \ ...
+    (pd-(currentposition(4,:)'))));
 
 Qi = (deltaq + qi);
 

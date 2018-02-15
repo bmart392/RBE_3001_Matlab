@@ -2,11 +2,11 @@
 % INPUTS:   PID_ID = the global variable declaring the PID ID
 %           pidpacket = the global variable assigned to the pidpacket
 %           position = a 3 x 1 column matrix holding the desired joint
-%           angles
+%           angles in radians
 % 
 % OUTPUTS:  none
 function returnpidpacket = send_point(PID_ID, pp, pidpacket,point)
-angconv = 11.4;
+angconv = (1/pi)*(4096/2); % (180/pi)*(4096/360);
 point = point.*angconv;
 % Assign the pidpacket the joint angles
 pidpacket(1) = point(1,1);

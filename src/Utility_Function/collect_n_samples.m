@@ -15,7 +15,7 @@
 %   Output of this is in radians
 function samples = collect_n_samples(version,numsamples, STATUS_ID, pp,statuspacket )
 
-angconv = ((360/4096)*(pi/180)); % ticks per degree * degrees per radian
+angconv = ((360/4096)*(pi/180)); % degrees per tick * radians per degree
 
 % Create the array to hold the values sampled from the robot
 samples = zeros(10,numsamples);
