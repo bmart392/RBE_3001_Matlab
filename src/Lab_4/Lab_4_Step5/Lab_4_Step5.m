@@ -36,10 +36,8 @@ velocity = zeros(3,1);  % Intialize a matrix to hold the velocity
 % Intitialize an index to track the index of the samples matrix
 arm_samples_index = 1;
 
-global Robot;
-Robot.name = '3001 Arm';
-
 % Create the values for the robot arm lengths
+Robot.name = '3001 Arm';
 Robot.l1 = 0.135;       % Link 1
 Robot.l2 = 0.175;       % Link 2
 Robot.l3  = 0.16928;    % Link 3
@@ -74,7 +72,7 @@ try
     
     % Determine the number of samples to take for each point along the
     % trajectory
-    NUM_SAMPLES = 1;
+    NUM_SAMPLES = 3;
     
     % Calculate the trajectory in xyz coordinates
     trajectory_xyz = full_trajgen_cubic...
@@ -113,21 +111,23 @@ try
             arm_samples_index:arm_samples_index+NUM_SAMPLES-1));
        
         % Calculate the average velocity for the given samples
-        velocity = forw_diff_kinematics(arm_samples(2:4,arm_samples_index+NUM_SAMPLES-1),arm_samples(5:7,arm_samples_index+NUM_SAMPLES-1));
+        velocity = forw_diff_kinematics(arm_samples(2:4,...
+            arm_samples_index+NUM_SAMPLES-1),...
+            arm_samples(5:7,arm_samples_index+NUM_SAMPLES-1));
         
         % Place the calculated velocities in the samples matrix
-        for k = arm_samples_index:arm_samples_index+NUM_SAMPLES
-            arm_samples(5:7,k) = velocity(1:3,1);
-        end
+        %for k = arm_samples_index:arm_samples_index+NUM_SAMPLES
+        %    arm_samples(5:7,k) = velocity(1:3,1);
+        %end
         
         % Plot the robot arm live
-        RobotPlotter(Robot,(arm_samples(2:4,k-1) .* angconv));
+        RobotPlotter(Robot,(arm_samples(2:4,arm_samples_index+NUM_SAMPLES-1) .* angconv));
         
         % Calculate the end position of the robot for the velocity vector
-        end_position = kinematics_general(arm_samples(2:4,k-1));
+        end_position = kinematics_general(arm_samples(2:4,arm_samples_index+NUM_SAMPLES-1));
         
         % Retrieve the velocity of the robot for the velocity vector
-        end_velocity = arm_samples(5:7,k-1);
+        end_velocity = arm_samples(5:7,arm_samples_index+NUM_SAMPLES-1-1);
         
         % Plot the velocity vector of the end effector
         set(Robot.handle2,'XData',end_position(1),'YData',end_position(2),...

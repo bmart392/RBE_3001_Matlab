@@ -8,7 +8,7 @@ L1 = 0.135;            % Meters
 L2 = 0.175;            % Meters
 L3 = 0.16928;          % Meters
 
-theta1 = q(1,1);
+theta1 = q(1,1)*(-1);
 theta2 = q(2,1);
 theta3 = q(3,1);
 

@@ -6,10 +6,8 @@ L1 = 0.135;
 L2 = 0.175;
 L3 = 0.16928;
 
-% convert encoder ticks to radians
+% Correct waist angle sign
 q1(1,1) = q1(1,1)*(-1);
-q1(2,1) = q1(2,1);
-q1(3,1) = q1(3,1);
 
 % The alpha gets the z-axis aligned about the x
 % The theta gets the x-axis aligned about the z

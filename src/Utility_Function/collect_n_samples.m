@@ -12,10 +12,11 @@
 %   OUTPUT: samples = a 10 x n array of samples where a column
 %                       holds all of the data collected for a 
 %                       given point in time
-%
+%   Output of this is in radians
 function samples = collect_n_samples(version,numsamples, STATUS_ID, pp,statuspacket )
 
-angconv = 4096/360; % ticks per degree
+angconv = ((360/4096)*(pi/180)); % ticks per degree * degrees per radian
+
 % Create the array to hold the values sampled from the robot
 samples = zeros(10,numsamples);
 
@@ -47,7 +48,7 @@ switch version
                 samples(j+1,i) = returnstatuspacket((3*j)-2);
             end
         end
-        samples = cat(1,samples(1,:),(samples(2:4,:) ./ angconv));
+        samples = cat(1,samples(1,:),(samples(2:4,:) .* angconv));
         
     case VEL
         % Take numsamples number of velocity samples
@@ -65,7 +66,7 @@ switch version
                 samples(j+4,i) = returnstatuspacket((3*j)-1);
             end
         end
-        samples = cat(1,samples(1,:),(samples(6:8,:) ./ angconv));
+        samples = cat(1,samples(1,:),(samples(6:8,:) .* angconv));
         
     case TOR
         % Take numsamples number of torque samples
@@ -107,8 +108,8 @@ switch version
             end
             
         end
-        samples = cat(1,samples(1,:),(samples(2:4,:) ./ angconv),...
-            (samples(6:8,:) ./ angconv));
+        samples = cat(1,samples(1,:),(samples(2:4,:) .* angconv),...
+            (samples(6:8,:) .* angconv));
         
     case POSTOR
         % Take numsamples number of position and torque samples
@@ -164,8 +165,8 @@ switch version
             end
             
         end
-        samples = cat(1,samples(1,:),(samples(2:4,:) ./ angconv),...
-            (samples(6:8,:) ./ angconv),samples(8:10,:));
+        samples = cat(1,samples(1,:),(samples(2:4,:) .* angconv),...
+            (samples(6:8,:) .* angconv),samples(8:10,:));
         
         case POS_NOTIME
         % Take numsamples number of position samples
@@ -181,7 +182,7 @@ switch version
                 samples(j,i) = returnstatuspacket((3*j)-2);
             end
         end
-        samples = (samples(1:3,:) ./ angconv);
+        samples = (samples(1:3,:) .* angconv);
         
     otherwise
         % Take numsamples number of position samples
@@ -199,6 +200,6 @@ switch version
                 samples(j+1,i) = returnstatuspacket((3*j)-2);
             end
         end
-        samples = cat(1,samples(1,:),(samples(2:4,:) ./ angconv));
+        samples = cat(1,samples(1,:),(samples(2:4,:) .* angconv));
 end
 

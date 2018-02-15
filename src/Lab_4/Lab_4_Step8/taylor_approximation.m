@@ -19,7 +19,6 @@ while (case1 || case3)
     qi = inverse_kin_jacobs2(pd, qi);
     
     all_joint_positions_qi =  forward_kinematics_rad(qi);
-    
     qi_xyz = all_joint_positions_qi(4,:)';
     
     case1 = (pd(1)-qi_xyz(1)) >= threshold(1) ...
