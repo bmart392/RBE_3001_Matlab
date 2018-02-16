@@ -1,4 +1,7 @@
-
+%% Step 7: Jacobian-based solution of the inverse kinematics problem
+ % plots a stick model of the arm in the x-z plane
+ % uses Taylor Series expansion and Jacobian pseudoinverse to
+ % implement a numeric inverse kinematics algorithm
 clc; clear all; close all;
 
 %% Plotting code.

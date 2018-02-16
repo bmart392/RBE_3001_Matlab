@@ -1,3 +1,5 @@
+%% Tests inverse jacobian
+
 clc; close all; clear all;
 a = jacobrad([0;0;0]); b = a(1:3,:); c = pinv(b);
 % disp(" This is b: "); disp(b);
