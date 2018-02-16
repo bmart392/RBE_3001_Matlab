@@ -35,8 +35,6 @@ try
     % ***make sure the robot is in the upright position
     % read the position angles
     q_joint_angles = collect_n_samples(7,1,STATUS_ID,pp,statuspacket);
-    %disp('joint angles (deg)');
-    %disp(q_joint_angles);
     
     % convert to radians
     q_joint_angles_rad = q_joint_angles .* (pi/180);

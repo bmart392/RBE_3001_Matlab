@@ -1,3 +1,5 @@
+%% Step 8:Implementing "teach" modality
+
 clear java;
 
 javaaddpath('..lib/hid4java-0.5.1.jar');
