@@ -3,7 +3,7 @@
 %           pidpacket = the global variable assigned to the pidpacket
 % 
 % OUTPUTS:  none
-function returnpidpacket = send_home(PID_ID, pidpacket)
+function returnpidpacket = send_home(PID_ID, pidpacket,pp)
 % Assign the pidpacket zerro values
 pidpacket(1) = 0;
 pidpacket(4) = 0;

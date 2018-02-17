@@ -6,7 +6,7 @@
 % start angle, end angle
 %
 % OUTPUTS : a 4 x 1 column matrix with a0 through a3
-function coefficients = gencoeff(t0, tf, v0, vf, q0, qf)
+function coefficients = gencoeff_cubic(t0, tf, q0, qf, v0, vf)
 
 coefficients = [
     1 t0 t0^2 t0^3;
