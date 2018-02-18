@@ -92,7 +92,10 @@ while 1
             disp('Go to point 1');
             disp('torque: ' + torque_Nm);
             
-            % plot the force vector
+            % calculate end effector xyz force components
+            endeffector_force_xyz = endeffectorforce(torque_Nm, vertex1);
+            
+            % plot the force vector on end effector
         case POINT2
             
             % Send the arm to Vertex 2
@@ -113,6 +116,9 @@ while 1
             
             disp('Go to point 2');
             disp('torque: ' + torque_Nm);
+            
+            % calculate end effector xyz force components
+            endeffector_force_xyz = endeffectorforce(torque_Nm, vertex2);
             
             % plot the force vector
         case POINT3
@@ -135,6 +141,9 @@ while 1
             
             disp('Go to point 3');
             disp('torque: ' + torque_Nm);
+            
+            % calculate end effector xyz force components
+            endeffector_force_xyz = endeffectorforce(torque_Nm, vertex3);
             
             % plot force vector on the end effector
         otherwise
