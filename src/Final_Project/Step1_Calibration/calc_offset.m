@@ -15,9 +15,9 @@ clc; clear all; close all;
 
 % -------------- Communication Initialization -----------------
 
-pp = PacketProcessor(7);    % initialize the value
-PID_ID = 37;                % initialize the value
-STATUS_ID = 42;             % initialize the value
+pp = PacketProcessor(7);
+PID_ID = 37;                % moves the robot
+STATUS_ID = 42;             % reads position, velocity and torques from the robot           
 
 % Create a variable to hold the statuspacket, including a digit
 % determining if the force was going to be sampled
@@ -46,8 +46,6 @@ if(user_input == YES)
     
     Collect_PositionandTorque_Only = 9;    % Determine what was to be sampled
     num_samples = 1;            % The number of samples to take
-    statuspacket(16) = 1;       % Set the status packet to tell the
-    %  nucleo to sample torque
     
     % Sample the the arm to read the torque sensors
     sampled_torque = collect_n_samples(Collect_PositionandTorque_Only,num_samples,...
