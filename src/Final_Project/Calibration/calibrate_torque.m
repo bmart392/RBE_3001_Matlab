@@ -51,14 +51,6 @@ xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
 
 % ------------------------- Test Force Sensing -------------------------
 
-% y = kx + y0
-% where y is the ADC count value, k = 178.5, x = torque (Nm), and y0 is the
-% initial offset calculated in the calibration step
-% x = (y - y0)/k
-
-y0 = [0 ; 0; 0]; % offset calculated in calc_offset
-k = 178.5;       % given scaling factor
-
 % Set the vertices that the arm will travel to in radians
 vertex1 = [ 0; 0; 1030];
 vertex2 = [ 343; 343; 343];
@@ -95,7 +87,7 @@ while 1
                 Collect_PositionandTorque_Only,num_samples,...
                 STATUS_ID,pp, statuspacket);
             % calculate torque in Nm
-            torque_Nm = (sampled_torque - y0)/k;
+            torque_Nm = calc_torque_Nm(sampled_torque);
             
             disp('Go to point 1');
             disp('torque: ' + torque_Nm);
@@ -117,7 +109,7 @@ while 1
                 Collect_PositionandTorque_Only,num_samples,...
                 STATUS_ID,pp, statuspacket);
             % calculate torque in Nm
-            torque_Nm = (sampled_torque - y0)/k;
+            torque_Nm = calc_torque_Nm(sampled_torque);
             
             disp('Go to point 2');
             disp('torque: ' + torque_Nm);
@@ -139,7 +131,7 @@ while 1
                 Collect_PositionandTorque_Only,num_samples,...
                 STATUS_ID,pp, statuspacket);
             % calculate torque in Nm
-            torque_Nm = (sampled_torque - y0)/k;
+            torque_Nm = calc_torque_Nm(sampled_torque);
             
             disp('Go to point 3');
             disp('torque: ' + torque_Nm);
