@@ -15,12 +15,13 @@ clc; clear all; close all;
 % -------------- Communication Initialization -----------------
 
 pp = PacketProcessor(7);    % initialize the value
-PID_ID = 37;                % initialize the value
-STATUS_ID = 42;             % initialize the value
+PID_ID = 37;                % moves the robot
+%STATUS_ID = 42;            % reads position and velocity
+TORQUE_ID = 98;             % reads torque values from the the robot
 
 % Create a variable to hold the statuspacket, including a digit
 % determining if the force was going to be sampled
-statuspacket = zeros(16,1,'single');
+torquepacket = zeros(15,1,'single');
 
 % Create a variable to hold the statuspacket
 pidpacket = zeros(15,1,'single');
@@ -52,9 +53,9 @@ xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
 % ------------------------- Test Force Sensing -------------------------
 
 % Set the vertices that the arm will travel to in radians
-vertex1 = [ 0; 0; 1030];
-vertex2 = [ 343; 343; 343];
-vertex3 = [ 0; 686; 0 ];
+vertex1 = [ 0; 0; pi/2];
+vertex2 = [ 0.5236; 0.5236; 0.5236];
+vertex3 = [ 0; 1.0472; 0 ];
 
 while 1
     % User Interface to determine which point to go to
@@ -79,13 +80,11 @@ while 1
             % Determine what is to be sampled
             Collect_PositionandTorque_Only = 9;    
             num_samples = 1;            % The number of samples to take
-            statuspacket(16) = 1;       % Set the status packet to tell the
-                                        %  nucleo to sample torque
-                                        
+            
             % Sample the the arm to read the position and the torque sensors
             sampled_torque = collect_n_samples(...
                 Collect_PositionandTorque_Only,num_samples,...
-                STATUS_ID,pp, statuspacket);
+                TORQUE_ID,pp, torquepacket);
             % calculate torque in Nm
             torque_Nm = calc_torque_Nm(sampled_torque);
             
@@ -104,13 +103,11 @@ while 1
             % Determine what is to be sampled
             Collect_PositionandTorque_Only = 9;    
             num_samples = 1;            % The number of samples to take
-            statuspacket(16) = 1;       % Set the status packet to tell the
-                                        %  nucleo to sample torque
-                                        
+
             % Sample the the arm to read the position and the torque sensors
             sampled_torque = collect_n_samples(...
                 Collect_PositionandTorque_Only,num_samples,...
-                STATUS_ID,pp, statuspacket);
+                TORQUE_ID,pp, torquepacket);
             % calculate torque in Nm
             torque_Nm = calc_torque_Nm(sampled_torque);
             
@@ -129,13 +126,11 @@ while 1
             % Determine what is to be sampled
             Collect_PositionandTorque_Only = 9;    
             num_samples = 1;            % The number of samples to take
-            statuspacket(16) = 1;       % Set the status packet to tell the
-                                        %  nucleo to sample torque
                                         
             % Sample the the arm to read the position and the torque sensors
             sampled_torque = collect_n_samples(...
                 Collect_PositionandTorque_Only,num_samples,...
-                STATUS_ID,pp, statuspacket);
+                TORQUE_ID,pp, torquepacket);
             % calculate torque in Nm
             torque_Nm = calc_torque_Nm(sampled_torque);
             
