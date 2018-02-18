@@ -16,12 +16,11 @@ clc; clear all; close all;
 
 pp = PacketProcessor(7);    % initialize the value
 PID_ID = 37;                % moves the robot
-%STATUS_ID = 42;            % reads position and velocity
-TORQUE_ID = 98;             % reads torque values from the the robot
+STATUS_ID = 42;             % reads position and velocity
 
 % Create a variable to hold the statuspacket, including a digit
 % determining if the force was going to be sampled
-torquepacket = zeros(15,1,'single');
+statuspacket = zeros(15,1,'single');
 
 % Create a variable to hold the statuspacket
 pidpacket = zeros(15,1,'single');
@@ -84,7 +83,7 @@ while 1
             % Sample the the arm to read the position and the torque sensors
             sampled_torque = collect_n_samples(...
                 Collect_PositionandTorque_Only,num_samples,...
-                TORQUE_ID,pp, torquepacket);
+                STATUS_ID,pp, statuspacket);
             % calculate torque in Nm
             torque_Nm = calc_torque_Nm(sampled_torque);
             
@@ -107,7 +106,7 @@ while 1
             % Sample the the arm to read the position and the torque sensors
             sampled_torque = collect_n_samples(...
                 Collect_PositionandTorque_Only,num_samples,...
-                TORQUE_ID,pp, torquepacket);
+                STATUS_ID,pp, statuspacket);
             % calculate torque in Nm
             torque_Nm = calc_torque_Nm(sampled_torque);
             
@@ -130,7 +129,7 @@ while 1
             % Sample the the arm to read the position and the torque sensors
             sampled_torque = collect_n_samples(...
                 Collect_PositionandTorque_Only,num_samples,...
-                TORQUE_ID,pp, torquepacket);
+                STATUS_ID,pp, statuspacket);
             % calculate torque in Nm
             torque_Nm = calc_torque_Nm(sampled_torque);
             
