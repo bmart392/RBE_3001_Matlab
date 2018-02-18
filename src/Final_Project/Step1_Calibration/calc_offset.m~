@@ -3,9 +3,7 @@
 % where y is the ADC count value, k = 178.5, x = torque (Nm), and y0 is the
 % initial offset calculated in the calibration step
 
-clear java;
-
-javaaddpath('..lib/hid4java-0.5.1.jar');
+javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -17,12 +15,16 @@ clc; clear all; close all;
 
 % -------------- Communication Initialization -----------------
 
-% Set up communication with the arm
-STATUS_ID = 42;
-PID_ID = 37;
 pp = PacketProcessor(7);
-pidpacket = zeros(15,'single');
-statuspacket = zeros(15,'single');
+PID_ID = 37;                % moves the robot
+STATUS_ID = 42;             % reads position, velocity and torques from the robot
+
+% Create a variable to hold the statuspacket, including a digit
+% determining if the force was going to be sampled
+statuspacket = zeros(15,1,'single');
+
+% Create a variable to hold the statuspacket
+pidpacket = zeros(15,1,'single');
 
 % --------------- Calibration of the offset curve -------------
 
@@ -37,42 +39,27 @@ statuspacket = zeros(15,'single');
 
 % Set the position for the arm to travel
 % vertical over the base joint
-position1 = [ 0; pi/2; 0 ];
-position2 = [ 0; pi/2; pi/2 ];
-
-send_home(PID_ID,pidpacket,pp);
-
-pause(1);
+% vertical_position = [ 0; 0; 0 ];
 
 % Send the arstatuspacket = zeros(16,1,'single');m to the vertical position
-send_point(PID_ID,pp,pidpacket,position1);
-
-pause(2);
-
-send_point(PID_ID,pp,pidpacket,position2);
-
-pause(2);
+% send_point(PID_ID,pp,pidpacket,vertical_position);
+% YES = 1;
 %
-% % YES = 1;
-% %
-% % user_input = dialog_box_truefalse(...
-% %     'Would you like to set the y0 offset for each torque sensor?'...
-% %     ,'Sensor Calibration');
-% %
-% % if(user_input == YES)
+% user_input = dialog_box_truefalse(...
+%     'Would you like to set the y0 offset for each torque sensor?'...
+%     ,'Sensor Calibration');
 %
+% if(user_input == YES)
+
 Collect_PositionandTorque_Only = 9;    % Determine what was to be sampled
 num_samples = 1;            % The number of samples to take
 
 % Sample the the arm to read the torque sensors
 sampled_torque = collect_n_samples(Collect_PositionandTorque_Only,num_samples,...
     STATUS_ID,pp, statuspacket);
-
+disp(size(sampled_torque));
 % Display the sample
 for i = 1:3
     disp("The sampled torque for Joint " + i + " is " + sampled_torque(i,1));
 end
-
-% Clear up memory upon termination
-pp.shutdown()
-clear java;
+% end

@@ -5,14 +5,14 @@
 %           angles in radians
 % 
 % OUTPUTS:  none
-function returnpidpacket = send_point(PID_ID, pp, pidpacket,point)
+function returnpidpacket = send_point(PID_ID, pp, pidpacket,point1)
 angconv = (1/pi)*(4096/2); % (180/pi)*(4096/360);
-point = point.*angconv;
+point = point1.*angconv;
 % Assign the pidpacket the joint angles
 pidpacket(1) = point(1,1);
 pidpacket(4) = point(2,1);
 pidpacket(7) = point(3,1);
-
+% disp(pidpacket);
 % Send the pidpacket
 returnpidpacket = pp.command(PID_ID, pidpacket);
 end

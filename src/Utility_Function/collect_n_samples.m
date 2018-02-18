@@ -47,7 +47,7 @@ switch version
             % Collect the time each sample was taken
             samples(1,i) = toc;
             
-            % Iterate through the returnstatuspacket to find the joint angles and
+            % IteTOR_NOTIMErate through the returnstatuspacket to find the joint angles and
             % put them in the columns of samples
             for j = 1:3
                 samples(j+1,i) = returnstatuspacket((3*j)-2);
@@ -76,7 +76,7 @@ switch version
     case TOR
         % Take numsamples number of torque samples
         % and store them in the return matrix
-        for i = 1:numsamples
+        for i = 1TOR_NOTIME:numsamples
             % read the status packet
             returnstatuspacket = pp.command(STATUS_ID, statuspacket);
             
@@ -145,7 +145,7 @@ switch version
         % Take numsamples number of position, velocity, and torque samples
         % and store them in the return matrix
         for i = 1:numsamples
-            % read the status packet
+            % reaTOR_NOTIMEd the status packet
             returnstatuspacket = pp.command(STATUS_ID, statuspacket);
             
             % Collect the time each sample was taken
@@ -213,8 +213,9 @@ switch version
             
             % Iterate through the returnstatuspacket to find the joint torques and
             % put them in the columns of samples
+            % 	packet[(i*3)+2] = actualtorque;
             for j = 1:3
-                samples(j,i) = returnstatuspacket((3*j));
+                samples(j,i) = returnstatuspacket((3*j)+2);
             end
         end
         samples = samples(1:3,:);
@@ -246,7 +247,7 @@ switch version
         
     case POSTOR_NOTIME
         % Take numsamples number of position and torque samples
-        % and store them in the return matrix
+        % and store them in the ret	packet[(i*3)+2] = actualtorque;urn matrix
         for i = 1:numsamples
             % read the status packet
             returnstatuspacket = pp.command(STATUS_ID, statuspacket);

@@ -4,19 +4,19 @@ classdef PacketProcessor
         hidService;
     end
     methods
-	%The is a shutdown function to clear the HID hardware connection
+        %The is a shutdown function to clear the HID hardware connection
         function  shutdown(packet)
-	    %Close the device
+            %Close the device
             packet.hidDevice.close();
-	    %Close the HID services
+            %Close the HID services
             packet.hidService.shutdown();
-
+            
         end
         % Create a packet processor for an HID device with USB PID 0x007
         function packet = PacketProcessor(deviceID)
             % Load the dependant Jar file
             javaaddpath('../lib/hid4java-0.5.1.jar');
-            % Import Java classes 
+            % Import Java classes
             import org.hid4java.*;
             import org.hid4java.event.*;
             import java.nio.ByteBuffer;
@@ -36,7 +36,7 @@ classdef PacketProcessor
                         packet.hidDevice = dev(k);
                         % Open the device to begin communication
                         packet.hidDevice.open();
-
+                        
                     end
                 end
             end
@@ -47,7 +47,7 @@ classdef PacketProcessor
             if incoming<0
                 threshVal=uint8(incoming+256);
             else
-                 threshVal=uint8(incoming);
+                threshVal=uint8(incoming);
             end
         end
         %Perform a command cycle. This function will take in a command ID
@@ -81,31 +81,31 @@ classdef PacketProcessor
                 if val > 0
                     %Read back a packet of data from the HID interface
                     ret = packet.hidDevice.read(int32(packetSize), int32(1000));
-		    if ~isempty(ret)
-			    %disp('Read from hardware');
-
-			    %disp('Convert to bytes');
-			    %Use a Lambda to convert all Bytes to signed integers
-			    %in Matlab datatypes
-			    byteArray = arrayfun(@(x)  x.byteValue(), ret);
-
-			    %disp('Reshape');
-			    %Reshape the threshholded array. The flat array of
-			    %bytes is reshaped to 4x16 so each column contains all
-			    %the bytes for a given value
-			    sm = reshape(arrayfun(@(x)  mythreshhold(packet,x), byteArray),[4,16]);
-
-			    %disp('parse');
-                    
-                           
-                             for i=1:length(returnValues)
-                               % Strip a column to process 
-                               subMatrix = sm(:,i+1);
-                               % Use teh typecast to convert 4 bytes to the
-                               % 32bit datatype
-                               returnValues(i)=typecast(subMatrix,'single');
-                             end
-                           
+                    if ~isempty(ret)
+                        %disp('Read from hardware');
+                        
+                        %disp('Convert to bytes');
+                        %Use a Lambda to convert all Bytes to signed integers
+                        %in Matlab datatypes
+                        byteArray = arrayfun(@(x)  x.byteValue(), ret);
+                        
+                        %disp('Reshape');
+                        %Reshape the threshholded array. The flat array of
+                        %bytes is reshaped to 4x16 so each column contains all
+                        %the bytes for a given value
+                        sm = reshape(arrayfun(@(x)  mythreshhold(packet,x), byteArray),[4,16]);
+                        
+                        %disp('parse');
+                        
+                        
+                        for i=1:length(returnValues)
+                            % Strip a column to process
+                            subMatrix = sm(:,i+1);
+                            % Use teh typecast to convert 4 bytes to the
+                            % 32bit datatype
+                            returnValues(i)=typecast(subMatrix,'single');
+                        end
+                        
                     else
                         disp('Read failed, no data returned')
                     end
@@ -123,10 +123,10 @@ classdef PacketProcessor
             %Create the 4 byte control code
             tmp1 = typecast(int32(code), 'uint8');
             for j=1:4
-                 returnArray(j)=tmp1(j);
+                returnArray(j)=tmp1(j);
             end
             %disp('Code: ')
-
+            
             %disp(code)
             %disp(tmp1)
             for i=1:length(val)
