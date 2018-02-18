@@ -60,9 +60,9 @@ y0 = [0 ; 0; 0]; % offset calculated in calc_offset
 k = 178.5;       % given scaling factor
 
 % Set the vertices that the arm will travel to in radians
-vertex1 = [ 0; 0; 0 ];
-vertex2 = [ 0; 0; 0 ];
-vertex3 = [ 0; 0; 0 ];
+vertex1 = [ 0; 0; 1030];
+vertex2 = [ 343; 343; 343];
+vertex3 = [ 0; 686; 0 ];
 
 while 1
     % User Interface to determine which point to go to
