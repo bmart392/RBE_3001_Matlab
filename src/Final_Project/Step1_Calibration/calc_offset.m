@@ -5,7 +5,7 @@
 
 clear java;
 
-javaaddpath('..lib/hid4java-0.5.1.jar');
+javaaddpath('../RBE3001_Matlab_Team_C18_01/lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -18,11 +18,13 @@ clc; clear all; close all;
 % -------------- Communication Initialization -----------------
 
 % Set up communication with the arm
-STATUS_ID = 42;
+%STATUS_ID = 42;
+TORQUE_ID = 25;
 PID_ID = 37;
 pp = PacketProcessor(7);
 pidpacket = zeros(15,'single');
 statuspacket = zeros(15,'single');
+torquepacket = zeros(15,'single');
 
 % --------------- Calibration of the offset curve -------------
 
@@ -42,12 +44,10 @@ position2 = [ 0; pi/2; pi/2 ];
 
 send_home(PID_ID,pidpacket,pp);
 
-pause(1);
-
-% Send the arstatuspacket = zeros(16,1,'single');m to the vertical position
+% Send the arm to the vertical position
 send_point(PID_ID,pp,pidpacket,position1);
 
-pause(2);
+pause(1);
 
 send_point(PID_ID,pp,pidpacket,position2);
 
@@ -66,7 +66,7 @@ num_samples = 1;            % The number of samples to take
 
 % Sample the the arm to read the torque sensors
 sampled_torque = collect_n_samples(Collect_PositionandTorque_Only,num_samples,...
-    STATUS_ID,pp, statuspacket);
+    TORQUE_ID,pp, torquepacket);
 
 % Display the sample
 for i = 1:3

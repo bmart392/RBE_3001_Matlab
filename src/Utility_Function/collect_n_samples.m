@@ -215,7 +215,7 @@ switch version
             % put them in the columns of samples
             % 	packet[(i*3)+2] = actualtorque;
             for j = 1:3
-                samples(j,i) = returnstatuspacket((3*j)+2);
+                samples(j,i) = returnstatuspacket(j);
             end
         end
         samples = samples(1:3,:);
