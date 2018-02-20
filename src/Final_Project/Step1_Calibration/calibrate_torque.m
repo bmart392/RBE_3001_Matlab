@@ -2,7 +2,7 @@
 % This script will allow for the y0 offset for the joints to be calculated
 % and the calibration curve to be set.
 
-javaaddpath('../lib/hid4java-0.5.1.jar');
+javaaddpath('lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -125,11 +125,9 @@ while 1
             disp(endeffector_force_xyz);
             % plot the force vector on end effector
             RobotPlotter2(Robot,vertex1);
-            
-           
-            
-            quiver3(endposition1(1),endposition1(2),endposition1(3),100,100,100);%endeffector_force_xyz(1)*1000,...
-                 %endeffector_force_xyz(2)*1000,endeffector_force_xyz(3)*1000);
+             
+              quiver3(endposition1(1),endposition1(2),endposition1(3),endeffector_force_xyz(1)*100,...
+                 endeffector_force_xyz(2)*100,endeffector_force_xyz(3)*100,'LineWidth',5);
        
 %             set(Robot.handle2,'XData',vertex1(1),'YData',vertex1(2),...
 %                 'ZData',vertex1(3),'UData',endeffector_force_xyz(1)*1000,'VData',...
