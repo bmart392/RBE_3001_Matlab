@@ -47,7 +47,7 @@ fig_size = get(0, 'Screensize');
 fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
     0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
-axis((Robot.l2 + Robot.l3) * [-1 1 -1 1 -0.5 1.5]);
+axis((Robot.l2 + Robot.l3) * [-2 2 -2 2 -0.5 1.5]);
 title('Stick figure plot');
 xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
 
@@ -59,7 +59,7 @@ y0 = forward_kinematics_rad([0; 0; 0]);
 Robot.handle = plot3(y0(:,1),y0(:,2),y0(:,3),'-o', ...
     'color', [0 0.4 0.7], 'LineWidth', 5);
 
-% set the second handle of the robot to be the quiver3 function initially 
+% set the second handle of the robot to be the quiver3 function initially
 % plotting a 0 vector
 Robot.handle2 = quiver3(y0(4,1),y0(4,2),y0(4,3),0,0,0,'LineWidth',5);
 
@@ -84,9 +84,9 @@ endposition3 = endposition3(4,:)';
 send_home(PID_ID, pidpacket, pp);
 
 pause(10);
- 
+
 while 1
-   
+    
     
     % User Interface to determine which point to go to
     user_input = dialog_box_3option('Which point would you like to go to?',...
@@ -122,17 +122,18 @@ while 1
             
             % calculate end effector xyz force components
             endeffector_force_xyz = endeffectorforce(sampled_torque, vertex1);
+            disp('end effector force');
             disp(endeffector_force_xyz);
             % plot the force vector on end effector
             RobotPlotter2(Robot,vertex1);
-             
-              quiver3(endposition1(1),endposition1(2),endposition1(3),endeffector_force_xyz(1)*100,...
-                 endeffector_force_xyz(2)*100,endeffector_force_xyz(3)*100,'LineWidth',5);
-       
-%             set(Robot.handle2,'XData',vertex1(1),'YData',vertex1(2),...
-%                 'ZData',vertex1(3),'UData',endeffector_force_xyz(1)*1000,'VData',...
-%                 endeffector_force_xyz(2)*1000,'WData',endeffector_force_xyz(3)*1000);
-%        
+            
+            %             quiver3(endposition1(1),endposition1(2),endposition1(3),endeffector_force_xyz(1)*100,...
+            %                 endeffector_force_xyz(2)*100,endeffector_force_xyz(3)*100,'LineWidth',5);
+            
+            set(Robot.handle2,'XData',vertex1(1),'YData',vertex1(2),...
+                'ZData',vertex1(3),'UData',endeffector_force_xyz(1)*1000,'VData',...
+                endeffector_force_xyz(2)*1000,'WData',endeffector_force_xyz(3)*1000);
+            
         case POINT2
             
             % Send the arm to Vertex 2
@@ -148,12 +149,22 @@ while 1
                 TORQUE_ID,pp, torquepacket);
             
             disp('Go to point 2');
-            disp('torque: ' + sampled_torque);
+            disp('torque: ');
+            disp(sampled_torque);
             
             % calculate end effector xyz force components
             endeffector_force_xyz = endeffectorforce(sampled_torque, vertex2);
+            disp(endeffector_force_xyz);
+            % plot the force vector on end effector
+            RobotPlotter2(Robot,vertex2);
             
-            % plot the force vector
+            quiver3(endposition2(1),endposition2(2),endposition2(3),endeffector_force_xyz(1)*100,...
+                endeffector_force_xyz(2)*100,endeffector_force_xyz(3)*100,'LineWidth',5);
+            
+            %             set(Robot.handle2,'XData',vertex1(1),'YData',vertex1(2),...
+            %                 'ZData',vertex1(3),'UData',endeffector_force_xyz(1)*1000,'VData',...
+            %                 endeffector_force_xyz(2)*1000,'WData',endeffector_force_xyz(3)*1000);
+            %
         case POINT3
             
             % Send the arm to Vertex 3
@@ -169,12 +180,23 @@ while 1
                 TORQUE_ID,pp, torquepacket);
             
             disp('Go to point 3');
-            disp('torque: ' + sampled_torque);
+            disp('torque: ');
+            disp(sampled_torque);
             
             % calculate end effector xyz force components
             endeffector_force_xyz = endeffectorforce(sampled_torque, vertex3);
+            disp(endeffector_force_xyz);
+            % plot the force vector on end effector
+            RobotPlotter2(Robot,vertex3);
             
-            % plot force vector on the end effector
+            quiver3(endposition3(1),endposition3(2),endposition3(3),...
+                endeffector_force_xyz(1)*100, endeffector_force_xyz(2)*100,...
+                endeffector_force_xyz(3)*100,'LineWidth',5);
+            
+            %             set(Robot.handle2,'XData',vertex1(1),'YData',vertex1(2),...
+            %                 'ZData',vertex1(3),'UData',endeffector_force_xyz(1)*1000,'VData',...
+            %                 endeffector_force_xyz(2)*1000,'WData',endeffector_force_xyz(3)*1000);
+            %
         otherwise
             break
     end
@@ -184,22 +206,4 @@ end
 % Clear up memory upon termination
 pp.shutdown()
 clear java;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
