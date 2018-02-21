@@ -3,41 +3,41 @@
 % function creates the crosshair matrix that is a square denoted by side
 % length n.
 % imagexy is => size(img)
-function cross = crosshair(imagexy, centroidx, centroidy)
+function cross = crosshair(imagexy, centroidrow, centroidcolumn)
 
 % Line thickness
-thicc = 4;
+line_thickness = 4;
 
 % Say n equals 40 for now. This is the side length of the crosshair.
-n = 40;
+cross_height_width = 40;
 
 % Image dimensions
-imagex = imagexy(1,2); % 826
-disp(imagex);
-imagey = imagexy(1,1); % 571
-disp(imagey);
+imagerow = imagexy(1,1); 
+disp(imagerow);
+imagecolumn = imagexy(1,2); 
+disp(imagecolumn);
 
 % Center of matrix start.
-centleft = centroidx-(thicc/2);
+centleft = centroidrow-(line_thickness/2);
 
-centright = centroidx+(thicc/2);
+centright = centroidrow+(line_thickness/2);
 
-centup = centroidy; %-(thicc/2);
+centup = centroidcolumn-(line_thickness/2);
 
-centdown = centroidy + thicc; %+(thicc/2);
+centdown = centroidcolumn +(line_thickness/2);
 
 % This will hold our values.
-startmatrix = zeros(imagex, imagey);
+startmatrix = zeros(imagerow, imagecolumn);
 
 % Now we fill in the vertical component of the cross hair.
 for i=centleft:centright % The column controller, crosshair width
-    for c=centroidy-(n/2):centroidy+(n/2) % The row controller crosshair length
+    for c=centroidcolumn-(cross_height_width/2):centroidcolumn+(cross_height_width/2) % The row controller crosshair length
         startmatrix(c,i) = 1;
     end
 end
 
 % Now we fill in the horizontal component of the cross hair.
-for i=centroidx-(n/2):centroidx+(n/2) % The row controller, crosshair width
+for i=centroidrow-(cross_height_width/2):centroidrow+(cross_height_width/2) % The row controller, crosshair width
     for c=centup:centdown  % The column controller crosshair length
         startmatrix(c,i) = 1;
     end

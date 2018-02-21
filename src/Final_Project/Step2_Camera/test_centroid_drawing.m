@@ -17,7 +17,9 @@ end
 % img = snapshot(cam);
 
 % Here we import an image from the hard drive.
-img = imread('green_Copper.jpg');
+%img = imread('green_Copper.jpg');
+img = imread('blue_Copper.jpg');
+%img = imread('yellow_Copper.jpg');
 
 % Show the snapshot
 % imshow(img)
@@ -26,7 +28,9 @@ img = imread('green_Copper.jpg');
 % should do is isolate all colors but the correct color.
 % What is returned is an image that is black and white. The white blob is
 % the object we want.
-filteredimg = find_Green_blob_copper(img);
+%filteredimg = find_Green_blob_copper(img);
+filteredimg = find_Blue_blob_copper(img);
+%filteredimg = find_Yellow_blob_copper(img);
 
 % Next we want to get rid of all the last dots in the image.
 
@@ -35,11 +39,11 @@ filteredimg = find_Green_blob_copper(img);
 % The default connectivity is 8 for two dimensions, 26 for three 
 % dimensions, and conndef(ndims(BW), 'maximal') for higher dimensions. 
 % This operation is known as an area opening. 
-minimumPix = 20;
+minimumPix = 50;
 blob1 = bwareaopen(filteredimg, minimumPix);
     
 % Display the filtered image.
-% imshow(blob1);
+%imshow(blob1);
 
 % Now we find the centroid of the object in the camera frame.
 % Ilabel = bwlabel(blob1);
@@ -48,7 +52,6 @@ stat = regionprops(blob1,'centroid');
 % Display the centroid of the blob.
 disp("Centroid");
 disp(stat) % need to do the floor() command
-
 
 % THis is the size including the porches. The actual image is 640x480.
 % disp(size(blob1))
@@ -64,30 +67,30 @@ disp(stat) % need to do the floor() command
 
 % Here we create the new image with the given centroid.
 centroid = cat(1, stat.Centroid);
-centx = centroid(1,1);
-centy = centroid(1,2);
+centrow = centroid(1,1);
+centcolumn = centroid(1,2);
 
-centx = floor(centx);
-centy = floor(centy);
+centrow = floor(centrow);
+centcolumn = floor(centcolumn);
 
 % Create our crosshair matrix.
-overlaycross = crosshair(size(img), centx, centy);
-% disp(overlaycross)
+overlaycross = crosshair(size(img), centrow, centcolumn)';
+ %disp(overlaycross)
 
 % disp("Image size");
 % disp(size(img));
 
 newcrossimage = img; % zeros(size(img,1), size(img, 2), 3);
-size(img,2)
+% size(img,2)
 
-pause(1);
+pause(0.25);
 
 % We will overlay the crosshair over the old image file.
 for L=1:826 % row controller 826 if 2, 571 if 1
    for Y=1:571 % Column controller
 %        disp(img(L,Y,:))
-        if(overlaycross(L,Y) == 1)
-            newcrossimage(L,Y, :) = [1 1 1];
+        if(overlaycross(L, Y) == 1)
+            newcrossimage(Y,L, 1:3) = [255 255 255];
         else
             newcrossimage(Y,L, 1:3) = img(Y,L, 1:3);
         end
