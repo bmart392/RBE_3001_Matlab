@@ -1,10 +1,8 @@
-%% Part 8: Object Localization
-% uses a function that takes in a framE from the camera,
-% identifies the centroid of a solid colored spherical tracking object
-% and overlays a marker on the display video feed
-% colors are blue, yellow or green. 
+%% Test Centroid drawing.
+% This currently reads a picture from the hard drive, finds the centroid,
+% adds a crosshair to the original image, and then displays the image.
 
-close all; clear all;
+close all; clear all; clc
 
 % Instantiate hardware (turn on camera)
 if ~exist('cam', 'var') % connect to webcam iff not connected
@@ -41,7 +39,7 @@ minimumPix = 20;
 blob1 = bwareaopen(filteredimg, minimumPix);
     
 % Display the filtered image.
-imshow(blob1);
+% imshow(blob1);
 
 % Now we find the centroid of the object in the camera frame.
 % Ilabel = bwlabel(blob1);
@@ -51,8 +49,9 @@ stat = regionprops(blob1,'centroid');
 disp("Centroid");
 disp(stat) % need to do the floor() command
 
+
 % THis is the size including the porches. The actual image is 640x480.
-disp(size(blob1))
+% disp(size(blob1))
 
 % Now we need to edit the color image so that the centroid has a
 % cross-hairs over it.
@@ -64,14 +63,38 @@ disp(size(blob1))
 % imshow(img)
 
 % Here we create the new image with the given centroid.
-% centx = floor(stat(1,1));
-% centy = floor(stat(1,2));
+centroid = cat(1, stat.Centroid);
+centx = centroid(1,1);
+centy = centroid(1,2);
 
-% Make sure the size is correct for the new image.
-newBWimage = zeros(size(blob1));
+centx = floor(centx);
+centy = floor(centy);
 
+% Create our crosshair matrix.
+overlaycross = crosshair(size(img), centx, centy);
+% disp(overlaycross)
 
+% disp("Image size");
+% disp(size(img));
 
+newcrossimage = img; % zeros(size(img,1), size(img, 2), 3);
+size(img,2)
+
+pause(1);
+
+% We will overlay the crosshair over the old image file.
+for L=1:826 % row controller 826 if 2, 571 if 1
+   for Y=1:571 % Column controller
+%        disp(img(L,Y,:))
+        if(overlaycross(L,Y) == 1)
+            newcrossimage(L,Y, :) = [1 1 1];
+        else
+            newcrossimage(Y,L, 1:3) = img(Y,L, 1:3);
+        end
+   end
+end
+
+imshow(newcrossimage);
 
 % If we so choose, we can write the jpg to a file.
 % imwrite(colorfiltered, 'filtered_green_Copper.jpg');
