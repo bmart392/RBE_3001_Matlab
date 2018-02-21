@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pixels>
    <pixel>
+<<<<<<< HEAD
       <m>214.6577</m>
       <n>292.9266</n>
    </pixel>
@@ -19,5 +20,25 @@
    <pixel>
       <m>434.2558</m>
       <n>418.5526</n>
+=======
+      <m>213</m>
+      <n>247</n>
+   </pixel>
+   <pixel>
+      <m>411</m>
+      <n>255</n>
+   </pixel>
+   <pixel>
+      <m>292</m>
+      <n>299</n>
+   </pixel>
+   <pixel>
+      <m>195</m>
+      <n>366</n>
+   </pixel>
+   <pixel>
+      <m>423</m>
+      <n>375</n>
+>>>>>>> 2391a5c557a67ca74a616fd95ea451c748176bcc
    </pixel>
 </pixels>
