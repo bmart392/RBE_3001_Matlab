@@ -32,6 +32,8 @@ img = imread('blue_Copper.jpg');
 filteredimg = find_Blue_blob_copper(img);
 %filteredimg = find_Yellow_blob_copper(img);
 
+% imshow(filteredimg);
+
 % Next we want to get rid of all the last dots in the image.
 
 % removes all connected components (objects) that have fewer than 
@@ -43,7 +45,7 @@ minimumPix = 50;
 blob1 = bwareaopen(filteredimg, minimumPix);
     
 % Display the filtered image.
-%imshow(blob1);
+% imshow(blob1);
 
 % Now we find the centroid of the object in the camera frame.
 % Ilabel = bwlabel(blob1);
