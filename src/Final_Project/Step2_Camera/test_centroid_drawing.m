@@ -14,11 +14,11 @@ end
 % preview(cam)
 
 % Next we take a snapshot from the camera
-% img = snapshot(cam);
+ img = snapshot(cam);
 
 % Here we import an image from the hard drive.
 %img = imread('green_Copper.jpg');
-img = imread('blue_Copper.jpg');
+%img = imread('blue_Copper.jpg');
 %img = imread('yellow_Copper.jpg');
 
 % Show the snapshot

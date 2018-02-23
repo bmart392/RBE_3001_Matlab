@@ -8,8 +8,7 @@ l2 = 0.175;   % The shoulder link.
 l3 = 0.16928; % The elbow link.
 
 
-radiansToDegrees = 180 / pi;    % Radians to degrees conversion
-angconv = 4096/360;             % ticks per degree
+degreesToRadians = pi/180;    % Radians to degrees conversion
 
 x = endeffectlocation(1,1);
 y = endeffectlocation(2,1);
@@ -17,15 +16,15 @@ z = endeffectlocation(3,1);
 
 % These are the physical angular limits of the arm. 
 % These all need to be tested manually.
-theta1max = 85;     % In degrees
-theta1min = -85;    % In degrees
+theta1max = 85*degreesToRadians;    
+theta1min = -85*degreesToRadians;    
 
-theta2max = 85;  % The should be all the way up
-theta2min = -25; % This is the lowest the shoulder can go. 
+theta2max = 95*degreesToRadians;  % The should be all the way up
+theta2min = -10*degreesToRadians; % This is the lowest the shoulder can go. 
                  % This needs to be tested further.
 
-theta3max = 80;  
-theta3min = -80;  
+theta3max = 80*degreesToRadians;  
+theta3min = -80*degreesToRadians;  
 
 %% Calculations and Error testing 
 
@@ -49,7 +48,7 @@ end
 theta1 = atan2(-y, x);
 
 if (~(isreal(theta1)))
-   error("Imaginary theta1 angle");
+   error('Imaginary theta1 angle');
 end
 
 % 1. Assume that link 1 does not effect the z. This means that we
@@ -63,12 +62,12 @@ magend = ((endloc(1,1)^2) + (endloc(2,1)^2) + (endloc(3,1)^2))^(0.5);
 % Next, calculate the angle of the upper link against the horizontal
 % created by the first link. We are calling that angle theta3.
 
-theta3 = -acos(-(clamp(((l2^2) + (l3^2) - (magend^2)) / ...
+theta3 = (pi/2)-acos(-(clamp(((l2^2) + (l3^2) - (magend^2)) / ...
     (2 * l2 * l3), -1, 1)));
 
 % Check for imaginary angles
 if (~(isreal(theta3)))
-   error("Imaginary theta3 angle.");
+   error('Imaginary theta3 angle.');
 end
 
 % Elbow down
@@ -80,26 +79,26 @@ beta = asin(clamp(((l2^2) + (magend^2) - (l3^2))...
     / (2 * l2 * magend), -1, 1));
 
 % Theta2 as elbow down.
-theta2 = alpha - beta;
+theta2 = alpha - beta + (pi/2);
 
 if (~(isreal(theta2)))
-   error("Imaginary theta2 angle.");
+   error('Imaginary theta2 angle.');
 end
 
 % Final error checking to see if the angles are out of bounds.
 if (theta1 < theta1min || theta1 > theta1max)
-    error(" The Waist angle (Theta 1) is out of range.");
+    error('The Waist angle (Theta 1) is out of range.');
 end
 
 if (theta2 < theta2min || theta2 > theta2max)
-    error(" The Shoulder angle (Theta 2) is out of range.");
+    error('The Shoulder angle (Theta 2) is out of range.');
 end
 
 if (theta3 < theta3min || theta3 > theta3max)
-    error(" The Elbow angle (Theta 3) is out of range.");
+    error('The Elbow angle (Theta 3) is out of range.');
 end
 
-% Return degrees, not radians, and in a column vector.
-T =  radiansToDegrees.*([theta1 ((pi/2)+theta2) theta3+(pi/2)]');
+% Return radians in a column vector.
+T =  ([theta1 (theta2) theta3]');
 
 end

@@ -2,7 +2,7 @@
 % This script will allow for the y0 offset for the joints to be calculated
 % and the calibration curve to be set.
 
-javaaddpath('lib/hid4java-0.5.1.jar');
+javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -47,7 +47,7 @@ fig_size = get(0, 'Screensize');
 fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
     0.9*fig_size(3), 0.8*fig_size(4)];
 set(f, 'Position', fig_pos);
-axis((Robot.l2 + Robot.l3) * [-2 2 -2 2 -0.5 1.5]);
+axis((Robot.l2 + Robot.l3) * [-1.5 1.5 -1.5 1.5 -0.5 1.5]);
 title('Stick figure plot');
 xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
 
@@ -67,7 +67,7 @@ Robot.handle2 = quiver3(y0(4,1),y0(4,2),y0(4,3),0,0,0,'LineWidth',5);
 % ------------------------- Test Force Sensing -------------------------
 
 % Set the vertices that the arm will travel to in radians
-vertex1 = [ 0; 0; pi/2];
+vertex1 = [ 0; pi/2; 0];
 vertex2 = [ 0.5236; 0.5236; 0.5236];
 vertex3 = [ 0; 1.0472; 0 ];
 
@@ -127,8 +127,8 @@ while 1
             % plot the force vector on end effector
             RobotPlotter2(Robot,vertex1);
             
-            %             quiver3(endposition1(1),endposition1(2),endposition1(3),endeffector_force_xyz(1)*100,...
-            %                 endeffector_force_xyz(2)*100,endeffector_force_xyz(3)*100,'LineWidth',5);
+%             quiver3(endposition1(1),endposition1(2),endposition1(3),endeffector_force_xyz(1)*100,...
+%                 endeffector_force_xyz(2)*100,endeffector_force_xyz(3)*100,'LineWidth',5);
             
             set(Robot.handle2,'XData',vertex1(1),'YData',vertex1(2),...
                 'ZData',vertex1(3),'UData',endeffector_force_xyz(1)*1000,'VData',...

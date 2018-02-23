@@ -73,6 +73,12 @@ for i = 1:3
     disp("The sampled torque for Joint " + i + " is " + sampled_torque(i,1));
 end
 
+pause(3);
+send_point(PID_ID,pp,pidpacket,position1);
+
+pause(1);
+send_home(PID_ID,pidpacket,pp);
+
 % Clear up memory upon termination
 pp.shutdown()
 clear java;
