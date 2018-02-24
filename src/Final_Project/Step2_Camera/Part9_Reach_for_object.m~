@@ -25,8 +25,6 @@ pidpacket = zeros(15,'single');
 statuspacket = zeros(15,'single');
 torquepacket = zeros(15,'single');
 
-send_home(PID_ID,pidpacket,pp);
-
 % -------------- Image Processing Initializations -------------------
 
 % Instantiate hardware (turn on camera)
@@ -43,12 +41,16 @@ end
 img = snapshot(cam);
 imshow(img);
 
+% Read in the image from the camera
+%img = imread('blue_Copper.jpg');
+
 % Calculate the centroid and color of the object from the picture
 img_stats = identify_centroid_color(img);
 
 % Calculate the position of the centroid in the task space
+% taskspace_position = [0.1 0.1 0.1];
 taskspace_position_camera = (mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
-taskspace_position = cat(2,taskspace_position_camera,-0.02)';
+taskspace_position = cat(2,taskspace_position_camera,-0.0343)';
 
 % ----------- Find Current Position of the Arm -----------------------
 
@@ -59,18 +61,18 @@ num_samples = 1;
 current_pos_ticks = collect_n_samples(ONLY_POSITION,num_samples,...
     STATUS_ID,pp,statuspacket);
 
-% Calculate the current joint angles in radians
+%Calculate the current joint angles in radians
 current_pos_radians = current_pos_ticks * (360/4096) * (pi/180);
-
 % Calculate the current XYZ position of the arm
 current_pos_xyz_full = forward_kinematics_rad(current_pos_radians);
 current_pos_xyz = current_pos_xyz_full(4,:);
 
 % ---------- Calculate the Joint Angles for the Centroid -------------
 
+offset = [0; 0; pi/18];
+
 % Inverse Kinematics of Jacobian, we should decide
 object_position_angles = inverse_kinematics(taskspace_position);
-oject_position_angles = object_position_angles;
 
 % ------ Calculate the Trajectory Required to Reach the Object -------
 
@@ -88,7 +90,6 @@ for i= 1:size(trajectory,2)
     pause(.05);
 end
 disp(toc);
-
 % --------------- Clear up memory upon termination ------------------
 pp.shutdown()
 clear java;

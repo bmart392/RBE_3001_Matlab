@@ -1,1 +1,0 @@
-%% This places a crosshair on the centroid given an image.
