@@ -1,4 +1,4 @@
-% Inverse Kinematics still has issues but hteyre okay for the most part,
+% Inverse Kinematics still has issues but they are okay for the most part,
 % just leave it alone unless there are serious problems.
 
 % There needs to be an offset in the position sent to the arm becuase it is
