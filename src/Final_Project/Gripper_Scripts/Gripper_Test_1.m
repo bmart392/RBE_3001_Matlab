@@ -26,7 +26,7 @@ torquepacket = zeros(15,'single');
 grippacket = zeros(15,'single');
 
 % Start at home
-send_home(PID_ID, pidpacket, pp);
+% send_home(PID_ID, pidpacket, pp);
 
 pause(1);
 
@@ -47,11 +47,11 @@ disp(returnpacket);
 
 pause(2);
 
-send_point(PID_ID,pp,pidpacket,[ 0; pi/4; 0 ]);
+% send_point(PID_ID,pp,pidpacket,[ 0; pi/4; 0 ]);
 
 pause(2);
 
-send_point(PID_ID,pp,pidpacket,[ 0; 0; 0 ]);
+% send_point(PID_ID,pp,pidpacket,[ 0; 0; 0 ]);
 
 pause(2);
 

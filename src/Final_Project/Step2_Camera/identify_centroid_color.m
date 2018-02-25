@@ -25,7 +25,6 @@ minimumPix = 50;
 blob_green = bwareaopen(filteredimage_green, minimumPix);
 blob_blue = bwareaopen(filteredimage_blue, minimumPix);
 blob_yellow = bwareaopen(filteredimage_yellow, minimumPix);
-imshow(blob_blue);
 
 % Find the centroid and area of each blob
 green_stats = regionprops(blob_green);
@@ -46,6 +45,7 @@ if num_rows_green
         largest_area = green_stats.Area;
         centroid_color.Color = "Green";
         centroid_color.Centroid = green_stats.Centroid;
+        imshow(blob_green);
     end
 end
 % Check if the most  blue is in the image
@@ -54,6 +54,7 @@ if num_rows_blue
         largest_area = blue_stats.Area;
         centroid_color.Color = "Blue";
         centroid_color.Centroid = blue_stats.Centroid;
+        imshow(blob_blue);
     end
 end
 % Check if the most yellow is in the image
@@ -61,6 +62,7 @@ if num_rows_yellow
     if yellow_stats.Area > largest_area
         centroid_color.Color = "Yellow";
         centroid_color.Centroid = yellow_stats.Centroid;
+        imshow(blob_yellow);
     end
 end
 

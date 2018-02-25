@@ -20,12 +20,17 @@ clc; clear all; close all;
 STATUS_ID = 42;
 TORQUE_ID = 25;
 PID_ID = 37;
+GRIP_ID = 13;
 pp = PacketProcessor(7);
 pidpacket = zeros(15,'single');
 statuspacket = zeros(15,'single');
 torquepacket = zeros(15,'single');
+grippacket = zeros(15,'single');
 
-send_home(PID_ID,pidpacket,pp);
+% -------  move arm out of the way-------------------- --
+
+send_point(PID_ID,pp, pidpacket, [0; pi/2; 0]);
+
 
 % -------------- Image Processing Initializations -------------------
 
@@ -38,6 +43,8 @@ end
 % --------------- Capture Centroid from Image ----------------------
 % Preview what the camera sees
 %preview(cam)
+
+
 
 % Next we take a snapshot from the camera
 img = snapshot(cam);
@@ -56,11 +63,8 @@ ONLY_POSITION = 7;
 num_samples = 1;
 
 % Sample for the current position
-current_pos_ticks = collect_n_samples(ONLY_POSITION,num_samples,...
+current_pos_radians = collect_n_samples(ONLY_POSITION,num_samples,...
     STATUS_ID,pp,statuspacket);
-
-% Calculate the current joint angles in radians
-current_pos_radians = current_pos_ticks * (360/4096) * (pi/180);
 
 % Calculate the current XYZ position of the arm
 current_pos_xyz_full = forward_kinematics_rad(current_pos_radians);
@@ -74,20 +78,29 @@ oject_position_angles = object_position_angles;
 
 % ------ Calculate the Trajectory Required to Reach the Object -------
 
-time_to_object = 4.3; % seconds
+time_to_object = 9.25; % seconds
 num_steps = 50;
 
 trajectory = full_trajgen_cubic(1,[  current_pos_radians ...
     object_position_angles ], time_to_object, num_steps);
 
 % ----------------- Move the robot to the object ---------------------
+
+% send the gripper to open.
+grippacket(1,1) = 0;
+returnpacket = pp.command(GRIP_ID, grippacket);
+
 tic;
 for i= 1:size(trajectory,2)
      send_point(PID_ID,pp,pidpacket,trajectory(:,i));
 %    disp(trajectory(:,i));
-    pause(.05);
+    %pause(.01);
 end
 disp(toc);
+
+grippacket(1,1) = 1;
+returnpacket = pp.command(GRIP_ID, grippacket);
+
 
 % --------------- Clear up memory upon termination ------------------
 pp.shutdown()
