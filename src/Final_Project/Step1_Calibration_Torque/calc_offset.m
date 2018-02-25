@@ -18,7 +18,7 @@ clc; clear all; close all;
 % -------------- Communication Initialization -----------------
 
 % Set up communication with the arm
-%STATUS_ID = 42;
+STATUS_ID = 42;
 TORQUE_ID = 25;
 PID_ID = 37;
 pp = PacketProcessor(7);
@@ -40,10 +40,10 @@ torquepacket = zeros(15,'single');
 % Set the position for the arm to travel
 % vertical over the base joint
 position1 = [ 0; pi/2; 0 ];
-position2 = [ 0; pi/2; pi/2 ];
+position2 = [ 0; pi/2; 0  ];
 
 send_home(PID_ID,pidpacket,pp);
-
+for w=1:5
 % Send the arm to the vertical position
 send_point(PID_ID,pp,pidpacket,position1);
 
@@ -51,7 +51,7 @@ pause(1);
 
 send_point(PID_ID,pp,pidpacket,position2);
 
-pause(2);
+%pause(2);
 %
 % % YES = 1;
 % %
@@ -63,7 +63,7 @@ pause(2);
 %
 Collect_PositionandTorque_Only = 9;    % Determine what was to be sampled
 num_samples = 1;            % The number of samples to take
-
+pause(0.5);
 % Sample the the arm to read the torque sensors
 sampled_torque = collect_n_samples(Collect_PositionandTorque_Only,num_samples,...
     TORQUE_ID,pp, torquepacket);
@@ -71,14 +71,16 @@ sampled_torque = collect_n_samples(Collect_PositionandTorque_Only,num_samples,..
 % Display the sample
 for i = 1:3
     disp("The sampled torque for Joint " + i + " is " + sampled_torque(i,1));
+    disp('');
 end
 
-pause(3);
+pause(1);
 send_point(PID_ID,pp,pidpacket,position1);
 
 pause(1);
 send_home(PID_ID,pidpacket,pp);
-
+pause(1);
+end
 % Clear up memory upon termination
 pp.shutdown()
 clear java;

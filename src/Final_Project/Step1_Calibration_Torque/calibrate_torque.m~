@@ -206,10 +206,8 @@ while 1
             end
             
             % calculate end effector xyz force components
-            endeffector_force_xyz = endeffectorforce(actual_torque, vertex3); %.*[ 1 1 -1];
+            endeffector_force_xyz = endeffectorforce(actual_torque, vertex3).*[ 1 1 -1];
             disp(endeffector_force_xyz);
-            disp("Dot multiplied");
-            disp(endeffector_force_xyz.*[ 1; 1; -1 ]);
             % plot the force vector on end effector
             RobotPlotter2(Robot,vertex3);
             

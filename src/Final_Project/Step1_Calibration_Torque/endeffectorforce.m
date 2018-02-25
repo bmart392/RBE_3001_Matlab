@@ -11,8 +11,8 @@ jacobian = jacob0(joint_angles);
 
 % solve for the xyz force components on the end effector
 % endforce = (jacobian')*torques;
-endforce = torques'/(jacobian');
-endforce = endforce';
+endforce_nontransposed = inv(jacobian')*torques;
+endforce = endforce_nontransposed;
 
 end
 
