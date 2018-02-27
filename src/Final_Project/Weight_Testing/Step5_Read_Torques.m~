@@ -1,4 +1,4 @@
-%% Calibrate the Constants for the Torque Equations
+%% Read in the torque from 3 different positions.
 % This script will allow for the y0 offset for the joints to be calculated
 % and the calibration curve to be set.
 
@@ -66,10 +66,21 @@ Robot.handle2 = quiver3(y0(4,1),y0(4,2),y0(4,3),0,0,0,'LineWidth',5);
 % ------------------------- Test Force Sensing -------------------------
 
 % Set the vertices that the arm will travel to in radians
+vertex1 = [ pi/2; pi/3; 0 ];
+vertex2 = [ 0; pi/5; -pi/6 ];
 vertex3 = [ 0; 1.0472; 0 ];
+
+endposition1 = forward_kinematics_rad(vertex1);
+endposition1 = endposition1(4,:)';
+
+endposition2 = forward_kinematics_rad(vertex2);
+endposition2 = endposition2(4,:)';
 
 endposition3 = forward_kinematics_rad(vertex3);
 endposition3 = endposition3(4,:)';
+
+vertices = [ vertex1 vertex2 vertex3 ];
+endpositions = [endposition1 endposition2 endposition3];
 
 send_home(PID_ID, pidpacket, pp);
 
@@ -79,9 +90,12 @@ timeout = [];
 % This is the pause to allow you to move the figure.
 pause(6);
 
-while 1
+for positions=1:3
+    
+    disp("Moving to Position " + positions);
+        
     % Send the arm to Vertex 3
-    send_point(PID_ID,pp,pidpacket,vertex3);
+    send_point(PID_ID,pp,pidpacket,vertices(:,positions));
     
     % Determine what is to be sampled
     Collect_PositionandTorque_Only = 9;
@@ -120,17 +134,19 @@ while 1
     end
     
     % calculate end effector xyz force components
-    endeffector_force_xyz = endeffectorforce(actual_torque, vertex3); %.*[ 1 1 -1];
+    endeffector_force_xyz = endeffectorforce(actual_torque, vertices(:,positions)); %.*[ 1 1 -1];
     
     disp("This is endeffector_force_xyz");
     disp(endeffector_force_xyz);
     
     % plot the force vector on end effector
-    RobotPlotter2(Robot,vertex3);
+    RobotPlotter2(Robot,vertices(:,positions));
     
-    set(Robot.handle2,'XData',endposition3(1),'YData',endposition3(2),...
+    set(Robot.handle2,'XData',endposition(1),'YData',endposition3(2),...
         'ZData',endposition3(3),'UData',endeffector_force_xyz(1,1),'VData',...
         endeffector_force_xyz(2,1),'WData',endeffector_force_xyz(3,1));
+    
+    pause(2);
 end
 
 % Clear up memory upon termination

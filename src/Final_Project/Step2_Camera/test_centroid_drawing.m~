@@ -14,7 +14,7 @@ end
 % preview(cam)
 
 % Next we take a snapshot from the camera
-% img = snapshot(cam);
+ img = snapshot(cam);
 
 % Here we import an image from the hard drive.
 img = imread('green_Copper.jpg');
@@ -28,7 +28,7 @@ img = imread('green_Copper.jpg');
 % should do is isolate all colors but the correct color.
 % What is returned is an image that is black and white. The white blob is
 % the object we want.
-filteredimg = find_Green_blob_copper(img);
+%filteredimg = find_Green_blob_copper(img);
 %filteredimg = find_Blue_blob_copper(img);
 %filteredimg = find_Yellow_blob_copper(img);
 
