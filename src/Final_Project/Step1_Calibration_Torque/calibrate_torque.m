@@ -2,7 +2,7 @@
 % This script will allow for the y0 offset for the joints to be calculated
 % and the calibration curve to be set.
 
-javaaddpath('../lib/hid4java-0.5.1.jar');
+javaaddpath('../RBE3001_Matlab_Team_C18_01/lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;

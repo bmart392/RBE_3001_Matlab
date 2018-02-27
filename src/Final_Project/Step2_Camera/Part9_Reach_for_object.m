@@ -27,9 +27,6 @@ statuspacket = zeros(15,'single');
 torquepacket = zeros(15,'single');
 grippacket = zeros(15,'single');
 
-
-
-
 % -------------- Image Processing Initializations -------------------
 
 % Instantiate hardware (turn on camera)
@@ -53,8 +50,6 @@ pause(3);
 % --------------- Capture Centroid from Image ----------------------
 % Preview what the camera sees
 %preview(cam)
-
-
 
 % Next we take a snapshot from the camera
 img = snapshot(cam);

@@ -11,9 +11,7 @@ function [ outarr ] = mn2xy( m, n , tot_width_in_cm, tot_height_in_cm)
 % 17 and 12 work well for close to the camera mount
 %tot_width_in_cm = 15;%19;%17;
 %tot_height_in_cm = 15;%2;%12;
-
-disp('tot_width_in_cm');
-disp(tot_width_in_cm);
+disp(tot_height_in_cm);
 
 %% read in data from xml
 xml = xmlread('calibrations/pixels.xml');

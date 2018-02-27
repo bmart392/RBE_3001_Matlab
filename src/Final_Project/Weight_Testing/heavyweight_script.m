@@ -1,4 +1,4 @@
-%% Test weight of objects
+%% Am I heavy or naw??
 % grab an object, pick it up
 % display force vector
 
@@ -54,20 +54,9 @@ imshow(img);
 img_stats = identify_centroid_color(img);
 
 % Calculate the position of the centroid in the task space
-taskspace_position_camera = (choose_mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
+% taskspace_position_camera = (mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
+taskspace_position_camera = (mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
 taskspace_position = cat(2,taskspace_position_camera,-0.02)';
-
-
-
-
-
-
-
-
-
-
-
-
 
 % ----------- Find Current Position of the Arm -----------------------
 
@@ -135,15 +124,8 @@ disp(torque_load);
 % calculate end effector xyz force components
 endeffector_force_xyz = endeffectorforce(torque_load, vertex3);
 disp(endeffector_force_xyz);
-% disp("Dot multiplied");
-% disp(endeffector_force_xyz.*[ 1; 1; -1 ]);
-disp("Am I heavy??? ");
-if (endeffector_force_xyz(1,1) > 0.75)
-    disp(" Copper for the win");
-else
-    disp(" No, I am slim. ")
-end
-
+disp("Dot multiplied");
+disp(endeffector_force_xyz.*[ 1; 1; -1 ]);
 
 pause(2);
 
