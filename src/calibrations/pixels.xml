@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pixels>
    <pixel>
-      <m>222</m>
-      <n>308</n>
-   </pixel>
-   <pixel>
-      <m>432</m>
-      <n>306</n>
-   </pixel>
-   <pixel>
-      <m>309</m>
-      <n>357</n>
-   </pixel>
-   <pixel>
       <m>206</m>
-      <n>450</n>
+      <n>299</n>
    </pixel>
    <pixel>
-      <m>455</m>
-      <n>457</n>
+      <m>415</m>
+      <n>297</n>
+   </pixel>
+   <pixel>
+      <m>292</m>
+      <n>348</n>
+   </pixel>
+   <pixel>
+      <m>189</m>
+      <n>445</n>
+   </pixel>
+   <pixel>
+      <m>436</m>
+      <n>444</n>
    </pixel>
 </pixels>

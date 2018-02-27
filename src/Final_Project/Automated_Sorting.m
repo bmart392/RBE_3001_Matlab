@@ -68,11 +68,12 @@ end
 
 % ||||||||||||||||| Start of Automation Code |||||||||||||||||||||||||
 
-for w=1:5
+% send the gripper to open.
+grippacket(1,1) = 0;
+returnpacket = pp.command(GRIP_ID, grippacket);
+
+while 1
     
-        % send the gripper to open.
-    grippacket(1,1) = 0;
-    returnpacket = pp.command(GRIP_ID, grippacket);
     
     % --------------- weigh robot---------------------
     weighing_position = [ 0; 1.0472; 0 ];
@@ -109,6 +110,14 @@ for w=1:5
     
     % Calculate the centroid and color of the object from the picture
     img_stats = identify_centroid_color(img);
+    
+    % Check for errors in the object identification phase
+    if img_stats.Error
+        
+        disp("Board is empty");
+        break;
+    end
+    
     
     disp("Color of Object");
     disp(img_stats.Color);
@@ -287,6 +296,10 @@ for w=1:5
     img_stats.Color = "";
     img_stats.Centroid = [ 0 0 ] ;
     img_stats.Weight = "";
+    
+    % send the gripper to open.
+    grippacket(1,1) = 0;
+    returnpacket = pp.command(GRIP_ID, grippacket);
     
 end
 

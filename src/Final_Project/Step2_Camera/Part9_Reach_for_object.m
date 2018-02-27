@@ -53,7 +53,7 @@ pause(3);
 
 % Next we take a snapshot from the camera
 img = snapshot(cam);
-imshow(img);
+%imshow(img);
 
 % Calculate the centroid and color of the object from the picture
 img_stats = identify_centroid_color(img);
