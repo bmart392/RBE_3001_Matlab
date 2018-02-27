@@ -27,9 +27,7 @@ statuspacket = zeros(15,'single');
 torquepacket = zeros(15,'single');
 grippacket = zeros(15,'single');
 
-% -------  move arm out of the way-------------------- --
 
-send_point(PID_ID,pp, pidpacket, [0; pi/2; 0]);
 
 
 % -------------- Image Processing Initializations -------------------
@@ -39,6 +37,18 @@ if ~exist('cam', 'var') % connect to webcam iff not connected
     cam = webcam();
     pause(1); % give the camera time to adjust to lighting
 end
+
+while(1)
+    
+% -------  move arm out of the way-------------------- --
+
+send_point(PID_ID,pp, pidpacket, [0; pi/2; 0]);
+
+% send the gripper to open.
+grippacket(1,1) = 0;
+returnpacket = pp.command(GRIP_ID, grippacket);
+
+pause(3);
 
 % --------------- Capture Centroid from Image ----------------------
 % Preview what the camera sees
@@ -54,8 +64,11 @@ imshow(img);
 img_stats = identify_centroid_color(img);
 
 % Calculate the position of the centroid in the task space
-taskspace_position_camera = (mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
-taskspace_position = cat(2,taskspace_position_camera,-0.02)';
+taskspace_position_camera = (choose_mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
+
+taskspace_position = cat(2,taskspace_position_camera,-0.00)';
+
+taskspace_position_end = cat(2,taskspace_position_camera,-0.02)';
 
 % ----------- Find Current Position of the Arm -----------------------
 
@@ -74,7 +87,7 @@ current_pos_xyz = current_pos_xyz_full(4,:);
 
 % Inverse Kinematics of Jacobian, we should decide
 object_position_angles = inverse_kinematics(taskspace_position);
-oject_position_angles = object_position_angles;
+object_position_angles_end = inverse_kinematics(taskspace_position_end);
 
 % ------ Calculate the Trajectory Required to Reach the Object -------
 
@@ -93,14 +106,17 @@ returnpacket = pp.command(GRIP_ID, grippacket);
 tic;
 for i= 1:size(trajectory,2)
      send_point(PID_ID,pp,pidpacket,trajectory(:,i));
-%    disp(trajectory(:,i));
-    %pause(.01);
 end
 disp(toc);
+
+send_point(PID_ID,pp,pidpacket,object_position_angles_end);
+pause(0.5);
 
 grippacket(1,1) = 1;
 returnpacket = pp.command(GRIP_ID, grippacket);
 
+
+end
 
 % --------------- Clear up memory upon termination ------------------
 pp.shutdown()

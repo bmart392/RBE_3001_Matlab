@@ -20,7 +20,7 @@ theta1max = 85*degreesToRadians;  % 1.4835 rad
 theta1min = -85*degreesToRadians; % -1.4835 rad  
 
 theta2max = 95*degreesToRadians;  % 1.6581 rad. The should be all the way up
-theta2min = -10*degreesToRadians; % -0.1745 rad. This is the lowest the shoulder can go. 
+theta2min = -20*degreesToRadians; % -0.1745 rad. This is the lowest the shoulder can go. 
 
 theta3max = 80*degreesToRadians;  % 1.3963 rad.
 theta3min = -80*degreesToRadians; % -1.3963 rad. 

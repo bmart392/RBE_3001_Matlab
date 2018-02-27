@@ -5,10 +5,15 @@
 %
 % In addition:  this function assumes that you have successfully
 % run the provided "calibrate_camera.m" function prior to its use.
-function [ outarr ] = mn2xy( m, n )
+function [ outarr ] = mn2xy( m, n , tot_width_in_cm, tot_height_in_cm)
 %% define calibration distance constants
-tot_width_in_cm = 24;
-tot_height_in_cm = 18;
+% 19 and 2 work well for close to the robot
+% 17 and 12 work well for close to the camera mount
+%tot_width_in_cm = 15;%19;%17;
+%tot_height_in_cm = 15;%2;%12;
+
+disp('tot_width_in_cm');
+disp(tot_width_in_cm);
 
 %% read in data from xml
 xml = xmlread('calibrations/pixels.xml');

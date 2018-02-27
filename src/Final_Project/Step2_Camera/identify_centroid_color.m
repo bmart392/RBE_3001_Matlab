@@ -21,10 +21,11 @@ filteredimage_blue = find_Blue_blob_copper(blurred_image);
 filteredimage_yellow = find_Yellow_blob_copper(blurred_image);
 
 % Clean up each image
-minimumPix = 50;
+minimumPix = 100;
 blob_green = bwareaopen(filteredimage_green, minimumPix);
 blob_blue = bwareaopen(filteredimage_blue, minimumPix);
 blob_yellow = bwareaopen(filteredimage_yellow, minimumPix);
+imshow(blob_blue);
 
 % Find the centroid and area of each blob
 green_stats = regionprops(blob_green);
