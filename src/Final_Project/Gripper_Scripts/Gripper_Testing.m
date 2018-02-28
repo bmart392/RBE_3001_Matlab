@@ -12,7 +12,7 @@ import java.lang.*;
 
 clc; clear all; close all;
 
-% -------------- Communication Initialization -----------------
+%%%%%%%%%%%%%%% Communication Initialization %%%%%%%%%%%%%%%%%%%%%%-
 
 % Set up communication with the arm
 GRIP_ID = 13;
@@ -25,46 +25,33 @@ statuspacket = zeros(15,'single');
 torquepacket = zeros(15,'single');
 grippacket = zeros(15,'single');
 
-% Start at home
-% send_home(PID_ID, pidpacket, pp);
+%%%%%%%%%% Test Setting and sending the gripper commands %%%%%%%%%%%%
 
-pause(1);
-
-% send the gripper to open.
+% set the gripper packet to open.
 grippacket(1,1) = 0;
 
-% This is open
+% Send the open packet
 returnpacket = pp.command(GRIP_ID, grippacket);
 disp(returnpacket);
 
+% Wait
 pause(4);
 
+% set the gripper packet to closed.
 grippacket(1,1) = 1;
 
-% This is closed
+% Send the closed packet
 returnpacket = pp.command(GRIP_ID, grippacket);
 disp(returnpacket);
 
 pause(2);
 
-% send_point(PID_ID,pp,pidpacket,[ 0; pi/4; 0 ]);
-
-pause(2);
-
-% send_point(PID_ID,pp,pidpacket,[ 0; 0; 0 ]);
-
-pause(2);
-
-% send the gripper to the 0 position, aka open.
+% set the gripper packet to the open position.
 grippacket(1,1) = 0;
 
-% This is open
+% Send the open packet
 returnpacket = pp.command(GRIP_ID, grippacket);
 disp(returnpacket);
-
-pause(2);
-
-send_point(PID_ID,pp,pidpacket,[ 0; pi/4; 0 ]);
 
 
 % Clear up memory upon termination

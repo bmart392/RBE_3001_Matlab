@@ -16,7 +16,6 @@ clc; clear all; close all;
 
 pp = PacketProcessor(7);    % initialize the value
 PID_ID = 37;                % moves the robot
-%STATUS_ID = 42;             % reads position and velocity
 TORQUE_ID = 25;
 
 % Create a variable to hold the statuspacket, including a digit
@@ -71,7 +70,7 @@ vertex3 = [ 0; 1.0472; 0 ];
 endposition3 = forward_kinematics_rad(vertex3);
 endposition3 = endposition3(4,:)';
 
-send_home(PID_ID, pidpacket, pp);
+%send_home(PID_ID, pidpacket, pp);
 
 % For wating for person comment loop.
 timeout = [];
@@ -86,7 +85,7 @@ while 1
     % Determine what is to be sampled
     Collect_PositionandTorque_Only = 9;
     num_samples = 1;            % The number of samples to take
-    pause(1);
+    pause(2);
     
     % Sample the the arm to read the position and the torque sensors
     torque_noload = collect_n_samples(...
@@ -94,17 +93,20 @@ while 1
         TORQUE_ID,pp, torquepacket);
     torque_noload = torque_noload.*1000;
     
-    % Wait for somebody to push on the arm.
-    for L=1:4
-        pause(0.5);
-        timeout = num2str((8-(L*2))/4);
+    % Wait for the arm to be pushed
+    for L=1:5
+        pause(1);
+        timeout = num2str((6-L));
         disp(" Reading forces in " + timeout + " Seconds" );
     end
-    
+    disp("");
     % Read in the samples
     torque_load = collect_n_samples(...
         Collect_PositionandTorque_Only,num_samples,...
         TORQUE_ID,pp, torquepacket);
+    
+    pause(2);
+    disp("Stop pulling");
     
     % Fix the magnitude
     torque_load = torque_load.*1000;
