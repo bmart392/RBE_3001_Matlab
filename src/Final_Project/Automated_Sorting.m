@@ -4,7 +4,7 @@
 
 clear java;
 
-javaaddpath('../RBE3001_Matlab_Team_C18_01/lib/hid4java-0.5.1.jar');
+javaaddpath('../lib/hid4java-0.5.1.jar');
 
 import org.hid4java.*;
 import org.hid4java.event.*;
@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.lang.*;
 
-clc; clear all; close all;
+%clc; clear all; close all;
 
 % -------------- Communication Initialization -----------------
 
@@ -30,31 +30,31 @@ grippacket = zeros(15,'single');
 % --------------- Positions to place each Type of Object -------------
 
 % Calculate the position of the storage for heavy blue objects
-blue_heavy_storage_position_xyz = [ 0.10; 0.15; 0 ];
+blue_heavy_storage_position_xyz = [ 0.10; 0.18; 0 ];
 blue_heavy_storage_position_angle = inverse_kinematics...
     (blue_heavy_storage_position_xyz);
 
 % Calculate the position of the storage for light blue objects
-blue_light_storage_position_xyz = [ 0.10; -0.15; 0 ];
+blue_light_storage_position_xyz = [ 0.10; -0.18; 0 ];
 blue_light_storage_position_angle = inverse_kinematics...
     (blue_light_storage_position_xyz);
 
 % Calculate the position of the storage for heavy green objects
-green_heavy_storage_position_xyz = [ 0.18; 0.15; 0 ];
+green_heavy_storage_position_xyz = [ 0.18; 0.18; 0 ];
 green_heavy_storage_position_angle = inverse_kinematics...
     (green_heavy_storage_position_xyz);
 % Calculate the position of the storage for light green objects
-green_light_storage_position_xyz = [ 0.18; -0.15; 0 ];
+green_light_storage_position_xyz = [ 0.18; -0.18; 0 ];
 green_light_storage_position_angle = inverse_kinematics...
     (green_light_storage_position_xyz);
 
 % Calculate the position of the storage for heavy yellow objects
-yellow_heavy_storage_position_xyz = [ 0.25; 0.15; 0 ];
+yellow_heavy_storage_position_xyz = [ 0.25; 0.18; 0 ];
 yellow_heavy_storage_position_angle = inverse_kinematics...
     (yellow_heavy_storage_position_xyz);
 
 % Calculate the position of the storage light yellow objects
-yellow_light_storage_position_xyz = [ 0.25; -0.15; 0 ];
+yellow_light_storage_position_xyz = [ 0.25; -0.18; 0 ];
 yellow_light_storage_position_angle = inverse_kinematics...
     (yellow_light_storage_position_xyz);
 
@@ -75,26 +75,32 @@ returnpacket = pp.command(GRIP_ID, grippacket);
 while 1
     
     
+
     % --------------- weigh robot---------------------
-    weighing_position = [ 0; 1.0472; 0 ];
+    weighing_position = [ 0; pi/2; 0 ];
     
     % Send the arm to the weighing position
     send_point(PID_ID,pp,pidpacket,weighing_position);
     
     % read no torque values for each joint
     Collect_PositionandTorque_Only = 9;
-    num_samples = 2;            % The number of samples to take
-    
-    pause(2);
+    num_samples = 1;            % The number of samples to take
     
     
-    no_torque_load = collect_n_samples(...
+    pause(3);
+    
+    
+        no_torque_load = collect_n_samples(...
         Collect_PositionandTorque_Only,num_samples,...
         TORQUE_ID,pp, torquepacket);
     
-    average_no_torque_load = (no_torque_load(:,1) + no_torque_load(:,2))/2;
+    % Set the value sampled from joint 1 to be 0
+    no_torque_load(1,:) = 0;
+    no_torque_load(2,:) = 0;
     
-    no_torque_load = average_no_torque_load.*1000;
+    average_no_torque_load = no_torque_load;%(no_torque_load(:,1) + no_torque_load(:,2))/2;
+    
+    no_torque_load = average_no_torque_load;%.*1000;
     
     
     % -------  move arm out of the way-------------------- --
@@ -125,10 +131,10 @@ while 1
     % Calculate the position of the centroid in the task space
     taskspace_position_camera = (choose_mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
     taskspace_position = cat(2,taskspace_position_camera,-0.00)';
-    taskspace_position_end = cat(2,taskspace_position_camera,-0.02)';
+    taskspace_position_end = cat(2,taskspace_position_camera,-0.018)';
     
     
-    % ---------------------- pick up the object ---------------------
+    % ----------------------0.000001- pick up the object ---------------------
     
     % ----------- Find Current Position of the Arm -----------------------
     
@@ -186,32 +192,41 @@ while 1
     
     % read torque values for each joint
     Collect_PositionandTorque_Only = 9;
-    num_samples = 2;            % The number of samples to take
+    num_samples = 1;            % The number of samples to take
     
-    pause(2);
+    pause(10);
     
     torque_load = collect_n_samples(...
         Collect_PositionandTorque_Only,num_samples,...
         TORQUE_ID,pp, torquepacket);
     
-    average_torque_load = (torque_load(:,1) + torque_load(:,2))/2;
+    % Set the value sampled from joint 1 to be 0
+    torque_load(1,:) = 0;
+    torque_load(2,:) = 0;
     
-    torque_load = average_torque_load.*1000;
+    
+    average_torque_load = torque_load;%(torque_load(:,1) + torque_load(:,2))/2;
+    
+    torque_load = average_torque_load;%.*1000;
     
     % calculate the actual torque
+    
     actual_torque_load = torque_load - no_torque_load;
+    disp(actual_torque_load);
     
     % calculate end effector xyz force components
     endeffector_force_xyz = endeffectorforce(actual_torque_load, weighing_position);
     
+    disp(" End Effect Force");
+    disp(endeffector_force_xyz);
+    
     % calculate end effector force magnitude
-    endeffector_force_magnitude = sqrt(endeffector_force_xyz(1,1)^2 + ...
-        endeffector_force_xyz(2,1)^2 + endeffector_force_xyz(3,1)^2);
+    endeffector_force_magnitude = (abs(endeffector_force_xyz(3,1))*endeffector_force_xyz(3,1))*1000;
     
     disp('endeffector_force_magnitude');
     disp(endeffector_force_magnitude);
     
-    if (endeffector_force_magnitude > 0.35)
+    if (endeffector_force_magnitude < 0)
         disp("Object is heavy");
         img_stats.Weight = "heavy";
     else
@@ -291,15 +306,26 @@ while 1
     
     pause(1);
     
+    % send the gripper to open.
+    grippacket(1,1) = 0;
+    returnpacket = pp.command(GRIP_ID, grippacket);
+    
+    pause(1);
+    
+    % Send the arm out of the storage zone
+    last_point = trajectory(:,i) .*  [ 1; 1; 0 ];
+    point = last_point + [0; pi/6 ; 0];
+    send_point(PID_ID,pp,pidpacket,point);
+    
+    pause(3);
+    
     % Clear all important variables
     trajectory = 0;
     img_stats.Color = "";
     img_stats.Centroid = [ 0 0 ] ;
     img_stats.Weight = "";
     
-    % send the gripper to open.
-    grippacket(1,1) = 0;
-    returnpacket = pp.command(GRIP_ID, grippacket);
+    
     
 end
 
