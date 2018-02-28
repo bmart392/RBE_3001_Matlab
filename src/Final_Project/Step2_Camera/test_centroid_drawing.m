@@ -14,10 +14,11 @@ end
 % preview(cam)
 
 % Next we take a snapshot from the camera
-% img = snapshot(cam);
+ img = snapshot(cam);
+ disp(size(img));
 
 % Here we import an image from the hard drive.
-img = imread('green_Copper.jpg');
+%img = imread('green_Copper.jpg');
 %img = imread('blue_Copper.jpg');
 %img = imread('yellow_Copper.jpg');
 
@@ -28,8 +29,9 @@ img = imread('green_Copper.jpg');
 % should do is isolate all colors but the correct color.
 % What is returned is an image that is black and white. The white blob is
 % the object we want.
-filteredimg = find_Green_blob_copper(img);
-%filteredimg = find_Blue_blob_copper(img);
+%filteredimg = find_Green_blob_copper(img);
+filteredimg = find_Blue_blob_copper(img);
+imshow(filteredimg);
 %filteredimg = find_Yellow_blob_copper(img);
 
 % imshow(filteredimg);
@@ -41,7 +43,7 @@ filteredimg = find_Green_blob_copper(img);
 % The default connectivity is 8 for two dimensions, 26 for three 
 % dimensions, and conndef(ndims(BW), 'maximal') for higher dimensions. 
 % This operation is known as an area opening. 
-minimumPix = 50;
+minimumPix = 100;
 blob1 = bwareaopen(filteredimg, minimumPix);
     
 % Display the filtered image.
@@ -88,8 +90,8 @@ newcrossimage = img; % zeros(size(img,1), size(img, 2), 3);
 pause(0.25);
 
 % We will overlay the crosshair over the old image file.
-for L=1:826 % row controller 826 if 2, 571 if 1
-   for Y=1:571 % Column controller
+for L=1:size(img,2)%826 % row controller 826 if 2, 571 if 1
+   for Y=1:size(img,1)%571 % Column controller
 %        disp(img(L,Y,:))
         if(overlaycross(L, Y) == 1)
             newcrossimage(Y,L, 1:3) = [255 255 255];

@@ -49,7 +49,7 @@ fig_pos = [0,0,... %fig_size(3), fig_size(4), ...
 set(f, 'Position', fig_pos);
 axis((Robot.l2 + Robot.l3) * [-1.5 1.5 -1.5 1.5 -0.5 1.5]);
 title('Stick figure plot');
-xlabel('X Axis [m]'); ylabel('Y Axis [m]'); zlabel('Z Axis [m]');
+xlabel('X Axis [N*m]'); ylabel('Y Axis [N*m]'); zlabel('Z Axis [N*m]');
 
 % Set the graph to plot the home position of the robot
 y0 = forward_kinematics_rad([0; 0; 0]);

@@ -38,7 +38,7 @@ function [ outarr ] = choose_mn2xy( m , n )
 %   +------- 410 -------+   Interface_U
 %   |                   |
 %   |     Zone 30       |
-%   |   W = 17; H =12   |
+%   |   W = 17; H =11   |
 %   |                   |
 %   +---- Camera -------+ Interface_Camera
 

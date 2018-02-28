@@ -87,7 +87,7 @@ while 1
     num_samples = 1;            % The number of samples to take
     
     
-    pause(5);
+    pause(3);
     
     
         no_torque_load = collect_n_samples(...
@@ -107,7 +107,7 @@ while 1
     
     send_point(PID_ID,pp, pidpacket, [0; pi/2; 0]);
     
-    pause(1);
+    pause(0.25);
     
     % --------------- Capture Centroid from Image ----------------------
     
@@ -151,7 +151,7 @@ while 1
     
     % ---------- Calculate the Joint Angles for the Centroid -------------
     
-    % Inverse Kinematics of Jacobian, we should decide
+    % Calculate the inverse kinematics of the robot
     object_position_angles = inverse_kinematics(taskspace_position);
     object_position_angles_end = inverse_kinematics(taskspace_position_end);
     
@@ -174,7 +174,7 @@ while 1
     end
     
     send_point(PID_ID,pp,pidpacket,object_position_angles_end);
-    pause(0.5);
+    pause(0.25);
     
     grippacket(1,1) = 1;
     returnpacket = pp.command(GRIP_ID, grippacket);
@@ -194,7 +194,7 @@ while 1
     Collect_PositionandTorque_Only = 9;
     num_samples = 1;            % The number of samples to take
     
-    pause(5);
+    pause(3);
     
     torque_load = collect_n_samples(...
         Collect_PositionandTorque_Only,num_samples,...
@@ -234,7 +234,7 @@ while 1
         img_stats.Weight = "light";
     end
     
-    pause(2);
+    pause(1);
     
     % ----------------------- Sort the object ------------------------------
     
@@ -304,20 +304,20 @@ while 1
             end
     end
     
-    pause(1);
+    pause(0.5);
     
     % send the gripper to open.
     grippacket(1,1) = 0;
     returnpacket = pp.command(GRIP_ID, grippacket);
     
-    pause(1);
+    
     
     % Send the arm out of the storage zone
     last_point = trajectory(:,i) .*  [ 1; 1; 0 ];
     point = last_point + [0; pi/6 ; 0];
     send_point(PID_ID,pp,pidpacket,point);
     
-    pause(3);
+   
     
     % Clear all important variables
     trajectory = 0;
