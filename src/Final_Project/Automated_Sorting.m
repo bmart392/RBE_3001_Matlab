@@ -30,31 +30,31 @@ grippacket = zeros(15,'single');
 % --------------- Positions to place each Type of Object -------------
 
 % Calculate the position of the storage for heavy blue objects
-blue_heavy_storage_position_xyz = [ 0.10; 0.18; 0 ];
+blue_heavy_storage_position_xyz = [ 0.0750; 0.2; 0 ];
 blue_heavy_storage_position_angle = inverse_kinematics...
     (blue_heavy_storage_position_xyz);
 
 % Calculate the position of the storage for light blue objects
-blue_light_storage_position_xyz = [ 0.10; -0.18; 0 ];
+blue_light_storage_position_xyz = [ 0.0750; -0.2; 0 ];
 blue_light_storage_position_angle = inverse_kinematics...
     (blue_light_storage_position_xyz);
 
 % Calculate the position of the storage for heavy green objects
-green_heavy_storage_position_xyz = [ 0.18; 0.18; 0 ];
+green_heavy_storage_position_xyz = [ 0.15; 0.2; 0 ];
 green_heavy_storage_position_angle = inverse_kinematics...
     (green_heavy_storage_position_xyz);
 % Calculate the position of the storage for light green objects
-green_light_storage_position_xyz = [ 0.18; -0.18; 0 ];
+green_light_storage_position_xyz = [ 0.15; -0.2; 0 ];
 green_light_storage_position_angle = inverse_kinematics...
     (green_light_storage_position_xyz);
 
 % Calculate the position of the storage for heavy yellow objects
-yellow_heavy_storage_position_xyz = [ 0.25; 0.18; 0 ];
+yellow_heavy_storage_position_xyz = [ 0.20; 0.2; 0 ];
 yellow_heavy_storage_position_angle = inverse_kinematics...
     (yellow_heavy_storage_position_xyz);
 
 % Calculate the position of the storage light yellow objects
-yellow_light_storage_position_xyz = [ 0.25; -0.18; 0 ];
+yellow_light_storage_position_xyz = [ 0.20; -0.2; 0 ];
 yellow_light_storage_position_angle = inverse_kinematics...
     (yellow_light_storage_position_xyz);
 
@@ -87,7 +87,7 @@ while 1
     num_samples = 1;            % The number of samples to take
     
     
-    pause(3);
+    pause(5);
     
     
         no_torque_load = collect_n_samples(...
@@ -131,7 +131,7 @@ while 1
     % Calculate the position of the centroid in the task space
     taskspace_position_camera = (choose_mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
     taskspace_position = cat(2,taskspace_position_camera,-0.00)';
-    taskspace_position_end = cat(2,taskspace_position_camera,-0.018)';
+    taskspace_position_end = cat(2,taskspace_position_camera,-0.02)';
     
     
     % ----------------------0.000001- pick up the object ---------------------
@@ -194,7 +194,7 @@ while 1
     Collect_PositionandTorque_Only = 9;
     num_samples = 1;            % The number of samples to take
     
-    pause(10);
+    pause(5);
     
     torque_load = collect_n_samples(...
         Collect_PositionandTorque_Only,num_samples,...
@@ -226,7 +226,7 @@ while 1
     disp('endeffector_force_magnitude');
     disp(endeffector_force_magnitude);
     
-    if (endeffector_force_magnitude < 0)
+    if (endeffector_force_magnitude < -0.000100000000000000000000)
         disp("Object is heavy");
         img_stats.Weight = "heavy";
     else
@@ -241,7 +241,7 @@ while 1
     color = img_stats.Color;
     
     time_to_storage = 9.25; % seconds
-    num_steps = 25;
+    num_steps = 50;
     
     switch color
         case "Blue"

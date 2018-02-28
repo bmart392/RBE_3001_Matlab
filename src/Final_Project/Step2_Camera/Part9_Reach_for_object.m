@@ -45,7 +45,7 @@ send_point(PID_ID,pp, pidpacket, [0; pi/2; 0]);
 grippacket(1,1) = 0;
 returnpacket = pp.command(GRIP_ID, grippacket);
 
-pause(3);
+pause(1);
 
 % --------------- Capture Centroid from Image ----------------------
 % Preview what the camera sees
@@ -58,9 +58,12 @@ img = snapshot(cam);
 % Calculate the centroid and color of the object from the picture
 img_stats = identify_centroid_color(img);
 
+disp(img_stats.Centroid);
+
 % Calculate the position of the centroid in the task space
 taskspace_position_camera = (choose_mn2xy(img_stats.Centroid(1),img_stats.Centroid(2)))./100;
 
+pause(1);
 taskspace_position = cat(2,taskspace_position_camera,-0.00)';
 
 taskspace_position_end = cat(2,taskspace_position_camera,-0.02)';
@@ -87,7 +90,7 @@ object_position_angles_end = inverse_kinematics(taskspace_position_end);
 % ------ Calculate the Trajectory Required to Reach the Object -------
 
 time_to_object = 9.25; % seconds
-num_steps = 50;
+num_steps = 20;
 
 trajectory = full_trajgen_cubic(1,[  current_pos_radians ...
     object_position_angles ], time_to_object, num_steps);

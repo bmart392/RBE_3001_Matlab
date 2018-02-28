@@ -1,4 +1,4 @@
-function [BW,maskedRGBImage] = find_DullYellow_blob(RGB)
+function [BW,maskedRGBImage] = find_DullBlue_blob(RGB)
 %createMask  Threshold RGB image using auto-generated code from colorThresholder app.
 %  [BW,MASKEDRGBIMAGE] = createMask(RGB) thresholds image RGB using
 %  auto-generated code from the colorThresholder App. The colorspace and
@@ -14,16 +14,16 @@ function [BW,maskedRGBImage] = find_DullYellow_blob(RGB)
 I = rgb2hsv(RGB);
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 0.128;
-channel1Max = 0.218;
+channel1Min = 0.502;
+channel1Max = 0.763;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 0.441;
+channel2Min = 0.830;
 channel2Max = 1.000;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 0.234;
-channel3Max = 0.484;
+channel3Min = 0.000;
+channel3Max = 0.415;
 
 % Create mask based on chosen histogram thresholds
 sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...

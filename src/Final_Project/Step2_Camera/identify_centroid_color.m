@@ -15,21 +15,25 @@ centroid_color.Error = 0;
 
 % Blur the image to remove small color sections
 blurred_image = imfilter(image,ones(3)/15);
-%imshow(blurred_image);
+% imshow(blurred_image);
 
 
 % Filter the image for each color
 filteredimage_green = find_Green_blob_copper(blurred_image);
-filteredimage_blue = find_Blue_blob_copper(blurred_image);
+filteredimage_blue = find_DullBlue_blob(blurred_image);
 filteredimage_yellow = find_DullYellow_blob(blurred_image);
-%imshow(filteredimage_yellow);
+% imshow(filteredimage_green);
+% imshow(filteredimage_blue);
+% imshow(filteredimage_yellow);
 
 % Clean up each image
 minimumPix = 100;
 blob_green = bwareaopen(filteredimage_green, minimumPix);
 blob_blue = bwareaopen(filteredimage_blue, minimumPix);
 blob_yellow = bwareaopen(filteredimage_yellow, minimumPix);
-%imshow(blob_yellow);
+% imshow(blob_green);
+% imshow(blob_blue);
+% imshow(blob_yellow);
 
 % Find the centroid and area of each blob
 green_stats = regionprops(blob_green);
@@ -116,7 +120,7 @@ else
         
         if yellow_stats(index_of_largest).Area > largest_area
             
-            centroid_color.Color = "Green";
+            centroid_color.Color = "Yellow";
             centroid_color.Centroid = yellow_stats(index_of_largest).Centroid;
             %imshow(blob_green);
             
