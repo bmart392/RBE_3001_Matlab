@@ -4,7 +4,7 @@
 %%%%%%%%%%%%%%%%% Initializations and Setup %%%%%%%%%%%%%%%%%%%
 
 % --------------------- Java Setup -------------------------
-
+  
 clear java;
 
 javaaddpath('../lib/hid4java-0.5.1.jar');
